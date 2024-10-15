@@ -25,6 +25,7 @@
     background-position: center;
     position: relative;
     min-width: 144px;
+    object-fit: cover;
 }
 
 .trending-info {
