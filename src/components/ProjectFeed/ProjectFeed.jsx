@@ -7,10 +7,37 @@ const mockProjects = Array(20).fill(null).map((_, i) => ({
     title: `Project ${i + 1}`,
     description: 'This is a sample project description. It can contain details about the project, its goals, and its current status.',
     thumbnail: `/src/assets/dekler-ph-OSk8nBHR21Q-unsplash.jpg`,
-    trends: Math.floor(Math.random() * 100) + 1
+    trends: Math.floor(Math.random() * 100) + 1,
+    date: '2024-10-22',
+    files: [
+        { name: `File${i + 1}.pdf` },
+        { name: `Documentation${i + 1}.docx` }
+    ],
+    steps: [
+        {
+            image: `/src/assets/dekler-ph-OSk8nBHR21Q-unsplash.jpg`,
+            description: `This is the description for step 1 of Project ${i + 1}`
+        },
+        {
+            image: `/src/assets/dekler-ph-OSk8nBHR21Q-unsplash.jpg`,
+            description: `This is the description for step 2 of Project ${i + 1}`
+        }
+    ],
+    comments: [
+        {
+            author: 'John Doe',
+            text: `Great project! I learned a lot from Project ${i + 1}.`,
+            date: '2024-10-21'
+        },
+        {
+            author: 'Jane Smith',
+            text: `I'm having trouble with step 2 on Project ${i + 1}. Any advice?`,
+            date: '2024-10-20'
+        }
+    ]
 }));
 
-const ProjectFeed = () => {
+const ProjectFeed = ({ onProjectClick }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [favorites, setFavorites] = useState([]);
     const projectsPerPage = 5;
@@ -25,13 +52,9 @@ const ProjectFeed = () => {
     const toggleFavorite = (projectId) => {
         setFavorites((prevFavorites) =>
             prevFavorites.includes(projectId)
-                ? prevFavorites.filter((id) => id !== projectId) // Remove from favorites
+                ? prevFavorites.filter((id) => id !== projectId)
                 : [...prevFavorites, projectId]
         );
-    };
-
-    const handleProjectClick = (projectId) => {
-        console.log(`Clicked on project ${projectId}`);
     };
 
     return (
@@ -45,9 +68,9 @@ const ProjectFeed = () => {
                         thumbnail={project.thumbnail}
                         title={project.title}
                         trends={project.trends}
-                        isFavorite={favorites.includes(project.id)} // Pass favorite status
-                        onFavoriteToggle={() => toggleFavorite(project.id)} // Pass toggle handler
-                        onClick={() => handleProjectClick(project.id)}
+                        isFavorite={favorites.includes(project.id)}
+                        onFavoriteToggle={() => toggleFavorite(project.id)}
+                        onClick={() => onProjectClick(project)}
                     />
                 ))}
             </div>

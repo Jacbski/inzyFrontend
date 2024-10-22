@@ -1,0 +1,38 @@
+.step {
+    display: flex;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.step-image {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.step-content p {
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .step {
+        flex-direction: column;
+    }
+
+    .step-image {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+}
