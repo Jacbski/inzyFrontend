@@ -8,6 +8,13 @@
     position: relative;
     font-family: 'Roboto', sans-serif;
     min-width: 376px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .thumbnail-container {
@@ -79,8 +86,13 @@
     position: absolute;
     top: 8px;
     right: 8px;
+    transition: color 0.3s ease;
 }
 
 .favorites-button:hover {
     color: #ff9800;
+}
+
+.favorites-button.favorite {
+    color: #ffd700;
 }
