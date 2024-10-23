@@ -1,19 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./css/header.scss";
-import Logo from "../assets/logo.svg";
-import UserIcon from "../assets/user-icon.png";
-import SearchIcon from "../assets/search-icon.png";
-import ClearIcon from "../assets/clear-icon.png"; // ikony zmienic na react icons te sa pogladowe
+import AsideMenu from "../Aside/Aside";
+import Logo from "../../assets/logo.svg";
+import UserIcon from "../../assets/user-icon.png";
+import SearchIcon from "../../assets/search-icon.png";
 
 const Header = () => {
-  const [isAsideOpen, setIsAsideOpen] = useState(false);
+  const [isAsideOpen, setIsAsideOpen] = useState(window.innerWidth > 1300);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1300) {
+        setIsAsideOpen(true);
+      } else {
+        setIsAsideOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const toggleAside = () => {
-    setIsAsideOpen(!isAsideOpen);
+    if (window.innerWidth <= 1300) {
+      setIsAsideOpen(!isAsideOpen);
+    }
   };
 
   const toggleUserMenu = () => {
@@ -22,7 +39,6 @@ const Header = () => {
 
   const handleSearchKeyPress = (event) => {
     if (event.key === "Enter") {
-      // logika wyszukiwania lub z bazy
       console.log("Szukam:", searchText);
     }
   };
@@ -37,11 +53,11 @@ const Header = () => {
 
   return (
     <>
-      <header className="header">
+      <header className={`header ${isAsideOpen ? "aside-menu--open" : ""}`}>
         <div className="header__container">
           {/* Lewa strona */}
           <div className="header__left">
-            {/* Przycisk menu */}
+            {/* Przycisk menu - widoczny tylko w wersji mobilnej */}
             <button className="header__menu-button" onClick={toggleAside}>
               ☰
             </button>
@@ -71,11 +87,7 @@ const Header = () => {
             />
             {searchText && (
               <button className="header__clear-button" onClick={clearSearch}>
-                <img
-                  src={ClearIcon}
-                  alt="Clear"
-                  className="header__icon-clear"
-                />
+                ✖
               </button>
             )}
           </div>
@@ -86,11 +98,7 @@ const Header = () => {
               className="header__icon-button header__search-icon-mobile"
               onClick={toggleSearchModal}
             >
-              <img
-                src={SearchIcon}
-                alt="Search"
-                className="header__icon-small"
-              />
+              🔍
             </button>
             {/* Ikona użytkownika */}
             <button className="header__icon-button" onClick={toggleUserMenu}>
@@ -135,35 +143,9 @@ const Header = () => {
           </div>
         </div>
       </header>
-      {/* Aside menu - ogolnie do poprawki jako odzielny component */}
-      {isAsideOpen && (
-        <aside className="aside-menu">
-          <nav className="aside-menu__nav">
-            <ul>
-              <li>
-                <a href="/home">Home</a>
-              </li>
-              {isLoggedIn && (
-                <>
-                  <li>
-                    <a href="/your-creations">Your Creations</a>
-                  </li>
-                  <li>
-                    <a href="/favorites">Favorites</a>
-                  </li>
-                </>
-              )}
-              <li>
-                <a href="/regulations">Regulations</a>
-              </li>
-              <li>
-                <a href="/contact">Contact</a>
-              </li>
-            </ul>
-          </nav>
-        </aside>
-      )}
-      {/* Modal wyszukiwania dla mobile - do poprawki zle wystylizowałem - header.scss - temp file */}
+      {/* Aside menu - osobny komponent */}
+      <AsideMenu isAsideOpen={isAsideOpen} isLoggedIn={isLoggedIn} />
+      {/* Modal wyszukiwania dla mobile */}
       {isSearchModalOpen && (
         <div className="search-modal">
           <div className="search-modal__content">
