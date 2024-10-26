@@ -38,7 +38,7 @@ const ProjectView = ({ project, onClose }) => {
                                 <button className="reaction-button dislike-button" onClick={handleDislike}>
                                     Dislike
                                 </button>
-                                <span className="project-date">Created: {project.date || 'N/A'}</span>
+                                <span className="project-date">Created: {project.dataStworzenia || 'N/A'}</span>
                             </div>
 
                         </div>

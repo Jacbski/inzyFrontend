@@ -1,51 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProjectCard from '../ProjectCard/ProjectCard';
 import './css/ProjectFeed.css';
 
-const mockProjects = Array(20).fill(null).map((_, i) => ({
-    id: i + 1,
-    title: `Project ${i + 1}`,
-    description: 'This is a sample project description. It can contain details about the project, its goals, and its current status.',
-    thumbnail: `/src/assets/dekler-ph-OSk8nBHR21Q-unsplash.jpg`,
-    trends: Math.floor(Math.random() * 100) + 1,
-    date: '2024-10-22',
-    files: [
-        { name: `File${i + 1}.pdf` },
-        { name: `Documentation${i + 1}.docx` }
-    ],
-    steps: [
-        {
-            image: `/src/assets/dekler-ph-OSk8nBHR21Q-unsplash.jpg`,
-            description: `This is the description for step 1 of Project ${i + 1}`
-        },
-        {
-            image: `/src/assets/dekler-ph-OSk8nBHR21Q-unsplash.jpg`,
-            description: `This is the description for step 2 of Project ${i + 1}`
-        }
-    ],
-    comments: [
-        {
-            author: 'John Doe',
-            text: `Great project! I learned a lot from Project ${i + 1}.`,
-            date: '2024-10-21'
-        },
-        {
-            author: 'Jane Smith',
-            text: `I'm having trouble with step 2 on Project ${i + 1}. Any advice?`,
-            date: '2024-10-20'
-        }
-    ]
-}));
-
 const ProjectFeed = ({ onProjectClick }) => {
+    const [projects, setProjects] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [favorites, setFavorites] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const projectsPerPage = 5;
-    const totalPages = Math.ceil(mockProjects.length / projectsPerPage);
+
+    useEffect(() => {
+        fetchProjects();
+    }, []);
+
+    const fetchProjects = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/ogloszenie/getAll');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setProjects(data);
+            setIsLoading(false);
+        } catch (error) {
+            setError('Failed to fetch projects');
+            setIsLoading(false);
+        }
+    };
 
     const indexOfLastProject = currentPage * projectsPerPage;
     const indexOfFirstProject = indexOfLastProject - projectsPerPage;
-    const currentProjects = mockProjects.slice(indexOfFirstProject, indexOfLastProject);
+    const currentProjects = projects.slice(indexOfFirstProject, indexOfLastProject);
+    const totalPages = Math.ceil(projects.length / projectsPerPage);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -57,6 +44,9 @@ const ProjectFeed = ({ onProjectClick }) => {
         );
     };
 
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
+
     return (
         <div className="project-feed">
             <h1 className="project-feed-title">Projects</h1>
@@ -64,10 +54,10 @@ const ProjectFeed = ({ onProjectClick }) => {
                 {currentProjects.map((project) => (
                     <ProjectCard
                         key={project.id}
-                        description={project.description}
-                        thumbnail={project.thumbnail}
+                        description={project.opis}
+                        thumbnail="/placeholder.svg?height=150&width=150"
                         title={project.title}
-                        trends={project.trends}
+                        trends={project.opinia ? project.opinia.positive - project.opinia.negative : 0}
                         isFavorite={favorites.includes(project.id)}
                         onFavoriteToggle={() => toggleFavorite(project.id)}
                         onClick={() => onProjectClick(project)}
