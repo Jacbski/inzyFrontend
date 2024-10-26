@@ -16,8 +16,9 @@ const App = () => {
 
   return (
     <>
-      <Hedaer />
+
       <div>
+          <Hedaer />
         {!selectedProject ? (
           <ProjectFeed onProjectClick={handleProjectClick} />
         ) : (
