@@ -9,7 +9,6 @@
     justify-content: center;
     align-items: flex-start;
     overflow-y: auto;
-    z-index: 1001;
     padding-top: 20px;
 }
 .project-view-container {
