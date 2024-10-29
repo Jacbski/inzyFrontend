@@ -1,14 +1,15 @@
 import React from 'react';
 import './css/ProjectCard.css';
 
-const ProjectCard = ({ thumbnail, title, description, trends, isFavorite, onFavoriteToggle, onClick }) => {
+const ProjectCard = ({ thumbnail, title, description, trends, isFavorite, onFavoriteToggle }) => {
     const handleFavoriteClick = (e) => {
+        e.preventDefault();
         e.stopPropagation();
         onFavoriteToggle();
     };
 
     return (
-        <div className="project-card" onClick={onClick}>
+        <div className="project-card">
             <div className="thumbnail-container">
                 <img src={thumbnail} className="thumbnail" alt={title} />
                 <div className="trending-info">

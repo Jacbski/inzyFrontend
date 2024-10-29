@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import ProjectCard from '../ProjectCard/ProjectCard';
 import './css/ProjectFeed.css';
 
@@ -37,7 +38,7 @@ const mockProjects = Array(20).fill(null).map((_, i) => ({
     ]
 }));
 
-const ProjectFeed = ({ onProjectClick }) => {
+const ProjectFeed = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [favorites, setFavorites] = useState([]);
     const projectsPerPage = 5;
@@ -62,16 +63,16 @@ const ProjectFeed = ({ onProjectClick }) => {
             <h1 className="project-feed-title">Projects</h1>
             <div>
                 {currentProjects.map((project) => (
-                    <ProjectCard
-                        key={project.id}
-                        description={project.description}
-                        thumbnail={project.thumbnail}
-                        title={project.title}
-                        trends={project.trends}
-                        isFavorite={favorites.includes(project.id)}
-                        onFavoriteToggle={() => toggleFavorite(project.id)}
-                        onClick={() => onProjectClick(project)}
-                    />
+                    <Link to={`/project/${project.id}`} key={project.id}>
+                        <ProjectCard
+                            description={project.description}
+                            thumbnail={project.thumbnail}
+                            title={project.title}
+                            trends={project.trends}
+                            isFavorite={favorites.includes(project.id)}
+                            onFavoriteToggle={() => toggleFavorite(project.id)}
+                        />
+                    </Link>
                 ))}
             </div>
             <div className="pagination">

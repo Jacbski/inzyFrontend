@@ -1,32 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ProjectFeed from "./components/ProjectFeed/ProjectFeed";
 import ProjectView from "./components/ProjectView/ProjectView";
-import Hedaer from "./components/Header/Hearder";
+import Header from "./components/Header/Hearder";
 
 const App = () => {
-  const [selectedProject, setSelectedProject] = useState(null);
-
-  const handleProjectClick = (project) => {
-    setSelectedProject(project);
-  };
-
-  const handleCloseView = () => {
-    setSelectedProject(null);
-  };
-
-  return (
-    <>
-
-      <div>
-          <Hedaer />
-        {!selectedProject ? (
-          <ProjectFeed onProjectClick={handleProjectClick} />
-        ) : (
-          <ProjectView project={selectedProject} onClose={handleCloseView} />
-        )}
-      </div>
-    </>
-  );
+    return (
+        <Router>
+            <Header />
+            <Routes>
+                <Route path="/" element={<ProjectFeed />} />
+                <Route path="/project/:id" element={<ProjectView />} />
+            </Routes>
+        </Router>
+    );
 };
 
 export default App;
