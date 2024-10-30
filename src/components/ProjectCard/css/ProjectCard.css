@@ -13,10 +13,6 @@
     width: 100%;
 }
 
-.project-card:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
 .thumbnail-container {
     position: relative;
     width: 144px;
@@ -90,10 +86,18 @@
     transition: color 0.3s ease;
 }
 
-.favorites-button:hover {
-    color: #ff9800;
-}
-
 .favorites-button.favorite {
     color: #ffd700;
 }
+
+@media (hover: hover) and (pointer: fine){
+    .favorites-button:hover {
+        color: #ff9800;
+    }
+
+    .project-card:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+}
+
+

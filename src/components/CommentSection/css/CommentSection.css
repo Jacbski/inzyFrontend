@@ -94,6 +94,8 @@
     transition: background-color 0.3s ease;
 }
 
-.add-comment button:hover {
-    background-color: #1a1a1b;
+@media (hover: hover) and (pointer: fine){
+    .add-comment button:hover {
+        background-color: #1a1a1b;
+    }
 }

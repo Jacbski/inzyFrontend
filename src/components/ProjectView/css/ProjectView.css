@@ -34,10 +34,6 @@
     transition: color 0.3s ease;
 }
 
-.close-button:hover {
-    color: #cc0000;
-}
-
 .project-header {
     display: flex;
     flex-direction: column;
@@ -95,11 +91,6 @@
     transition: color 0.3s ease;
 }
 
-.reaction-button:hover {
-    color: #333;
-}
-
-
 .reaction-sum {
     font-size: 16px;
     font-weight: bold;
@@ -154,10 +145,6 @@
     transition: color 0.3s ease;
 }
 
-.download-text:hover {
-    color: #000;
-}
-
 .project-steps {
     margin-top: 40px;
 }
@@ -166,6 +153,20 @@
     margin-bottom: 20px;
     font-size: 20px;
     color: #333;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .download-text:hover {
+        color: #000;
+    }
+
+    .reaction-button:hover {
+        color: #333;
+    }
+
+    .close-button:hover {
+        color: #cc0000;
+    }
 }
 
 @media (min-width: 768px) {
