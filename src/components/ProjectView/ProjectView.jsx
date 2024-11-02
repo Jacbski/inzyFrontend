@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ProjectSteps from '../ProjectSteps/ProjectSteps';
 import CommentSection from '../CommentSection/CommentSection';
+import ShopRecommendations from '../ShopRecommendations/ShopRecommendations'
 import './css/ProjectView.css';
 
 const mockProjects = Array(20).fill(null).map((_, i) => ({
@@ -11,6 +12,13 @@ const mockProjects = Array(20).fill(null).map((_, i) => ({
     thumbnail: `/src/assets/dekler-ph-OSk8nBHR21Q-unsplash.jpg`,
     trends: Math.floor(Math.random() * 100) + 1,
     date: '2024-10-22',
+    requiredItems: [
+        'Arduino Uno',
+        'Speaker',
+        'Microphone',
+        'Breadboard',
+        'Jumper wires'
+    ],
     files: [
         { name: `File${i + 1}.pdf` },
         { name: `Documentation${i + 1}.docx` }
@@ -128,6 +136,7 @@ const ProjectView = () => {
                                 <p>No files attached</p>
                             )}
                         </div>
+                        <ShopRecommendations items={project.requiredItems} />
                     </div>
                 </div>
                 <div className="project-steps">

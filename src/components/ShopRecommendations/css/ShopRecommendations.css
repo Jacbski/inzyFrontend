@@ -1,0 +1,102 @@
+.shop-recommendations {
+    margin-top: 20px;
+}
+
+.shop-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.shop-header h4 {
+    margin-bottom: 10px;
+    color: #444;
+    font-size: 16px;
+    margin: 0;
+}
+
+.shop-select {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.item-list {
+    padding: 0;
+    list-style-type: none;
+}
+
+.item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.item span {
+    flex-grow: 1;
+    font-size: 14px;
+    color: #333;
+    margin-right: 10px;
+}
+
+.search-button {
+    padding: 5px 10px;
+    font-size: 14px;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+    min-width: 120px;
+    text-align: center;
+}
+
+.amazon-button {
+    background-color: #FF9900;
+}
+
+.botland-button {
+    background-color: #ED1C24;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .shop-select:hover {
+        border-color: #333;
+    }
+
+    .amazon-button:hover {
+        background-color: #E88A00;
+    }
+
+    .botland-button:hover {
+        background-color: #D4161D;
+    }
+}
+
+@media (min-width: 768px) {
+    .shop-header h4 {
+        font-size: 20px;
+    }
+
+    .shop-select {
+        font-size: 16px;
+    }
+
+    .item {
+        font-size: 16px;
+    }
+
+    .search-button {
+        font-size: 16px;
+    }
+}
