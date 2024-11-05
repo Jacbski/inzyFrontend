@@ -1,0 +1,85 @@
+.code-blocks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.code-block-display {
+    margin-top: 0;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    overflow: hidden;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #24292e;
+    background-color: #f6f8fa;
+}
+
+.code-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    border-bottom: 1px solid #d1d5da;
+    padding: 8px 16px;
+}
+
+.code-block-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #24292e;
+}
+
+.code-container {
+    position: relative;
+    padding: 16px 0;
+    overflow-x: auto;
+}
+
+pre {
+    margin: 0;
+    padding: 0 16px;
+}
+
+code {
+    font-family: inherit;
+    white-space: pre;
+}
+
+.code-line {
+    display: flex;
+    padding: 0 16px;
+}
+
+.line-number {
+    color: #6a737d;
+    text-align: right;
+    padding-right: 16px;
+    user-select: none;
+    min-width: 40px;
+}
+
+.line-content {
+    padding-left: 16px;
+    border-left: 1px solid #e1e4e8;
+}
+
+.copy-button {
+    padding: 6px 12px;
+    background-color: #24292e;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .copy-button:hover {
+        background-color: #000000;
+    }
+}
