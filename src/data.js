@@ -82,5 +82,5 @@ void loop() {
         `.trim()
         }
     ],
-    link: 'https://www.buymeacoffee.com/abdenasser'
+    link: 'https://donate.stripe.com/test_7sIcMV5ui3oW38QdQQ'
 }));

@@ -75,21 +75,9 @@ const ProjectView = () => {
                                 </button>
                                 {copySuccess && <span className="copy-success">{copySuccess}</span>}
                                 <span className="project-date">Created: {project.date || 'N/A'}</span>
-                                {/*<a*/}
-                                {/*    href="https://www.buymeacoffee.com/abdenasser"*/}
-                                {/*    target="_blank"*/}
-                                {/*    rel="noopener noreferrer"*/}
-                                {/*    style = {{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}*/}
-                                {/*>*/}
-                                {/*    <img*/}
-                                {/*        src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"*/}
-                                {/*        alt="Buy Me A Coffee"*/}
-                                {/*        style={{ height: '44px', width: 'auto' } }*/}
-                                {/*    />*/}
-                                {/*</a>*/}
                             </div>
                         </div>
-                        <Donate link={project.link} />
+                        <Donate link={project.link} projectId={project.id} />
                         <div className="project-files">
                             <h4>Attached Files:</h4>
                             {project.files && project.files.length > 0 ? (
