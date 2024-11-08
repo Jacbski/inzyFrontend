@@ -81,5 +81,6 @@ void loop() {
 }
         `.trim()
         }
-    ]
+    ],
+    link: 'https://www.buymeacoffee.com/abdenasser'
 }));
