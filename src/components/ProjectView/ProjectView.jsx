@@ -7,12 +7,12 @@ import { mockProjects } from '../../data';
 import './css/ProjectView.css';
 import CodeBlockDIsplay from "../CodeBlockDisplay/CodeBlockDIsplay.jsx";
 import Donate from "../Donate/Donate.jsx";
+import Share from "../Share/Share.jsx";
 
 
 const ProjectView = () => {
     const [project, setProject] = useState(null);
     const [reactionSum, setReactionSum] = useState(0);
-    const [copySuccess, setCopySuccess] = useState('');
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -41,17 +41,6 @@ const ProjectView = () => {
         setReactionSum(prevSum => prevSum - 1);
     };
 
-    const handleShare = () => {
-        const projectUrl = window.location.href;
-        navigator.clipboard.writeText(projectUrl).then(() => {
-            setCopySuccess('URL copied!');
-            setTimeout(() => setCopySuccess(''), 2000);
-        }, (err) => {
-            console.error('Failed to copy: ', err);
-            setCopySuccess('Failed to copy');
-        });
-    };
-
     return (
         <div className="project-view-wrapper">
             <div className="project-view-container">
@@ -62,6 +51,7 @@ const ProjectView = () => {
                         <img src={project.thumbnail} alt={project.title} className="project-image"/>
                         <p className="project-description">{project.description}</p>
                         <div className="project-details">
+                            <span className="project-date">Created: {project.date || 'N/A'}</span>
                             <div className="project-reactions">
                                 <span className="reaction-sum">{reactionSum}</span>
                                 <button className="reaction-button like-button" onClick={handleLike}>
@@ -70,11 +60,7 @@ const ProjectView = () => {
                                 <button className="reaction-button dislike-button" onClick={handleDislike}>
                                     Dislike
                                 </button>
-                                <button className="reaction-button share-button" onClick={handleShare}>
-                                    Share
-                                </button>
-                                {copySuccess && <span className="copy-success">{copySuccess}</span>}
-                                <span className="project-date">Created: {project.date || 'N/A'}</span>
+                                <Share />
                             </div>
                         </div>
                         <Donate link={project.link} projectId={project.id} />
