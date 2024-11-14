@@ -1,20 +1,28 @@
 import React from 'react';
 import './css/ProjectCard.css';
 
-const ProjectCard = ({ thumbnail, title, description, trends, isFavorite, onFavoriteToggle }) => {
+const ProjectCard = ({ photo, title, description, opinia, isFavorite, onFavoriteToggle }) => {
     const handleFavoriteClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
         onFavoriteToggle();
     };
 
+    const opinionSum = Array.isArray(opinia)
+        ? opinia.reduce((total, opinion) => total + opinion.positive - opinion.negative, 0)
+        : 0;
+
     return (
         <div className="project-card">
             <div className="thumbnail-container">
-                <img src={thumbnail} className="thumbnail" alt={title} />
+                <img
+                    src={photo === null || photo === "" ? "https://via.placeholder.com/150" : photo}
+                    className="thumbnail"
+                    alt={title || "Project thumbnail"}
+                />
                 <div className="trending-info">
                     <span className="trending-icon">➚</span>
-                    <p className="trending-text">+{trends}</p>
+                    <p className="trending-text">{opinionSum}</p>
                 </div>
             </div>
             <div className="card-content">

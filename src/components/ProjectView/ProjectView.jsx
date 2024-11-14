@@ -1,37 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import ProjectSteps from '../ProjectSteps/ProjectSteps';
 import CommentSection from '../CommentSection/CommentSection';
-import ShopRecommendations from '../ShopRecommendations/ShopRecommendations'
-import { mockProjects } from '../../data';
+import ShopRecommendations from '../ShopRecommendations/ShopRecommendations';
+import { fetchProjects } from '../../data';
 import './css/ProjectView.css';
-import CodeBlockDIsplay from "../CodeBlockDisplay/CodeBlockDIsplay.jsx";
-import Donate from "../Donate/Donate.jsx";
-import Share from "../Share/Share.jsx";
-
+import CodeBlockDisplay from "../CodeBlockDisplay/CodeBlockDisplay";
+import Donate from "../Donate/Donate";
+import Share from "../Share/Share";
 
 const ProjectView = () => {
     const [project, setProject] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [reactionSum, setReactionSum] = useState(0);
     const { id } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        const projectId = parseInt(id);
-        const foundProject = mockProjects.find(p => p.id === projectId);
-        if (foundProject) {
-            setProject(foundProject);
-            setReactionSum(foundProject.trends);
-        } else {
-            navigate('/');
-        }
+        const loadProject = async () => {
+            try {
+                setLoading(true);
+                const projects = await fetchProjects();
+
+                if (!Array.isArray(projects)) {
+                    throw new Error("Fetched data is not an array");
+                }
+
+                const foundProject = projects.find(p => p.id === id);
+
+                if (foundProject) {
+                    setProject(foundProject);
+                    const initialReactionSum = Array.isArray(foundProject.opinia)
+                        ? foundProject.opinia.reduce((total, opinion) =>
+                            total + (Number(opinion.positive) || 0) + (Number(opinion.negative) || 0), 0)
+                        : 0;
+                    setReactionSum(initialReactionSum);
+                } else {
+                    navigate('/');
+                }
+            } catch (err) {
+                setError("Failed to load project. Please try again later.");
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadProject();
     }, [id, navigate]);
-
-    if (!project) return null;
-
-    const handleDownload = (fileName) => {
-        console.log(`Downloading ${fileName}`);
-    };
 
     const handleLike = () => {
         setReactionSum(prevSum => prevSum + 1);
@@ -41,17 +56,29 @@ const ProjectView = () => {
         setReactionSum(prevSum => prevSum - 1);
     };
 
-    return (
-        <div className="project-view-wrapper">
+    const handleDownload = (fileName) => {
+        console.log(`Downloading ${fileName}`);
+    };
+
+    const renderContent = () => {
+        if (loading) return <div>Loading...</div>;
+        if (error) return <div>Error: {error}</div>;
+        if (!project) return <div>Project not found</div>;
+
+
+        return (
             <div className="project-view-container">
-                <button className="close-button" onClick={() => navigate('/')}>X</button>
+                <Link to="/" className="close-button">X</Link>
                 <div className="project-header">
                     <div className="project-info">
-                        <h1>{project.title}</h1>
-                        <img src={project.thumbnail} alt={project.title} className="project-image"/>
-                        <p className="project-description">{project.description}</p>
+                        <h1>{project.title || 'Untitled Project'}</h1>
+                        {project.photo ? (
+                            <img src={project.photo} alt={project.title} className="project-image"/>
+                        ) : (
+                            <img src="https://via.placeholder.com/150" alt="Placeholder" className="project-image"/>
+                        )}                        <p className="project-description">{project.description || 'No description available'}</p>
                         <div className="project-details">
-                            <span className="project-date">Created: {project.date || 'N/A'}</span>
+                            <span className="project-date">Created: {project.dataStworzenia || 'N/A'}</span>
                             <div className="project-reactions">
                                 <span className="reaction-sum">{reactionSum}</span>
                                 <button className="reaction-button like-button" onClick={handleLike}>
@@ -71,10 +98,10 @@ const ProjectView = () => {
                                     {project.files.map((file, index) => (
                                         <li key={index} className="file-item">
                                             <span className="file-icon">📄</span>
-                                            <span className="file-name">{file.name}</span>
+                                            <span className="file-name">{file}</span>
                                             <span
                                                 className="download-text"
-                                                onClick={() => handleDownload(file.name)}
+                                                onClick={() => handleDownload(file)}
                                             >
                                                 Download
                                             </span>
@@ -85,16 +112,22 @@ const ProjectView = () => {
                                 <p>No files attached</p>
                             )}
                         </div>
-                        <ShopRecommendations items={project.requiredItems} />
+                        <ShopRecommendations items={project.requiredItems || []} />
                     </div>
                 </div>
-                <CodeBlockDIsplay codeBlocks={project.codeBlocks || []} />
+                <CodeBlockDisplay codeBlocks={project.kod || []} />
                 <div className="project-steps">
                     <h3>Steps</h3>
                     <ProjectSteps steps={project.steps || []} />
                 </div>
                 <CommentSection comments={project.comments || []} />
             </div>
+        );
+    };
+
+    return (
+        <div className="project-view-wrapper">
+            {renderContent()}
         </div>
     );
 };

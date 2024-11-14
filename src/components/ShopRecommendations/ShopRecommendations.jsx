@@ -24,28 +24,34 @@ const ShopRecommendations = ({ items }) => {
         <div className="shop-recommendations">
             <div className="shop-header">
                 <h4>Required Items:</h4>
-                <select
-                    value={selectedShop}
-                    onChange={(e) => setSelectedShop(e.target.value)}
-                    className="shop-select"
-                >
-                    <option value="Amazon">Amazon</option>
-                    <option value="Botland">Botland</option>
-                </select>
+                {items.length > 0 && (
+                    <select
+                        value={selectedShop}
+                        onChange={(e) => setSelectedShop(e.target.value)}
+                        className="shop-select"
+                    >
+                        <option value="Amazon">Amazon</option>
+                        <option value="Botland">Botland</option>
+                    </select>
+                )}
             </div>
-            <ul className="item-list">
-                {items.map((item, index) => (
-                    <li key={index} className="item">
-                        <span>{item}</span>
-                        <button
-                            className={getButtonClass(selectedShop)}
-                            onClick={() => window.open(getSearchUrl(selectedShop, item), '_blank')}
-                        >
-                            Search on {selectedShop}
-                        </button>
-                    </li>
-                ))}
-            </ul>
+            {items.length === 0 ? (
+                <p>No required items for this project.</p>
+            ) : (
+                <ul className="item-list">
+                    {items.map((item, index) => (
+                        <li key={index} className="item">
+                            <span>{item.itemName}</span>
+                            <button
+                                className={getButtonClass(selectedShop)}
+                                onClick={() => window.open(getSearchUrl(selectedShop, item.itemName), '_blank')}
+                            >
+                                Search on {selectedShop}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };

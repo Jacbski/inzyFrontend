@@ -1,18 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProjectCard from '../ProjectCard/ProjectCard';
 import './css/ProjectFeed.css';
-import {mockProjects} from "../../data.js";
+import { fetchProjects } from '../../data';
 
 const ProjectFeed = () => {
+    const [projects, setProjects] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [favorites, setFavorites] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const projectsPerPage = 5;
-    const totalPages = Math.ceil(mockProjects.length / projectsPerPage);
+
+    useEffect(() => {
+        const loadProjects = async () => {
+            try {
+                const fetchedProjects = await fetchProjects();
+                setProjects(fetchedProjects);
+                setIsLoading(false);
+            } catch (error) {
+                setError('Failed to fetch projects');
+                setIsLoading(false);
+            }
+        };
+        loadProjects();
+    }, []);
 
     const indexOfLastProject = currentPage * projectsPerPage;
     const indexOfFirstProject = indexOfLastProject - projectsPerPage;
-    const currentProjects = mockProjects.slice(indexOfFirstProject, indexOfLastProject);
+    const currentProjects = projects.slice(indexOfFirstProject, indexOfLastProject);
+    const totalPages = Math.ceil(projects.length / projectsPerPage);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -24,6 +41,9 @@ const ProjectFeed = () => {
         );
     };
 
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
+
     return (
         <div className="project-feed">
             <h1 className="project-feed-title">Projects</h1>
@@ -32,11 +52,14 @@ const ProjectFeed = () => {
                     <Link to={`/project/${project.id}`} key={project.id}>
                         <ProjectCard
                             description={project.description}
-                            thumbnail={project.thumbnail}
+                            photo={project.photo}
                             title={project.title}
-                            trends={project.trends}
+                            opinia={project.opinia ? project.opinia.reduce((sum, opinion) => sum + (opinion.positive || 0) - (opinion.negative || 0), 0) : 0}
                             isFavorite={favorites.includes(project.id)}
-                            onFavoriteToggle={() => toggleFavorite(project.id)}
+                            onFavoriteToggle={(e) => {
+                                e.preventDefault();
+                                toggleFavorite(project.id);
+                            }}
                         />
                     </Link>
                 ))}
