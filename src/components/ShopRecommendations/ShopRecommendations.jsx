@@ -4,20 +4,42 @@ import './css/ShopRecommendations.css';
 const ShopRecommendations = ({ items }) => {
     const [selectedShop, setSelectedShop] = useState('Amazon');
 
-    const getSearchUrl = (shop, itemName) => {
+    const getSearchUrl = (shop, item) => {
         if (shop === 'Amazon') {
             const baseUrl = 'https://www.amazon.com/s';
             const params = new URLSearchParams({
-                k: itemName
+                k: item.itemName
             });
             return `${baseUrl}?${params.toString()}`;
-        } else {
-            return `https://botland.com.pl/szukaj?s=${encodeURIComponent(itemName)}`;
+        } else if (shop === 'Botland') {
+            return `https://botland.com.pl/szukaj?s=${encodeURIComponent(item.itemName)}`;
+        } else if (shop === "Author's links") {
+            if (item.itemLink &&
+                item.itemLink.length > 0 &&
+                item.itemLink[0] &&
+                item.itemLink[0].trim() !== '') {
+                return item.itemLink[0];
+            }
+            return null;
         }
+        return '#';
     };
 
     const getButtonClass = (shop) => {
-        return `search-button ${shop === 'Amazon' ? 'amazon-button' : 'botland-button'}`;
+        return `search-button ${
+            shop === 'Amazon'
+                ? 'amazon-button'
+                : shop === 'Botland'
+                    ? 'botland-button'
+                    : 'author-button'
+        }`;
+    };
+
+    const isLinkAvailable = (item) => {
+        return item.itemLink &&
+            item.itemLink.length > 0 &&
+            item.itemLink[0] &&
+            item.itemLink[0].trim() !== '';
     };
 
     return (
@@ -32,6 +54,7 @@ const ShopRecommendations = ({ items }) => {
                     >
                         <option value="Amazon">Amazon</option>
                         <option value="Botland">Botland</option>
+                        <option value="Author's links">Author's links</option>
                     </select>
                 )}
             </div>
@@ -44,9 +67,15 @@ const ShopRecommendations = ({ items }) => {
                             <span>{item.itemName}</span>
                             <button
                                 className={getButtonClass(selectedShop)}
-                                onClick={() => window.open(getSearchUrl(selectedShop, item.itemName), '_blank')}
+                                onClick={() => {
+                                    const url = getSearchUrl(selectedShop, item);
+                                    if (url) window.open(url, '_blank');
+                                }}
+                                disabled={selectedShop === "Author's links" && !isLinkAvailable(item)}
                             >
-                                Search on {selectedShop}
+                                {selectedShop === "Author's links"
+                                    ? (isLinkAvailable(item) ? "View Link" : "No link available")
+                                    : `Search on ${selectedShop}`}
                             </button>
                         </li>
                     ))}
