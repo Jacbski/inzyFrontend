@@ -1,0 +1,50 @@
+.modal__title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.modal__form-group {
+  display: flex;
+  flex-direction: column;
+}
+.modal__label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+.modal__input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.modal__button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+.modal__button:hover {
+  background-color: #0056b3;
+}
+.modal__close {
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 15px;
+  transition: background-color 0.3s;
+}
+.modal__close:hover {
+  background-color: #e2e6ea;
+}/*# sourceMappingURL=Modal.css.map */

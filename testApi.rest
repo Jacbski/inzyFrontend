@@ -1,0 +1,243 @@
+@baseUrl = http://localhost:8080/
+
+@access_token = "{{login.response.body.token}}"
+
+
+# @name login
+POST {{baseUrl}}auth/authenticate
+Content-Type: application/json
+
+{
+  "userName": "sraker",
+  "password": "sraker"
+}
+
+
+
+### Tworzenie ogloszen/posta bez opini
+POST {{baseUrl}}api/ogloszenie/dodajOgloszenie HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "title":"tesssttest",
+  "opis":"fiip",
+  "kod":"fiip",
+  "kategoriaId":"12",
+  "opinia":[{
+    "positive": 1,
+    "negative": 0
+  }]
+}
+
+
+//my sami ręcznie nie będziemy dodawac opini do ogloszenia ale tutaj jest pokazane jak mniej wiecej to wyglada
+
+### Tworzenie ogloszen/posta bez opini
+POST {{baseUrl}}api/ogloszenie/dodajOgloszenie
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "title": "nowe",
+  "description": "Laptop w dobrym stanie, sprawny technicznie, 15 cali.",
+  "kod": [
+    {
+      "title": "Laptop code",
+      "code": "A1234B567"
+    }
+  ],
+  "kategoriaId": 1,
+  "requiredItems": [
+    {
+      "itemName": "Laptop charger",
+      "itemLink": [
+        "https://example.com/laptop-charger",
+        "https://example.com/laptop-charger2"
+      ]
+    },
+    {
+      "itemName": "Laptop bag",
+      "itemLink": [
+        "https://example.com/laptop-bag"
+      ]
+    }
+  ],
+  "files": [
+    "https://example.com/laptop-image.jpg",
+    "https://example.com/laptop-documentation.pdf"
+  ],
+  "steps": [
+    {
+      "stepTitle": "Krok 1: Sprawdzenie stanu technicznego",
+      "stepImage": "https://example.com/step1-image.jpg",
+      "stepDescription": "Upewnij się, że laptop działa poprawnie."
+    },
+    {
+      "stepTitle": "Krok 2: Przygotowanie do wysyłki",
+      "stepImage": "https://example.com/step2-image.jpg",
+      "stepDescription": "Zapakuj laptopa w odpowiednie opakowanie."
+    }
+  ]
+}
+
+
+
+### POBIERANIE wszystkie ogloszenia/posty
+GET {{baseUrl}}api/ogloszenie/getAll
+Content-Type: application/json
+#Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJKYWt1YiIsImlhdCI6MTczMDczNzQ5NywiZXhwIjoxNzMwODIzODk3fQ.hZYCMMH7_X3XmMvpj00qC5heKrXSlxaawQtqaXgj8Mg
+
+### POBIERANIE po konkrtentym id ogloszenia/posty
+GET {{baseUrl}}api/ogloszenie/getById/6714d4ac3623bd1e680ea411
+Content-Type: application/json
+
+
+### POBIERANIE ogloszen po Kategoria id
+GET {{baseUrl}}api/ogloszenie/getByKategoria/44
+Content-Type: application/json
+
+
+### EDYTOWANIE danego posta po jego id
+PUT {{baseUrl}}api/ogloszenie/updateOgloszenia/673a3cd5846ca9284d27b19e
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "title": "zmioenione",
+  "description": "zmioenione.",
+  "kod": [
+    {
+      "title": "Laptop code",
+      "code": "A1234B567"
+    }
+  ],
+  "kategoriaId": 1,
+  "requiredItems": [
+    {
+      "itemName": "Laptop charger",
+      "itemLink": [
+        "https://example.com/laptop-charger",
+        "https://example.com/laptop-charger2"
+      ]
+    },
+    {
+      "itemName": "Laptop bag",
+      "itemLink": [
+        "https://example.com/laptop-bag"
+      ]
+    }
+  ],
+  "files": [
+    "https://example.com/laptop-image.jpg",
+    "https://example.com/laptop-documentation.pdf"
+  ],
+  "steps": [
+    {
+      "stepTitle": "Krok 1: Sprawdzenie stanu technicznego",
+      "stepImage": "https://example.com/step1-image.jpg",
+      "stepDescription": "Upewnij się, że laptop działa poprawnie."
+    },
+    {
+      "stepTitle": "Krok 2: Przygotowanie do wysyłki",
+      "stepImage": "https://example.com/step2-image.jpg",
+      "stepDescription": "Zapakuj laptopa w odpowiednie opakowanie."
+    }
+  ]
+}
+
+
+### USUWANIE danego posta po jego id
+DELETE {{baseUrl}}api/ogloszenie/deleteOgloszenie/673a2e4ad3843b6325edac92
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### Pobiera Opinie jako są przypisane do danego posta, zwraca liczbe pozytywnych/negatywnych i sumuje ilosc
+GET {{baseUrl}}api/ogloszenie/673a2b332338da37af559af6/opinie
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### Pobiera ogloszenia uzytkownika o danym id
+GET {{baseUrl}}api/ogloszenie/user/673516a2481ed0706af1620c/ogloszenia
+Content-Type: application/json
+
+### Dodanie Opini do Ogloszenia/psota
+POST {{baseUrl}}api/opinie/673a2b332338da37af559af6/dodaj
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "positive" : 1,
+  "negative": 0
+}
+
+### rejestracja uzytkownika
+POST {{baseUrl}}auth/register
+Content-Type: application/json
+
+{
+  "userName" : "ZBYSZKO Z BOGANCA",
+  "email" : "zbyszek@gmaiko.ing",
+  "password" : "zbyszko"
+}
+
+### TESTTTTTTT
+PUT {{baseUrl}}api/users/670535d4f3fbf85086324165
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzcmFrZXIiLCJpYXQiOjE3MzI5MTQzNzQsImV4cCI6MTczMzAwMDc3NH0.GBfFezXndVdDNhjj-lO0E_g98BJYGtNICwRwrc-S7t8
+
+{
+  "userName" : "ziomal"
+}
+
+### logowanie uzytkownika
+POST {{baseUrl}}auth/authenticate
+Content-Type: application/json
+
+{
+  "userName" : "sraker",
+  "password" : "sraker"
+}
+
+### dodanie ogloszenia do ulubiuonych
+POST {{baseUrl}}api/user/dodajDoUlubionych/673a3635c2af344bd6e0157e
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### Pobierz ulubione dla danego uzytkownika
+GET {{baseUrl}}api/user/ulubione/67351712a9a6843320eb9c35
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### pobieranie aktualnego uzytkownika
+GET {{baseUrl}}api/users/current-user
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzcmFrZXIiLCJpYXQiOjE3MzMwNzU5OTgsImV4cCI6MTczMzE2MjM5OH0.03C6ynN3ZIGCAjceXh-DMrOSjXx6VtK5NB1VYpg329k
+
+### POBIERANIE ogłoszeń posortowanych rosnąco według daty
+GET {{baseUrl}}api/ogloszenie/sorted/asc
+Content-Type: application/json
+
+
+### POBIERANIE ogłoszeń posortowanych malejąco według daty
+GET {{baseUrl}}api/ogloszenie/sorted/desc
+Content-Type: application/json
+
+### POBIERANIE ogłoszeń posortowanych według pozytywnych ocen
+GET {{baseUrl}}api/ogloszenie/sorted/positive
+Content-Type: application/json
+
+### POBIERANIE ogłoszeń posortowanych według negatywnych ocen
+GET {{baseUrl}}api/ogloszenie/sorted/negative
+Content-Type: application/json
+
+
+### Ustawienia avatara uzytkownika po id uzytkownika
+POST {{baseUrl}}api/avatar/{userId}/upload
+Content-Type: multipart/form-data
+
+
+### Pobranie avatara uzytkownika po jego id
+GET {{baseUrl}}api/avatar/67362fe05ab9bb6bc1c24279/download
+Content-Type: multipart/form-data
