@@ -120,7 +120,8 @@ const ProjectView = () => {
                     <h3>Steps</h3>
                     <ProjectSteps steps={project.steps || []} />
                 </div>
-                <CommentSection comments={project.comments || []} />
+                <CommentSection postId={project.id} />
+
             </div>
         );
     };
