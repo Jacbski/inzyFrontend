@@ -54,8 +54,14 @@
 }
 
 .comment-text {
-    margin-bottom: 4px;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: pre-wrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
 
 .add-comment {
     display: flex;
