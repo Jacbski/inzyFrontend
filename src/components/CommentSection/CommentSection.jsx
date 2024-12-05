@@ -118,11 +118,11 @@ export default function CommentSection({ postId }) {
                 <div className="add-comment">
                     <input
                         type="text"
-                        placeholder="Add a comment..."
+                        placeholder="Add comment"
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                     />
-                    <button onClick={handleAddComment}>Add</button>
+                    <button onClick={handleAddComment}>+</button>
                 </div>
             )}
             <h3>Comments</h3>
@@ -136,27 +136,46 @@ export default function CommentSection({ postId }) {
                             <div className="comment-header">
                                 <span className="comment-author">{comment.author || 'Anonymous'}</span>
                                 <span className="comment-date">
-                                    {new Date(comment.creationDate).toLocaleDateString() || 'Unknown date'}
+                                    {new Date(comment.creationDate).toLocaleDateString()}
                                 </span>
                             </div>
                             {editingCommentId === comment.id ? (
-                                <div>
+                                <div className="edit-comment">
                                     <input
                                         type="text"
                                         value={editingContent}
                                         onChange={(e) => setEditingContent(e.target.value)}
                                     />
-                                    <button onClick={handleSaveEdit}>Save</button>
-                                    <button onClick={() => setEditingCommentId(null)}>Cancel</button>
+                                    <div className="edit-actions">
+                                        <button onClick={handleSaveEdit}>Save</button>
+                                        <button onClick={() => setEditingCommentId(null)}>Cancel</button>
+                                    </div>
                                 </div>
                             ) : (
-                                <p className="comment-text">{comment.contents}</p>
-                            )}
-                            {currentUser && comment.isAuthor && (
-                                <div className="comment-actions">
-                                    <button onClick={() => handleEditComment(comment.id, comment.contents)}>Edit</button>
-                                    <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
-                                </div>
+                                <>
+                                    <p className="comment-text">{comment.contents}</p>
+                                    {currentUser && comment.isAuthor && (
+                                        <div className="comment-actions">
+                                            <button
+                                                className="action-button"
+                                                onClick={() => handleEditComment(comment.id, comment.contents)}
+                                            >
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            </button>
+                                            <button
+                                                className="action-button"
+                                                onClick={() => handleDeleteComment(comment.id)}
+                                            >
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                    <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
                     </div>
@@ -165,3 +184,4 @@ export default function CommentSection({ postId }) {
         </div>
     );
 }
+
