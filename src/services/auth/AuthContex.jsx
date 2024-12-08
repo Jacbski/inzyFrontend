@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useMemo } from "react";
 import { login as apiLogin, register as apiRegister } from "../api/Auth";
-import { getCurrentUser } from "../api/User";
+import { getCurrentUser, updateUser, deleteUser } from "../api/User";
 
 export const AuthContext = createContext();
 
@@ -62,6 +62,106 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("access_token");
   };
 
+  const updateUsername = async (newUsername, password) => {
+    if (!currentUser) {
+      throw new Error("No user is currently logged in");
+    }
+
+    if (!password) {
+      throw new Error("Password is required to update username");
+    }
+
+    try {
+      // Wywołanie API do zmiany nazwy użytkownika
+      await updateUser(currentUser.id, { userName: newUsername });
+
+      // Wylogowanie użytkownika
+      handleLogout();
+
+      // Ponowne logowanie z nową nazwą użytkownika
+      await handleLogin(newUsername, password);
+
+      // Zaktualizuj stan użytkownika po pomyślnym logowaniu
+      await fetchCurrentUser();
+
+      alert("Username updated successfully, and you are now logged in!");
+    } catch (error) {
+      console.error("Error updating username:", error);
+      throw error;
+    }
+  };
+
+  const updateEmail = async (newEmail, password) => {
+    if (!currentUser) {
+      throw new Error("No user is currently logged in");
+    }
+
+    if (!password) {
+      throw new Error("Password is required to update email");
+    }
+
+    try {
+      // Wywołanie API do zmiany e-maila
+      await updateUser(currentUser.id, { email: newEmail });
+
+      // Wylogowanie użytkownika
+      handleLogout();
+
+      // Ponowne logowanie z aktualnym username i hasłem
+      await handleLogin(currentUser.username, password);
+
+      // Aktualizacja stanu użytkownika
+      await fetchCurrentUser();
+
+      alert("Email updated successfully, and you are now logged in!");
+    } catch (error) {
+      console.error("Error updating email:", error);
+      throw error;
+    }
+  };
+
+  const updatePassword = async (newPassword) => {
+    if (!currentUser) {
+      throw new Error("No user is currently logged in");
+    }
+
+    if (!newPassword) {
+      throw new Error("New password is required");
+    }
+
+    try {
+      // Wywołanie API do zmiany hasła, przekazując tylko nowe hasło
+      await updateUser(currentUser.id, { password: newPassword });
+
+      // Wylogowanie użytkownika po zmianie hasła
+      handleLogout();
+
+      alert("Password updated successfully. Please log in again.");
+    } catch (error) {
+      console.error("Error updating password:", error);
+      throw error;
+    }
+  };
+
+  const deleteAccount = async () => {
+    if (!currentUser) {
+      throw new Error("No user is currently logged in");
+    }
+
+    try {
+      // Wywołanie API do usunięcia konta
+      await deleteUser(currentUser.id);
+
+      // Wylogowanie użytkownika po usunięciu konta
+      handleLogout();
+
+      alert("Account deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      throw error;
+    }
+  };
+
   const value = useMemo(
     () => ({
       isLoggedIn,
@@ -69,6 +169,10 @@ export const AuthProvider = ({ children }) => {
       login: handleLogin,
       register: handleRegister,
       logout: handleLogout,
+      updateUsername,
+      updateEmail,
+      updatePassword,
+      deleteAccount,
     }),
     [isLoggedIn, currentUser]
   );

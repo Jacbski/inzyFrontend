@@ -1,0 +1,44 @@
+.settings {
+  margin-top: 20px;
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+
+    button {
+      width: 200px;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      border: 1px solid #ccc;
+      border-radius: 50px; /* Owalny kształt */
+      background-color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+
+      &:hover {
+        background-color: #f0f0f0;
+        transform: scale(1.05); /* Subtelny efekt powiększenia */
+      }
+
+      &.delete {
+        color: #ff0000; /* Czerwony tekst */
+        border-color: #ffcccc;
+
+        &:hover {
+          background-color: #ffe6e6; /* Jasnoczerwone tło przy hover */
+        }
+      }
+    }
+  }
+}

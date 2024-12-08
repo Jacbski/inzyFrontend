@@ -199,6 +199,17 @@ Content-Type: application/json
   "password" : "sraker"
 }
 
+### logowanie z avatarem
+POST {{baseUrl}}auth/authenticate
+Content-Type: application/json
+
+{
+  "userName" : "igorgutkowski",
+  "password" : "haslohaslo"
+}
+
+
+
 ### dodanie ogloszenia do ulubiuonych
 POST {{baseUrl}}api/user/dodajDoUlubionych/673a3635c2af344bd6e0157e
 Content-Type: application/json
@@ -213,7 +224,7 @@ Authorization: Bearer {{access_token}}
 ### pobieranie aktualnego uzytkownika
 GET {{baseUrl}}api/users/current-user
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzcmFrZXIiLCJpYXQiOjE3MzMwNzU5OTgsImV4cCI6MTczMzE2MjM5OH0.03C6ynN3ZIGCAjceXh-DMrOSjXx6VtK5NB1VYpg329k
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZ29yZ3V0a293c2tpIiwiaWF0IjoxNzMzNTkyNzk0LCJleHAiOjE3MzM2NzkxOTR9.uBqr-IlkCCLxjNU_2xdQcXdiFDIaO1IhSqum-ZH14Rc
 
 ### POBIERANIE ogłoszeń posortowanych rosnąco według daty
 GET {{baseUrl}}api/ogloszenie/sorted/asc
