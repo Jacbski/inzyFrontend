@@ -73,7 +73,7 @@ const ProjectView = () => {
                     <div className="project-info">
                         <h1>{project.title || 'Untitled Project'}</h1>
                         {project.photo ? (
-                            <img src={project.photo} alt={project.title} className="project-image"/>
+                            <img src={`data:image/png;base64,${project.photo}`} alt={project.title} className="project-image"/>
                         ) : (
                             <img src="https://via.placeholder.com/150" alt="Placeholder" className="project-image"/>
                         )}                        <p className="project-description">{project.description || 'No description available'}</p>

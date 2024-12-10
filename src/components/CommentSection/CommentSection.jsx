@@ -4,12 +4,17 @@ import request from '../../services/api/Request.jsx';
 
 export default function CommentSection({ postId }) {
     const [comments, setComments] = useState([]);
+    const [users, setUsers] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editingContent, setEditingContent] = useState('');
+    const [validationError, setValidationError] = useState('');
+    const [editValidationError, setEditValidationError] = useState('');
+
+    const MAX_COMMENT_LENGTH = 500;
 
     useEffect(() => {
         const fetchCurrentUser = async () => {
@@ -21,27 +26,26 @@ export default function CommentSection({ postId }) {
             }
         };
 
+        const fetchUsers = async () => {
+            try {
+                const usersData = await request('/api/users', 'GET', null, true);
+                setUsers(usersData);
+            } catch (err) {
+                console.error('Failed to fetch users:', err);
+            }
+        };
+
         fetchCurrentUser();
+        fetchUsers();
     }, []);
 
     const fetchComments = async () => {
         try {
             setLoading(true);
             const data = await request(`/api/comments?postID=${postId}`, 'GET', null, true);
-
-            const commentsWithUserDetails = await Promise.all(
-                data.map(async (comment) => {
-                    const user = await request(`/api/users/${comment.userID}`, 'GET', null, true);
-                    return {
-                        ...comment,
-                        author: user?.userName || 'Unknown User',
-                        isAuthor: currentUser?.id === comment.userID,
-                    };
-                })
-            );
-
-            setComments(commentsWithUserDetails || []);
+            setComments(data || []);
         } catch (err) {
+            console.error('Failed to fetch comments:', err);
             setError('Failed to load comments. Please try again later.');
         } finally {
             setLoading(false);
@@ -50,9 +54,25 @@ export default function CommentSection({ postId }) {
 
     useEffect(() => {
         fetchComments();
-    }, [postId, currentUser]);
+    }, [postId]);
+
+    const getUserById = (userId) => {
+        const user = users.find((user) => user.id === userId);
+        if (user) {
+            return {
+                ...user,
+                avatar: user.avatar ? `data:image/png;base64,${user.avatar}` : null,
+            };
+        }
+        return { userName: 'Anonymous', avatar: null };
+    };
 
     const handleAddComment = async () => {
+        if (newComment.trim().length > MAX_COMMENT_LENGTH) {
+            setValidationError(`Comment cannot exceed ${MAX_COMMENT_LENGTH} characters.`);
+            return;
+        }
+
         if (newComment.trim()) {
             try {
                 const commentData = {
@@ -61,19 +81,11 @@ export default function CommentSection({ postId }) {
                 };
 
                 const addedComment = await request(`/api/comments/${postId}`, 'POST', commentData, true);
-                const user = await request(`/api/users/${addedComment.userID}`, 'GET', null, true);
-
-                setComments([
-                    {
-                        ...addedComment,
-                        author: user.userName,
-                        isAuthor: currentUser?.id === addedComment.userID,
-                    },
-                    ...comments,
-                ]);
-
+                setComments([addedComment, ...comments]);
                 setNewComment('');
+                setValidationError('');
             } catch (err) {
+                console.error('Failed to add comment:', err);
                 setError('Failed to add comment. Please try again later.');
             }
         }
@@ -94,9 +106,15 @@ export default function CommentSection({ postId }) {
     const handleEditComment = (commentId, content) => {
         setEditingCommentId(commentId);
         setEditingContent(content);
+        setEditValidationError('');
     };
 
     const handleSaveEdit = async () => {
+        if (editingContent.trim().length > MAX_COMMENT_LENGTH) {
+            setEditValidationError(`Comment cannot exceed ${MAX_COMMENT_LENGTH} characters.`);
+            return;
+        }
+
         const confirmed = window.confirm('Are you sure you want to save changes to this comment?');
         if (!confirmed) return;
 
@@ -104,6 +122,7 @@ export default function CommentSection({ postId }) {
             await request(`/api/comments/${editingCommentId}`, 'PUT', { contents: editingContent }, true);
             setEditingCommentId(null);
             setEditingContent('');
+            setEditValidationError('');
             setError(null);
             await fetchComments();
         } catch (err) {
@@ -123,65 +142,76 @@ export default function CommentSection({ postId }) {
                         onChange={(e) => setNewComment(e.target.value)}
                     />
                     <button onClick={handleAddComment}>+</button>
+                    <div className="comment-validation">
+                        {newComment.length}/{MAX_COMMENT_LENGTH}
+                        {validationError && <p className="error">{validationError}</p>}
+                    </div>
                 </div>
             )}
             <h3>Comments</h3>
             {loading && <p>Loading comments...</p>}
             {error && <p className="error">{error}</p>}
             <div className="comments">
-                {comments.map((comment) => (
-                    <div key={comment.id} className="comment">
-                        <div className="avatar">{comment.author ? comment.author[0] : 'A'}</div>
-                        <div className="comment-content">
-                            <div className="comment-header">
-                                <span className="comment-author">{comment.author || 'Anonymous'}</span>
-                                <span className="comment-date">
-                                    {new Date(comment.creationDate).toLocaleDateString()}
-                                </span>
+                {comments.map((comment) => {
+                    const user = getUserById(comment.userID);
+                    return (
+                        <div key={comment.id} className="comment">
+                            <div className="avatar">
+                                <img
+                                    src={user.avatar || 'https://via.placeholder.com/150'}
+                                    alt={user.userName}
+                                    className="avatar-img"
+                                />
                             </div>
-                            {editingCommentId === comment.id ? (
-                                <div className="edit-comment">
-                                    <input
-                                        type="text"
-                                        value={editingContent}
-                                        onChange={(e) => setEditingContent(e.target.value)}
-                                    />
-                                    <div className="edit-actions">
-                                        <button onClick={handleSaveEdit}>Save</button>
-                                        <button onClick={() => setEditingCommentId(null)}>Cancel</button>
-                                    </div>
+                            <div className="comment-content">
+                                <div className="comment-header">
+                                    <span className="comment-author">{user.userName}</span>
+                                    <span className="comment-date">
+                                        {new Date(comment.creationDate).toLocaleDateString()}
+                                    </span>
                                 </div>
-                            ) : (
-                                <>
-                                    <p className="comment-text">{comment.contents}</p>
-                                    {currentUser && comment.isAuthor && (
-                                        <div className="comment-actions">
-                                            <button
-                                                className="action-button"
-                                                onClick={() => handleEditComment(comment.id, comment.contents)}
-                                            >
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                </svg>
-                                            </button>
-                                            <button
-                                                className="action-button"
-                                                onClick={() => handleDeleteComment(comment.id)}
-                                            >
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                    <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                </svg>
-                                            </button>
+                                {editingCommentId === comment.id ? (
+                                    <div className="edit-comment">
+                                        <input
+                                            type="text"
+                                            value={editingContent}
+                                            onChange={(e) => setEditingContent(e.target.value)}
+                                        />
+                                        <div className="comment-validation">
+                                            {editingContent.length}/{MAX_COMMENT_LENGTH}
+                                            {editValidationError && <p className="error">{editValidationError}</p>}
                                         </div>
-                                    )}
-                                </>
-                            )}
+                                        <div className="edit-actions">
+                                            <button onClick={handleSaveEdit}>Save</button>
+                                            <button onClick={() => setEditingCommentId(null)}>Cancel</button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <p className="comment-text">{comment.contents}</p>
+                                        {currentUser && currentUser.id === comment.userID && (
+                                            <div className="comment-actions">
+                                                <button
+                                                    className="action-button"
+                                                    onClick={() => handleEditComment(comment.id, comment.contents)}
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    className="action-button"
+                                                    onClick={() => handleDeleteComment(comment.id)}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );
 }
-

@@ -16,7 +16,11 @@ const ProjectCard = ({ photo, title, description, opinia, isFavorite, onFavorite
         <div className="project-card">
             <div className="thumbnail-container">
                 <img
-                    src={photo === null || photo === "" ? "https://via.placeholder.com/150" : photo}
+                    src={
+                        photo
+                            ? `data:image/png;base64,${photo}`
+                            : "https://via.placeholder.com/150"
+                    }
                     className="thumbnail"
                     alt={title || "Project thumbnail"}
                 />
