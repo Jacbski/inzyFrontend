@@ -32,26 +32,35 @@
     object-fit: cover;
 }
 
-.trending-info {
+.likes-info {
     position: absolute;
     bottom: 8px;
     right: 8px;
     display: flex;
     align-items: center;
     background: rgba(255, 255, 255, 0.8);
-    padding: 2px 6px;
+    padding: 2px 8px;
     border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.trending-icon {
-    color: red;
-    margin-right: 4px;
+/* Dynamic color styling based on the opinion score */
+.likes-positive .likes-score {
+    color: #4caf50; /* Green for positive scores */
 }
 
-.trending-text {
+.likes-negative .likes-score {
+    color: #f44336; /* Red for negative scores */
+}
+
+.likes-neutral .likes-score {
+    color: #000000; /* Black for neutral scores */
+}
+
+.likes-score {
+    font-size: 1rem;
+    font-weight: bold;
     margin: 0;
-    color: #757575;
-    font-size: 0.9rem;
 }
 
 .card-content {
@@ -90,7 +99,7 @@
     color: #ffd700;
 }
 
-@media (hover: hover) and (pointer: fine){
+@media (hover: hover) and (pointer: fine) {
     .favorites-button:hover {
         color: #ff9800;
     }
@@ -99,5 +108,3 @@
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 }
-
-

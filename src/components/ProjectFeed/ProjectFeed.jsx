@@ -54,7 +54,7 @@ const ProjectFeed = () => {
                             description={project.description}
                             photo={project.photo}
                             title={project.title}
-                            opinia={project.opinia ? project.opinia.reduce((sum, opinion) => sum + (opinion.positive || 0) - (opinion.negative || 0), 0) : 0}
+                            projectId={project.id}
                             isFavorite={favorites.includes(project.id)}
                             onFavoriteToggle={(e) => {
                                 e.preventDefault();
