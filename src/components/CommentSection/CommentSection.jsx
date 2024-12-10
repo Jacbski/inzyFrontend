@@ -13,6 +13,7 @@ export default function CommentSection({ postId }) {
     const [editingContent, setEditingContent] = useState('');
     const [validationError, setValidationError] = useState('');
     const [editValidationError, setEditValidationError] = useState('');
+    const [isInputFocused, setIsInputFocused] = useState(false);
 
     const MAX_COMMENT_LENGTH = 500;
 
@@ -140,12 +141,16 @@ export default function CommentSection({ postId }) {
                         placeholder="Add comment"
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
+                        onFocus={() => setIsInputFocused(true)}
+                        onBlur={() => setIsInputFocused(false)}
                     />
                     <button onClick={handleAddComment}>+</button>
-                    <div className="comment-validation">
-                        {newComment.length}/{MAX_COMMENT_LENGTH}
-                        {validationError && <p className="error">{validationError}</p>}
-                    </div>
+                    {isInputFocused && (
+                        <div className="comment-validation">
+                            {newComment.length}/{MAX_COMMENT_LENGTH}
+                            {validationError && <p className="error">{validationError}</p>}
+                        </div>
+                    )}
                 </div>
             )}
             <h3>Comments</h3>
