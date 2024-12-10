@@ -128,7 +128,7 @@ const ProjectView = () => {
                                 <Share />
                             </div>
                         </div>
-                        <Donate link={project.link} projectId={project.id} />
+                        <Donate link={project.donationLink} />
                         <div className="project-files">
                             <h4>Attached Files:</h4>
                             {project.files && project.files.length > 0 ? (
