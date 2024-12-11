@@ -7,7 +7,6 @@ import { fetchProjects } from '../../data';
 const ProjectFeed = () => {
     const [projects, setProjects] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [favorites, setFavorites] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const projectsPerPage = 5;
@@ -17,9 +16,9 @@ const ProjectFeed = () => {
             try {
                 const fetchedProjects = await fetchProjects();
                 setProjects(fetchedProjects);
-                setIsLoading(false);
             } catch (error) {
                 setError('Failed to fetch projects');
+            } finally {
                 setIsLoading(false);
             }
         };
@@ -32,14 +31,6 @@ const ProjectFeed = () => {
     const totalPages = Math.ceil(projects.length / projectsPerPage);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-    const toggleFavorite = (projectId) => {
-        setFavorites((prevFavorites) =>
-            prevFavorites.includes(projectId)
-                ? prevFavorites.filter((id) => id !== projectId)
-                : [...prevFavorites, projectId]
-        );
-    };
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -55,11 +46,6 @@ const ProjectFeed = () => {
                             photo={project.photo}
                             title={project.title}
                             projectId={project.id}
-                            isFavorite={favorites.includes(project.id)}
-                            onFavoriteToggle={(e) => {
-                                e.preventDefault();
-                                toggleFavorite(project.id);
-                            }}
                         />
                     </Link>
                 ))}
