@@ -4,7 +4,7 @@ import request from '../../services/api/Request.jsx';
 
 export default function CommentSection({ postId }) {
     const [comments, setComments] = useState([]);
-    const [users, setUsers] = useState([]);
+    const [userCache, setUserCache] = useState({});
     const [newComment, setNewComment] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -26,17 +26,7 @@ export default function CommentSection({ postId }) {
             }
         };
 
-        const fetchUsers = async () => {
-            try {
-                const usersData = await request('/api/users', 'GET', null, true);
-                setUsers(usersData);
-            } catch (err) {
-                console.error('Failed to fetch users:', err);
-            }
-        };
-
         fetchCurrentUser();
-        fetchUsers();
     }, []);
 
     const fetchComments = async () => {
@@ -56,16 +46,35 @@ export default function CommentSection({ postId }) {
         fetchComments();
     }, [postId]);
 
-    const getUserById = (userId) => {
-        const user = users.find((user) => user.id === userId);
-        if (user) {
-            return {
-                ...user,
-                avatar: user.avatar ? `data:image/png;base64,${user.avatar}` : null,
-            };
+    const fetchUserById = async (userId) => {
+        if (userCache[userId]) return userCache[userId];
+
+        try {
+            const user = await request(`/api/users/${userId}`, 'GET', null, true);
+            setUserCache((prevCache) => ({ ...prevCache, [userId]: user }));
+            return user;
+        } catch (err) {
+            console.error(`Failed to fetch user ${userId}:`, err);
+            return { userName: 'Anonymous', avatar: null };
         }
-        return { userName: 'Anonymous', avatar: null };
     };
+
+    const getUserById = (userId) => {
+        return userCache[userId] || { userName: 'Loading...', avatar: null };
+    };
+
+    useEffect(() => {
+        const preloadUsers = async () => {
+            const userIds = [...new Set(comments.map((comment) => comment.userID))];
+            for (const userId of userIds) {
+                if (!userCache[userId]) {
+                    await fetchUserById(userId);
+                }
+            }
+        };
+
+        preloadUsers();
+    }, [comments]);
 
     const handleAddComment = async () => {
         if (newComment.trim().length > MAX_COMMENT_LENGTH) {
