@@ -108,7 +108,7 @@ export const AuthProvider = ({ children }) => {
       handleLogout();
 
       // Ponowne logowanie z aktualnym username i hasłem
-      await handleLogin(currentUser.username, password);
+      await handleLogin(currentUser.userName, password);
 
       // Aktualizacja stanu użytkownika
       await fetchCurrentUser();

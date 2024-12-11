@@ -165,7 +165,7 @@ const Header = () => {
                       onClick={() => setIsUserMenuOpen(false)}
                     >
                       {currentUser
-                        ? `Hello, ${currentUser.username}`
+                        ? `Hello, ${currentUser.userName}`
                         : "Loading..."}
                     </Link>
                     <button

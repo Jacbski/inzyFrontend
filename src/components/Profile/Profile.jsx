@@ -12,7 +12,7 @@ function Profile() {
       {currentUser ? (
         // w tym div profile picture nad welcom user
         <div>
-          <p>Welcome, {currentUser.username}!</p>
+          <p>Welcome, {currentUser.userName}!</p>
           <p>Email: {currentUser.email}</p>
           <Settings />
         </div>
