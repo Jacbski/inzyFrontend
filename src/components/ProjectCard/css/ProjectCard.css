@@ -44,17 +44,17 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Dynamic color styling based on the opinion score */
+
 .likes-positive .likes-score {
-    color: #4caf50; /* Green for positive scores */
+    color: #4caf50;
 }
 
 .likes-negative .likes-score {
-    color: #f44336; /* Red for negative scores */
+    color: #f44336;
 }
 
 .likes-neutral .likes-score {
-    color: #000000; /* Black for neutral scores */
+    color: #000000;
 }
 
 .likes-score {

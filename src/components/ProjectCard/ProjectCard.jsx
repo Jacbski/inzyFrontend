@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './css/ProjectCard.css';
 import request from '../../services/api/Request.jsx';
+import { AuthContext } from '../../services/auth/AuthContex';
 
-const ProjectCard = ({ photo, title, description, projectId, isFavorite, onFavoriteToggle }) => {
+const ProjectCard = ({ photo, title, description, projectId }) => {
+    const { isLoggedIn } = useContext(AuthContext);
     const [opinionSum, setOpinionSum] = useState(0);
+    const [isFavorite, setIsFavorite] = useState(false);
+    const [favorites, setFavorites] = useState([]);
 
     useEffect(() => {
         const fetchOpinions = async () => {
@@ -17,13 +21,39 @@ const ProjectCard = ({ photo, title, description, projectId, isFavorite, onFavor
             }
         };
 
-        fetchOpinions();
-    }, [projectId]);
+        const fetchFavorites = async () => {
+            if (isLoggedIn) {
+                try {
+                    const userData = await request('/api/users/current-user', 'GET', null, true);
+                    const userId = userData.id;
+                    const favoritesData = await request(`/api/users/ulubione/${userId}`, 'GET', null, true);
+                    setFavorites(favoritesData.map((favorite) => favorite.id));
+                    setIsFavorite(favoritesData.some((fav) => fav.id === projectId));
+                } catch (err) {
+                    console.error("Failed to fetch favorites:", err);
+                }
+            } else {
+                setFavorites([]);
+                setIsFavorite(false);
+            }
+        };
 
-    const handleFavoriteClick = (e) => {
+        fetchOpinions();
+        fetchFavorites();
+    }, [projectId, isLoggedIn])
+
+    const handleFavoriteClick = async (e) => {
         e.preventDefault();
         e.stopPropagation();
-        onFavoriteToggle();
+
+        if (!isFavorite) {
+            try {
+                await request(`/api/users/dodajDoUlubionych/${projectId}`, 'POST', null, true);
+                setIsFavorite(true);
+            } catch (err) {
+                console.error("Failed to add to favorites:", err);
+            }
+        }
     };
 
     const getLikesScoreClass = () => {
@@ -53,9 +83,9 @@ const ProjectCard = ({ photo, title, description, projectId, isFavorite, onFavor
                 <p className="body-text">{description}</p>
             </div>
             <button
-                aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                aria-label={isFavorite ? "Already in favorites" : "Add to favorites"}
                 className={`favorites-button ${isFavorite ? "favorite" : ""}`}
-                onClick={handleFavoriteClick}
+                onClick={!isFavorite ? handleFavoriteClick : undefined}
             >
                 ★
             </button>
