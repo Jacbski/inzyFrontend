@@ -51,7 +51,6 @@ const ProjectFeed = () => {
         }
     };
 
-    // Load data on initial mount
     useEffect(() => {
         fetchCurrentUserAndFavorites();
     }, []);
@@ -147,9 +146,9 @@ const ProjectFeed = () => {
                             photo={project.photo}
                             title={project.title}
                             projectId={project.id}
-                            isFavorite={favorites.includes(project.id)} // Pass favorite status
-                            addToFavorites={(id) => setFavorites((prev) => [...prev, id])} // Handle adding to favorites
-                            disableFavorite={!currentUser} // Disable favorite button if no user logged in
+                            isFavorite={favorites.includes(project.id)}
+                            addToFavorites={(id) => setFavorites((prev) => [...prev, id])}
+                            disableFavorite={!currentUser}
                         />
                     </Link>
                 ))}
