@@ -11,6 +11,7 @@ import request from '../../services/api/Request.jsx';
 
 const ProjectView = () => {
     const [project, setProject] = useState(null);
+    const [steps, setSteps] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [opinions, setOpinions] = useState({ positive: 0, negative: 0 });
@@ -32,6 +33,16 @@ const ProjectView = () => {
         }
     };
 
+    const fetchSteps = async () => {
+        try {
+            const fetchedSteps = await request(`/api/steps/${id}`, 'GET');
+            setSteps(fetchedSteps.sort((a, b) => a.stepNumber - b.stepNumber));
+        } catch (err) {
+            console.error("Failed to fetch steps:", err);
+            setSteps([]);
+        }
+    };
+
     const fetchOpinions = async () => {
         try {
             const data = await request(`/api/ogloszenie/${id}/opinie`, 'GET', null, false);
@@ -44,6 +55,7 @@ const ProjectView = () => {
 
     useEffect(() => {
         fetchProjectById();
+        fetchSteps();
         fetchOpinions();
     }, [id]);
 
@@ -141,7 +153,7 @@ const ProjectView = () => {
                 <CodeBlockDisplay codeBlocks={project.kod || []} />
                 <div className="project-steps">
                     <h3>Steps</h3>
-                    <ProjectSteps steps={project.steps || []} />
+                    <ProjectSteps steps={steps} />
                 </div>
                 <CommentSection postId={project.id} />
             </div>
