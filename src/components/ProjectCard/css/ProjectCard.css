@@ -108,3 +108,14 @@
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 }
+
+.favorites-wrapper.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.favorites-wrapper.disabled .favorites-button {
+    pointer-events: none;
+}
+

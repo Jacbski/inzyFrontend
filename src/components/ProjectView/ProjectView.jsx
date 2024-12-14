@@ -3,7 +3,6 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import ProjectSteps from '../ProjectSteps/ProjectSteps';
 import CommentSection from '../CommentSection/CommentSection';
 import ShopRecommendations from '../ShopRecommendations/ShopRecommendations';
-import { fetchProjects } from '../../data';
 import './css/ProjectView.css';
 import CodeBlockDisplay from "../CodeBlockDisplay/CodeBlockDisplay";
 import Donate from "../Donate/Donate";
@@ -20,14 +19,23 @@ const ProjectView = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const fetchProjectById = async () => {
+        try {
+            setLoading(true);
+            const project = await request(`/api/ogloszenie/getById/${id}`, 'GET');
+            setProject(project);
+        } catch (err) {
+            console.error("Failed to load project:", err);
+            setError("Failed to load project. Please try again later.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const fetchOpinions = async () => {
         try {
             const data = await request(`/api/ogloszenie/${id}/opinie`, 'GET', null, false);
-            if (!data) {
-                setOpinions({ positive: 0, negative: 0 });
-                return;
-            }
-            setOpinions(data);
+            setOpinions(data || { positive: 0, negative: 0 });
         } catch (err) {
             console.error("Failed to fetch opinions:", err);
             setOpinions({ positive: 0, negative: 0 });
@@ -35,32 +43,9 @@ const ProjectView = () => {
     };
 
     useEffect(() => {
-        const loadProject = async () => {
-            try {
-                setLoading(true);
-                const projects = await fetchProjects();
-                if (!Array.isArray(projects)) {
-                    throw new Error("Fetched data is not an array");
-                }
-
-                const foundProject = projects.find(p => p.id === id);
-
-                if (foundProject) {
-                    setProject(foundProject);
-                } else {
-                    navigate('/');
-                }
-            } catch (err) {
-                console.error(err);
-                setError("Failed to load project. Please try again later.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadProject();
+        fetchProjectById();
         fetchOpinions();
-    }, [id, navigate]);
+    }, [id]);
 
     const handleReactionRequest = async (positive, negative, none, newReaction) => {
         try {
@@ -106,9 +91,9 @@ const ProjectView = () => {
                     <div className="project-info">
                         <h1>{project.title || 'Untitled Project'}</h1>
                         {project.photo ? (
-                            <img src={`data:image/png;base64,${project.photo}`} alt={project.title} className="project-image"/>
+                            <img src={`data:image/png;base64,${project.photo}`} alt={project.title} className="project-image" />
                         ) : (
-                            <img src="https://via.placeholder.com/150" alt="Placeholder" className="project-image"/>
+                            <img src="https://via.placeholder.com/150" alt="Placeholder" className="project-image" />
                         )}
                         <p className="project-description">{project.description || 'No description available'}</p>
                         <div className="project-details">

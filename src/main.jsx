@@ -11,8 +11,6 @@ const root = createRoot(document.getElementById("root"));
 
 root.render(
   <AuthProvider>
-    <StrictMode>
       <App />
-    </StrictMode>
   </AuthProvider>
 );
