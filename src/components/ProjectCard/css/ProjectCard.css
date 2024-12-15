@@ -27,7 +27,6 @@
     border-radius: 8px;
     background-size: cover;
     background-position: center;
-    position: relative;
     min-width: 144px;
     object-fit: cover;
 }
@@ -43,7 +42,6 @@
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 
 .likes-positive .likes-score {
     color: #4caf50;
@@ -68,7 +66,10 @@
     display: flex;
     flex-direction: column;
     text-align: left;
-    margin-right: 30px;
+    margin-right: 25px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .project-title {
@@ -76,6 +77,9 @@
     font-size: 1.2rem;
     font-weight: bold;
     color: #000000;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .body-text {
@@ -99,16 +103,6 @@
     color: #ffd700;
 }
 
-@media (hover: hover) and (pointer: fine) {
-    .favorites-button:hover {
-        color: #ff9800;
-    }
-
-    .project-card:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-}
-
 .favorites-wrapper.disabled {
     cursor: not-allowed;
     opacity: 0.5;
@@ -117,5 +111,16 @@
 
 .favorites-wrapper.disabled .favorites-button {
     pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .favorites-button:hover {
+        color: #ff9800;
+    }
+
+    .project-card:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
 }
 
