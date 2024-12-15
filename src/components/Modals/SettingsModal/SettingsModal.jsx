@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "react-modal";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import "../Modal.css"; // Upewnij się, że ścieżka jest poprawna
+import "./css/SettingsModal.css";
 
 const SettingsModal = ({
   isOpen,

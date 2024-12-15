@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./css/aside.scss";
+import "./css/Aside.css";
 
 const AsideMenu = ({ isAsideOpen, isLoggedIn }) => {
   const [expandedSections, setExpandedSections] = useState({});
@@ -11,114 +11,85 @@ const AsideMenu = ({ isAsideOpen, isLoggedIn }) => {
     }));
   };
 
+  const renderSection = (title, items, keyForSection) => (
+    <li key={keyForSection}>
+      <h4
+        onClick={() => toggleSection(title.toLowerCase())}
+        className={expandedSections[title.toLowerCase()] ? "expanded" : ""}
+      >
+        {title}
+      </h4>
+      <ul className={expandedSections[title.toLowerCase()] ? "expanded" : ""}>
+        {items.map((item) => (
+          <li key={item.link}>
+            <a href={item.link}>{item.text}</a>
+          </li>
+        ))}
+      </ul>
+    </li>
+  );
+  //ogolnie widoczne sekcje jako default
+  const commonSections = [
+    {
+      title: "TOPICS",
+      items: [
+        { link: "/internet-culture", text: "Internet Culture (Viral)" },
+        { link: "/games", text: "Games" },
+        { link: "/qnas", text: "Q&As" },
+        { link: "/technology", text: "Technology" },
+        { link: "/pop-culture", text: "Pop Culture" },
+        { link: "/movies-tv", text: "Movies & TV" },
+      ],
+    },
+    {
+      title: "REGULATIONS",
+      items: [{ link: "/regulations", text: "Site Regulations" }],
+    },
+  ];
+
+  //tylko zalogwani widza te sekcje
+  const loggedInSections = [
+    {
+      title: "MY CONTENT",
+      items: [
+        { link: "/favorites", text: "Favorites" },
+        { link: "/my-posts", text: "My Posts" },
+      ],
+    },
+    {
+      title: "CONTACT",
+      items: [{ link: "/contact", text: "Contact Us" }],
+    },
+  ];
+
+  const loggedOutSections = [
+    //mozna dodac jesli tylko niezalogowany ma widziec ta sekcje
+  ];
+
   return (
     <aside className={`aside-menu ${isAsideOpen ? "aside-menu--open" : ""}`}>
       <nav className="aside-menu__nav">
         <ul>
           <li>
-            <a href="/home">Popular</a>
+            <a href="/">Home</a>
           </li>
-          <li>
-            <h4
-              onClick={() => toggleSection("recent")}
-              className={expandedSections["recent"] ? "expanded" : ""}
-            >
-              RECENT
-            </h4>
-            {expandedSections["recent"] && <a href="/test">test</a>}
-          </li>
-          <li>
-            <h4
-              onClick={() => toggleSection("topics")}
-              className={expandedSections["topics"] ? "expanded" : ""}
-            >
-              TOPICS
-            </h4>
-            <ul className={expandedSections["topics"] ? "expanded" : ""}>
-              <li>
-                <a href="/internet-culture">Internet Culture (Viral)</a>
-              </li>
-              <li>
-                <a href="/games">Games</a>
-              </li>
-              <li>
-                <a href="/qnas">Q&As</a>
-              </li>
-              <li>
-                <a href="/technology">Technology</a>
-              </li>
-              <li>
-                <a href="/pop-culture">Pop Culture</a>
-              </li>
-              <li>
-                <a href="/movies-tv">Movies & TV</a>
-              </li>
-            </ul>
-            <a href="/more-topics">See more</a>
-          </li>
-          <li>
-            <h4
-              onClick={() => toggleSection("resources")}
-              className={expandedSections["resources"] ? "expanded" : ""}
-            >
-              RESOURCES
-            </h4>
-            <ul className={expandedSections["resources"] ? "expanded" : ""}>
-              <li>
-                <a href="/about">About Reddit</a>
-              </li>
-              <li>
-                <a href="/advertise">Advertise</a>
-              </li>
-              <li>
-                <a href="/help">Help</a>
-              </li>
-              <li>
-                <a href="/blog">Blog</a>
-              </li>
-              <li>
-                <a href="/careers">Careers</a>
-              </li>
-              <li>
-                <a href="/press">Press</a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <h4
-              onClick={() => toggleSection("communities")}
-              className={expandedSections["communities"] ? "expanded" : ""}
-            >
-              COMMUNITIES
-            </h4>
-            <ul className={expandedSections["communities"] ? "expanded" : ""}>
-              <li>
-                <a href="/best">Best of Reddit</a>
-              </li>
-              <li>
-                <a href="/topics">Topics</a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <h4
-              onClick={() => toggleSection("policies")}
-              className={expandedSections["policies"] ? "expanded" : ""}
-            >
-              POLICIES
-            </h4>
-            <ul className={expandedSections["policies"] ? "expanded" : ""}>
-              <li>
-                <a href="/content-policy">Content Policy</a>
-              </li>
-              <li>
-                <a href="/privacy-policy">Privacy Policy</a>
-              </li>
-              <li>
-                <a href="/user-agreement">User Agreement</a>
-              </li>
-            </ul>
-          </li>
+          {/* Reszta sekcji Common */}
+          {commonSections.map((section, index) =>
+            renderSection(section.title, section.items, `common-${index}`)
+          )}
+          {/* Reszta sekcji dla zalogowanych */}
+          {isLoggedIn
+            ? loggedInSections.map((section, index) =>
+                renderSection(section.title, section.items, `loggedIn-${index}`)
+              )
+            : // Reszta sekcji dla nie zalogowanych tlyko
+              loggedOutSections.map((section, index) =>
+                renderSection(
+                  section.title,
+                  section.items,
+                  `loggedOut-${index}`
+                )
+              )}
         </ul>
       </nav>
     </aside>

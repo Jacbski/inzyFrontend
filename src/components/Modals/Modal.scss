@@ -1,14 +1,84 @@
+// Variables
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$background-color: #fff;
+$text-color: #333;
+$border-color: #ccc;
+$border-radius: 8px;
+$box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+$transition-duration: 0.3s;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin button-style {
+  padding: 10px 20px;
+  border: none;
+  border-radius: $border-radius;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all $transition-duration ease;
+}
+
+// Keyframes
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  @include flex-center;
+  z-index: 9999;
+  animation: fadeIn $transition-duration ease;
+}
+
 .modal {
+  background: $background-color;
+  padding: 30px;
+  border-radius: $border-radius;
+  max-width: 500px;
+  width: 90%;
+  box-sizing: border-box;
+  box-shadow: $box-shadow;
+  position: relative;
+  z-index: 10000;
+  animation: slideIn $transition-duration ease;
+
   &__title {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 28px;
+    margin-bottom: 25px;
     text-align: center;
+    color: $text-color;
+    font-weight: 600;
   }
 
   &__form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
   }
 
   &__form-group {
@@ -17,44 +87,88 @@
   }
 
   &__label {
-    margin-bottom: 5px;
-    font-weight: bold;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: $text-color;
+    font-size: 14px;
   }
 
   &__input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 12px;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
     font-size: 16px;
+    transition: border-color $transition-duration ease;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+    }
   }
 
   &__button {
-    background-color: #007bff;
+    @include button-style;
+    background-color: $primary-color;
     color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
+    font-weight: 600;
 
     &:hover {
-      background-color: #0056b3;
+      background-color: darken($primary-color, 10%);
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(0);
     }
   }
 
   &__close {
-    background-color: #f8f9fa;
-    border: 1px solid #ccc;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 15px;
-    transition: background-color 0.3s;
+    @include button-style;
+    background-color: $secondary-color;
+    color: white;
+    margin-top: 20px;
 
     &:hover {
-      background-color: #e2e6ea;
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+
+  // Error and success messages
+  &__message {
+    padding: 10px;
+    border-radius: $border-radius;
+    margin-bottom: 15px;
+    font-weight: 600;
+
+    &--error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    &--success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: 600px) {
+    padding: 20px;
+
+    &__title {
+      font-size: 24px;
+    }
+
+    &__input {
+      font-size: 14px;
+    }
+
+    &__button,
+    &__close {
+      font-size: 14px;
     }
   }
 }
