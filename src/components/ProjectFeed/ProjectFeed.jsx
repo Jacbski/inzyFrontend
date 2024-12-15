@@ -49,7 +49,6 @@ const ProjectFeed = () => {
             setFavorites(favoritesData.map((favorite) => favorite.id));
         } catch (err) {
             console.warn('No user logged in or failed to fetch favorites:', err);
-            setCurrentUser(null);
             setFavorites([]);
         }
     };
