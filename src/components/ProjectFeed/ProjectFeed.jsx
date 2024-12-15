@@ -9,7 +9,7 @@ const ProjectFeed = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
-    const [hasNextPage, setHasNextPage] = useState(true);
+    const [totalPages, setTotalPages] = useState(0);
     const [activeFilter, setActiveFilter] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentUser, setCurrentUser] = useState(null);
@@ -25,11 +25,12 @@ const ProjectFeed = () => {
                 : `/api/ogloszenie/getAll?pageNumber=${page}&pageSize=${projectsPerPage}`;
             const response = await request(endpoint, 'GET', null, false);
 
-            if (response && response.length > 0) {
-                setProjects(response);
-                setHasNextPage(response.length === projectsPerPage);
+            if (response) {
+                setProjects(response.content);
+                setTotalPages(response.totalPages);
             } else {
-                setHasNextPage(false);
+                setProjects([]);
+                setTotalPages(0);
             }
         } catch (err) {
             console.error('Failed to fetch projects:', err);
@@ -45,9 +46,11 @@ const ProjectFeed = () => {
             setCurrentUser(user);
 
             const favoritesData = await request(`/api/users/ulubione/${user.id}`, 'GET', null, true);
-            setFavorites(favoritesData.map((favorite) => favorite.id)); // Only store favorite IDs
+            setFavorites(favoritesData.map((favorite) => favorite.id));
         } catch (err) {
             console.warn('No user logged in or failed to fetch favorites:', err);
+            setCurrentUser(null);
+            setFavorites([]);
         }
     };
 
@@ -69,23 +72,69 @@ const ProjectFeed = () => {
     const handleSearch = (e) => {
         const value = e.target.value.toLowerCase();
         setSearchTerm(value);
+
         if (value.trim() === '') {
             fetchProjects(0, activeFilter);
         } else {
-            // Perform local search
             const filtered = projects.filter((project) =>
                 project.description.toLowerCase().includes(value)
             );
             setProjects(filtered);
-            setHasNextPage(false);
         }
     };
 
     const handlePagination = (pageNumber) => {
-        if (pageNumber >= 0 && pageNumber !== currentPage) {
+        if (pageNumber >= 0 && pageNumber < totalPages) {
             setCurrentPage(pageNumber);
         }
     };
+
+    const renderPageNumbers = () => {
+        const pageNumbers = [];
+
+        pageNumbers.push(
+            <button
+                key="first"
+                className={`pagination-button ${currentPage === 0 ? 'active' : ''}`}
+                onClick={() => handlePagination(0)}
+            >
+                1
+            </button>
+        );
+
+        if (currentPage > 1) {
+            pageNumbers.push(<span key="ellipsis1" className="pagination-ellipsis">...</span>);
+        }
+
+        if (currentPage !== 0 && currentPage !== totalPages - 1) {
+            pageNumbers.push(
+                <button
+                    key="current"
+                    className="pagination-button active"
+                    onClick={() => handlePagination(currentPage)}
+                >
+                    {currentPage + 1}
+                </button>
+            );
+        }
+
+        if (currentPage < totalPages - 2) {
+            pageNumbers.push(<span key="ellipsis2" className="pagination-ellipsis">...</span>);
+        }
+
+        pageNumbers.push(
+            <button
+                key="last"
+                className={`pagination-button ${currentPage === totalPages - 1 ? 'active' : ''}`}
+                onClick={() => handlePagination(totalPages - 1)}
+            >
+                {totalPages}
+            </button>
+        );
+
+        return pageNumbers;
+    };
+
 
     if (isLoading && currentPage === 0) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -161,11 +210,11 @@ const ProjectFeed = () => {
                 >
                     Previous
                 </button>
-                <span className="pagination-info">Page {currentPage + 1}</span>
+                {renderPageNumbers()}
                 <button
-                    className={`pagination-button ${!hasNextPage ? 'disabled' : ''}`}
+                    className={`pagination-button ${currentPage === totalPages - 1 ? 'disabled' : ''}`}
                     onClick={() => handlePagination(currentPage + 1)}
-                    disabled={!hasNextPage}
+                    disabled={currentPage === totalPages - 1}
                 >
                     Next
                 </button>
