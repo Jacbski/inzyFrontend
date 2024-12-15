@@ -222,6 +222,7 @@ const Header = () => {
     logout();
     setIsUserMenuOpen(false);
     navigate("/");
+    window.location.reload();
   };
 
   const handleLogin = async (username, password) => {

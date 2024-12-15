@@ -8,23 +8,23 @@ const ProjectSteps = ({ steps }) => {
 
     return (
         <div className="project-steps">
-            {steps.map((step, index) => (
-                <div key={index} className="step">
+            {steps.map((step) => (
+                <div key={step.stepId} className="step">
                     {step.stepImage ? (
                         <img
-                            src={step.stepImage}
-                            alt={`Step ${index + 1}`}
+                            src={`data:image/png;base64,${step.stepImage}`}
+                            alt={`Step ${step.stepNumber}`}
                             className="step-image"
                         />
                     ) : (
                         <img
                             src="https://via.placeholder.com/150"
-                            alt={`Placeholder for Step ${index + 1}`}
+                            alt={`Placeholder for Step ${step.stepNumber}`}
                             className="step-image"
                         />
                     )}
                     <div className="step-content">
-                        <h4>{step.stepTitle || `Step ${index + 1}`}</h4>
+                        <h4>{step.stepTitle || `Step ${step.stepNumber}`}</h4>
                         <p>{step.stepDescription || 'No description available'}</p>
                     </div>
                 </div>

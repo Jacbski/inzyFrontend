@@ -3,7 +3,6 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import ProjectSteps from '../ProjectSteps/ProjectSteps';
 import CommentSection from '../CommentSection/CommentSection';
 import ShopRecommendations from '../ShopRecommendations/ShopRecommendations';
-import { fetchProjects } from '../../data';
 import './css/ProjectView.css';
 import CodeBlockDisplay from "../CodeBlockDisplay/CodeBlockDisplay";
 import Donate from "../Donate/Donate";
@@ -12,6 +11,7 @@ import request from '../../services/api/Request.jsx';
 
 const ProjectView = () => {
     const [project, setProject] = useState(null);
+    const [steps, setSteps] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [opinions, setOpinions] = useState({ positive: 0, negative: 0 });
@@ -20,14 +20,33 @@ const ProjectView = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const fetchProjectById = async () => {
+        try {
+            setLoading(true);
+            const project = await request(`/api/ogloszenie/getById/${id}`, 'GET');
+            setProject(project);
+        } catch (err) {
+            console.error("Failed to load project:", err);
+            setError("Failed to load project. Please try again later.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchSteps = async () => {
+        try {
+            const fetchedSteps = await request(`/api/steps/${id}`, 'GET');
+            setSteps(fetchedSteps.sort((a, b) => a.stepNumber - b.stepNumber));
+        } catch (err) {
+            console.error("Failed to fetch steps:", err);
+            setSteps([]);
+        }
+    };
+
     const fetchOpinions = async () => {
         try {
             const data = await request(`/api/ogloszenie/${id}/opinie`, 'GET', null, false);
-            if (!data) {
-                setOpinions({ positive: 0, negative: 0 });
-                return;
-            }
-            setOpinions(data);
+            setOpinions(data || { positive: 0, negative: 0 });
         } catch (err) {
             console.error("Failed to fetch opinions:", err);
             setOpinions({ positive: 0, negative: 0 });
@@ -35,32 +54,10 @@ const ProjectView = () => {
     };
 
     useEffect(() => {
-        const loadProject = async () => {
-            try {
-                setLoading(true);
-                const projects = await fetchProjects();
-                if (!Array.isArray(projects)) {
-                    throw new Error("Fetched data is not an array");
-                }
-
-                const foundProject = projects.find(p => p.id === id);
-
-                if (foundProject) {
-                    setProject(foundProject);
-                } else {
-                    navigate('/');
-                }
-            } catch (err) {
-                console.error(err);
-                setError("Failed to load project. Please try again later.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadProject();
+        fetchProjectById();
+        fetchSteps();
         fetchOpinions();
-    }, [id, navigate]);
+    }, [id]);
 
     const handleReactionRequest = async (positive, negative, none, newReaction) => {
         try {
@@ -106,9 +103,9 @@ const ProjectView = () => {
                     <div className="project-info">
                         <h1>{project.title || 'Untitled Project'}</h1>
                         {project.photo ? (
-                            <img src={`data:image/png;base64,${project.photo}`} alt={project.title} className="project-image"/>
+                            <img src={`data:image/png;base64,${project.photo}`} alt={project.title} className="project-image" />
                         ) : (
-                            <img src="https://via.placeholder.com/150" alt="Placeholder" className="project-image"/>
+                            <img src="https://via.placeholder.com/150" alt="Placeholder" className="project-image" />
                         )}
                         <p className="project-description">{project.description || 'No description available'}</p>
                         <div className="project-details">
@@ -156,7 +153,7 @@ const ProjectView = () => {
                 <CodeBlockDisplay codeBlocks={project.kod || []} />
                 <div className="project-steps">
                     <h3>Steps</h3>
-                    <ProjectSteps steps={project.steps || []} />
+                    <ProjectSteps steps={steps} />
                 </div>
                 <CommentSection postId={project.id} />
             </div>

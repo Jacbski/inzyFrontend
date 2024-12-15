@@ -167,7 +167,7 @@ export default function CommentSection({ postId }) {
                         <div key={comment.id} className="comment">
                             <div className="avatar">
                                 <img
-                                    src={user.avatar || 'https://via.placeholder.com/150'}
+                                    src={`data:image/jpeg;base64,${user.avatar}` || 'https://via.placeholder.com/150'}
                                     alt={user.userName}
                                     className="avatar-img"
                                 />
