@@ -11,12 +11,11 @@ const AddPost = () => {
     const [newCode, setNewCode] = useState({ title: "", code: "" });
     const [donationLink, setDonationLink] = useState("");
     const [mainPhoto, setMainPhoto] = useState(null);
-    const [files, setFiles] = useState([]);
-    const [newFile, setNewFile] = useState("");
-    const [requiredItems, setRequiredItems] = useState([]);
+    const [files, setFiles] = useState(new Map());
     const [newItem, setNewItem] = useState({ itemName: "", itemLink: "" });
     const [steps, setSteps] = useState([]);
     const [newStep, setNewStep] = useState({ stepTitle: "", stepDescription: "", stepNumber: null, image: null });
+    const [requiredItems, setRequiredItems] = useState([]);
 
     const handleAddCodeBlock = () => {
         if (!newCode.title || !newCode.code) {
@@ -31,17 +30,56 @@ const AddPost = () => {
         setKod(kod.filter((_, i) => i !== index));
     };
 
-    const handleAddFile = () => {
-        if (!newFile.trim()) {
-            alert("File URL is required.");
-            return;
+    const handleAddFile = async (event) => {
+        const selectedFiles = Array.from(event.target.files).filter(file =>
+            file.type === "application/pdf" ||
+            file.type === "image/jpeg" ||
+            file.type === "text/plain"
+        );
+
+        if (selectedFiles.length !== event.target.files.length) {
+            alert("Some files were not added. Only PDF, JPG, and TXT files are allowed.");
         }
-        setFiles([...files, newFile.trim()]);
-        setNewFile("");
+
+        for (const file of selectedFiles) {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                const response = await fetch("http://localhost:8080/api/images/upload-single", {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                    },
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Upload failed: ${response.status} ${errorText}`);
+                }
+
+                const fileId = await response.text();
+                if (fileId && fileId.trim()) {
+                    setFiles(prev => {
+                        const newFiles = new Map(prev);
+                        newFiles.set(fileId.trim(), file.name);
+                        return newFiles;
+                    });
+                }
+            } catch (error) {
+                console.error(`Error uploading file ${file.name}:`, error);
+                alert(`Error uploading file ${file.name}: ${error.message}`);
+            }
+        }
     };
 
-    const handleRemoveFile = (index) => {
-        setFiles(files.filter((_, i) => i !== index));
+    const handleRemoveFile = (fileId) => {
+        setFiles(prev => {
+            const newFiles = new Map(prev);
+            newFiles.delete(fileId);
+            return newFiles;
+        });
     };
 
     const handleAddRequiredItem = () => {
@@ -104,12 +142,16 @@ const AddPost = () => {
             kategoriaId: parseInt(kategoriaId, 10),
             kod,
             requiredItems,
-            files,
             donationLink,
+            files: Array.from(files.keys())
         };
 
         formData.append("ogloszenie", JSON.stringify(ogloszeniePayload));
         formData.append("mainPhoto", mainPhoto);
+
+        files.forEach((fileName, fileId) => {
+            formData.append("files", fileId);
+        });
 
         try {
             const response = await fetch("http://localhost:8080/api/ogloszenie/addOgloszenie", {
@@ -121,7 +163,8 @@ const AddPost = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                const errorText = await response.text();
+                throw new Error(`HTTP error! Status: ${response.status} ${errorText}`);
             }
 
             const postData = await response.json();
@@ -150,6 +193,7 @@ const AddPost = () => {
 
             alert("Steps added successfully!");
         } catch (error) {
+            console.error("Error adding post or steps:", error);
             alert(`Error adding post or steps: ${error.message}`);
         }
     };
@@ -188,7 +232,7 @@ const AddPost = () => {
                 <h3>Steps</h3>
                 {steps
                     .slice()
-                    .sort((a, b) => a.stepNumber - b.stepNumber) // Sort steps by stepNumber
+                    .sort((a, b) => a.stepNumber - b.stepNumber)
                     .map((step, index) => (
                         <div key={index}>
                             <p><strong>Step {step.stepNumber}:</strong> {step.stepTitle}</p>
@@ -249,19 +293,18 @@ const AddPost = () => {
             </div>
             <div>
                 <h3>Files</h3>
-                {files.map((file, index) => (
-                    <div key={index}>
-                        <p>{file}</p>
-                        <button onClick={() => handleRemoveFile(index)}>Remove</button>
+                {Array.from(files.entries()).map(([fileId, fileName]) => (
+                    <div key={fileId}>
+                        <p>{fileName}</p>
+                        <button onClick={() => handleRemoveFile(fileId)}>Remove</button>
                     </div>
                 ))}
                 <input
-                    type="text"
-                    value={newFile}
-                    onChange={(e) => setNewFile(e.target.value)}
-                    placeholder="Enter file URL"
+                    type="file"
+                    onChange={handleAddFile}
+                    multiple
+                    accept=".pdf,.jpg,.txt"
                 />
-                <button onClick={handleAddFile}>Add File</button>
             </div>
             <div>
                 <h3>Required Items</h3>
@@ -288,10 +331,20 @@ const AddPost = () => {
                     <button onClick={handleAddRequiredItem}>Add Item</button>
                 </div>
             </div>
-
+            <div>
+                <h3>Donation Link (Optional)</h3>
+                <input
+                    type="text"
+                    value={donationLink}
+                    onChange={(e) => setDonationLink(e.target.value)}
+                    placeholder="Enter donation link if you'd like to receive support"
+                    className="w-full p-2 border rounded"
+                />
+            </div>
             <button onClick={testRequest}>Send Test Request</button>
         </div>
     );
 };
 
 export default AddPost;
+
