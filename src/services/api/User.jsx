@@ -10,3 +10,15 @@ export const updateUser = (userId, updatedData) =>
 
 export const deleteUser = (userId) =>
   request(`/api/users/${userId}`, "DELETE", null, true);
+
+// export const uploadAvatar = (userId, file) => {
+//   const formData = new FormData();
+//   formData.append("avatar", file);
+//   return request(`/api/users/avatar/${userId}`, "POST", formData, true, true);
+// };
+
+export const uploadAvatar = (userId, file) => {
+  const formData = new FormData();
+  formData.append("avatar", file);
+  return request(`/api/users/avatar/${userId}`, "POST", formData, true);
+};

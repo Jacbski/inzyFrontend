@@ -1,6 +1,11 @@
 import React, { createContext, useState, useEffect, useMemo } from "react";
 import { login as apiLogin, register as apiRegister } from "../api/Auth";
-import { getCurrentUser, updateUser, deleteUser } from "../api/User";
+import {
+  getCurrentUser,
+  updateUser,
+  deleteUser,
+  uploadAvatar,
+} from "../api/User";
 
 export const AuthContext = createContext();
 
@@ -162,6 +167,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  ///test
+  const handleAvatarUpload = async (file) => {
+    if (!currentUser) {
+      throw new Error("No user is currently logged in");
+    }
+
+    try {
+      await uploadAvatar(currentUser.id, file);
+      await fetchCurrentUser(); // Refresh user data to get the new avatar
+      alert("Avatar uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      throw error;
+    }
+  };
+
   const value = useMemo(
     () => ({
       isLoggedIn,
@@ -173,6 +194,7 @@ export const AuthProvider = ({ children }) => {
       updateEmail,
       updatePassword,
       deleteAccount,
+      uploadAvatar: handleAvatarUpload,
     }),
     [isLoggedIn, currentUser]
   );

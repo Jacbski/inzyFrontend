@@ -29,6 +29,13 @@
     }
   }
 
+  img {
+    display: inline;
+    width: 128px;
+    height: 128px;
+    border-radius: 10%;
+  }
+
   /* Stylizacja dla większych ekranów */
   @media (min-width: 768px) {
     padding: 20px;

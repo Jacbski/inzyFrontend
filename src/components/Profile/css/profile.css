@@ -26,6 +26,12 @@
 .profile div p {
   margin: 5px 0;
 }
+.profile img {
+  display: inline;
+  width: 128px;
+  height: 128px;
+  border-radius: 10%;
+}
 @media (min-width: 768px) {
   .profile {
     padding: 20px;

@@ -207,7 +207,14 @@ Content-Type: application/json
   "userName" : "igorgutkowski",
   "password" : "haslohaslo"
 }
+### log 
+POST {{baseUrl}}auth/authenticate
+Content-Type: application/json
 
+{
+  "userName" : "jajco2",
+  "password" : "jajco"
+}
 
 
 ### dodanie ogloszenia do ulubiuonych
@@ -224,7 +231,7 @@ Authorization: Bearer {{access_token}}
 ### pobieranie aktualnego uzytkownika
 GET {{baseUrl}}api/users/current-user
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZ29yZ3V0a293c2tpIiwiaWF0IjoxNzMzNTkyNzk0LCJleHAiOjE3MzM2NzkxOTR9.uBqr-IlkCCLxjNU_2xdQcXdiFDIaO1IhSqum-ZH14Rc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQxMTU2MzAsImV4cCI6MTczNDIwMjAzMH0.UmGqu61qKM7vM0yYT5FNd_HvUJxZaP-GIM-pE2GSHq0
 
 ### POBIERANIE ogłoszeń posortowanych rosnąco według daty
 GET {{baseUrl}}api/ogloszenie/sorted/asc
@@ -252,3 +259,16 @@ Content-Type: multipart/form-data
 ### Pobranie avatara uzytkownika po jego id
 GET {{baseUrl}}api/avatar/67362fe05ab9bb6bc1c24279/download
 Content-Type: multipart/form-data
+
+
+###igor test
+POST http://localhost:8080/api/users/avatar/67574e6d1f6d9b0066881606
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQxMTY4ODMsImV4cCI6MTczNDIwMzI4M30.YKxwG7k_oKPl_s8DrNPG7t9imAmCDSen4iK51na-D8o
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="avatar"; filename="tonk.png"
+Content-Type: image/png
+
+< C:\Users\Filip\Downloads\tonk.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
