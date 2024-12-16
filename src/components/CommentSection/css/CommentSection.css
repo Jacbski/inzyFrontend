@@ -164,4 +164,38 @@
     color: #dc2626;
     margin: 8px 0;
 }
+.add-comment {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.comment-validation {
+    position: absolute;
+    bottom: -32px;
+    left: 16px;
+    font-size: 13px;
+    color: #666;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: white;
+    white-space: nowrap;
+    width: 100%;
+    max-width: calc(100% - 32px);
+}
+
+.error {
+    white-space: normal;
+}
+
+.edit-comment .comment-validation {
+    position: static;
+    margin: 8px 0;
+}
+
+@media (max-width: 480px) {
+    .add-comment {
+        margin-bottom: 48px;
+    }
+}
 
