@@ -8,6 +8,7 @@ import CodeBlockDisplay from "../CodeBlockDisplay/CodeBlockDisplay";
 import Donate from "../Donate/Donate";
 import Share from "../Share/Share";
 import request from '../../services/api/Request.jsx';
+import ProjectFiles from "../ProjectFiles/ProjectFiles.jsx";
 
 const ProjectView = () => {
     const [project, setProject] = useState(null);
@@ -85,9 +86,6 @@ const ProjectView = () => {
         }
     };
 
-    const handleDownload = (fileName) => {
-        console.log(`Downloading ${fileName}`);
-    };
 
     const renderContent = () => {
         if (loading) return <div>Loading...</div>;
@@ -126,27 +124,7 @@ const ProjectView = () => {
                             </div>
                         </div>
                         <Donate link={project.donationLink} />
-                        <div className="project-files">
-                            <h4>Attached Files:</h4>
-                            {project.files && project.files.length > 0 ? (
-                                <ul className="file-list">
-                                    {project.files.map((file, index) => (
-                                        <li key={index} className="file-item">
-                                            <span className="file-icon">📄</span>
-                                            <span className="file-name">{file}</span>
-                                            <span
-                                                className="download-text"
-                                                onClick={() => handleDownload(file)}
-                                            >
-                                                Download
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p>No files attached</p>
-                            )}
-                        </div>
+                            <ProjectFiles project={project} />
                         <ShopRecommendations items={project.requiredItems || []} />
                     </div>
                 </div>

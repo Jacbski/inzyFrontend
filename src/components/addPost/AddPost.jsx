@@ -83,8 +83,8 @@ const AddPost = () => {
     };
 
     const handleAddRequiredItem = () => {
-        if (!newItem.itemName || !newItem.itemLink.trim()) {
-            alert("Both item name and link are required.");
+        if (!newItem.itemName) {
+            alert("Item name is required.");
             return;
         }
         setRequiredItems([
@@ -190,8 +190,6 @@ const AddPost = () => {
                     body: stepFormData,
                 });
             }
-
-            alert("Steps added successfully!");
         } catch (error) {
             console.error("Error adding post or steps:", error);
             alert(`Error adding post or steps: ${error.message}`);
@@ -211,7 +209,6 @@ const AddPost = () => {
         <div>
             <h2>Add a New Post</h2>
 
-            {/* Main Photo */}
             <div>
                 <label>Title:</label>
                 <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
