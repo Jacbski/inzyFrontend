@@ -120,9 +120,13 @@ const ProjectView = () => {
                         )}
                         <p className="project-description">{project.description || 'No description available'}</p>
                         <div className="project-details">
-                            <span className="project-date">Created: {project.dataStworzenia || 'N/A'}</span>
+                            <span className="project-date">Author: {project.username}</span>
+                            <span className="project-date">Date: {project.dataStworzenia ?
+                                new Date(project.dataStworzenia).toISOString().split('T')[0]
+                                : 'N/A'}
+</span>
                             <div className="project-reactions">
-                                <span className="reaction-sum">Likes score: {reactionSum}</span>
+                                <span className="reaction-sum">Likes: {reactionSum}</span>
                                 {currentUser && (
                                     <>
                                         <button
