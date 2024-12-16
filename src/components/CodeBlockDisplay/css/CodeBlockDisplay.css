@@ -76,6 +76,7 @@ code {
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    min-width: 60px;
 }
 
 @media (hover: hover) and (pointer: fine) {
