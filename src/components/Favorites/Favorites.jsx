@@ -38,8 +38,8 @@ const Favorites = () => {
                 setFavorites(response);
             }
         } catch (err) {
-            console.error("Failed to fetch favorites:", err);
-            setError("Failed to load favorites. Please try again later.");
+            console.error("Failed to fetch favorites or you don't have any yet:", err);
+            setError("You currently don't have any favorites or we failed to load favorites. Please try again later.");
         } finally {
             setIsLoading(false);
         }
