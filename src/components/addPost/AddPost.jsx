@@ -17,11 +17,41 @@ const AddPost = () => {
     const [newStep, setNewStep] = useState({ stepTitle: "", stepDescription: "", stepNumber: null, image: null });
     const [requiredItems, setRequiredItems] = useState([]);
 
+    const validateTitle = (title) => title.length <= 50;
+    const validateDescription = (description) => description.length <= 3500;
+    const validateStepTitle = (stepTitle) => stepTitle.length <= 50;
+    const validateStepDescription = (stepDescription) => stepDescription.length <= 3500;
+    const validateCodeBlockTitle = (title) => title.length <= 50;
+    const validateCodeContent = (content) => content.length <= 3500;
+    const validateItemName = (name) => name.length <= 50;
+    const validateLink = (link) => /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(link);
+
+    const MAX_STEPS = 100;
+    const MAX_FILES = 50;
+    const MAX_CODE_BLOCKS = 50;
+    const MAX_ITEMS = 100;
+
     const handleAddCodeBlock = () => {
         if (!newCode.title || !newCode.code) {
             alert("Please fill out both the code title and content.");
             return;
         }
+
+        if (!validateCodeBlockTitle(newCode.title)) {
+            alert("Code block title must be 50 characters or less.");
+            return;
+        }
+
+        if (!validateCodeContent(newCode.code)) {
+            alert("Code content must be 3500 characters or less.");
+            return;
+        }
+
+        if (kod.length >= MAX_CODE_BLOCKS) {
+            alert(`You can add a maximum of ${MAX_CODE_BLOCKS} code blocks.`);
+            return;
+        }
+
         setKod([...kod, { ...newCode }]);
         setNewCode({ title: "", code: "" });
     };
@@ -31,14 +61,11 @@ const AddPost = () => {
     };
 
     const handleAddFile = async (event) => {
-        const selectedFiles = Array.from(event.target.files).filter(file =>
-            file.type === "application/pdf" ||
-            file.type === "image/jpeg" ||
-            file.type === "text/plain"
-        );
+        const selectedFiles = Array.from(event.target.files);
 
-        if (selectedFiles.length !== event.target.files.length) {
-            alert("Some files were not added. Only PDF, JPG, and TXT files are allowed.");
+        if (files.size + selectedFiles.length > MAX_FILES) {
+            alert(`You can upload a maximum of ${MAX_FILES} files. You're trying to add ${selectedFiles.length} files, but you already have ${files.size} files.`);
+            return;
         }
 
         for (const file of selectedFiles) {
@@ -87,6 +114,22 @@ const AddPost = () => {
             alert("Item name is required.");
             return;
         }
+
+        if (!validateItemName(newItem.itemName)) {
+            alert("Item name must be 50 characters or less.");
+            return;
+        }
+
+        if (!validateLink(newItem.itemLink)) {
+            alert("Please enter a valid item link.");
+            return;
+        }
+
+        if (requiredItems.length >= MAX_ITEMS) {
+            alert(`You can add a maximum of ${MAX_ITEMS} required items.`);
+            return;
+        }
+
         setRequiredItems([
             ...requiredItems,
             { itemName: newItem.itemName, itemLink: [newItem.itemLink.trim()] },
@@ -106,6 +149,16 @@ const AddPost = () => {
             return;
         }
 
+        if (!validateStepTitle(stepTitle)) {
+            alert("Step title must be 50 characters or less.");
+            return;
+        }
+
+        if (!validateStepDescription(stepDescription)) {
+            alert("Step description must be 3500 characters or less.");
+            return;
+        }
+
         if (stepNumber <= 0) {
             alert("Step number must be a positive integer.");
             return;
@@ -113,6 +166,11 @@ const AddPost = () => {
 
         if (steps.some(step => step.stepNumber === stepNumber)) {
             alert("Step number must be unique.");
+            return;
+        }
+
+        if (steps.length >= MAX_STEPS) {
+            alert(`You can add a maximum of ${MAX_STEPS} steps.`);
             return;
         }
 
@@ -128,9 +186,48 @@ const AddPost = () => {
         setNewStep({ ...newStep, image: file });
     };
 
-    const testRequest = async () => {
+    const validateForm = () => {
+        if (!validateTitle(title)) {
+            alert("Title must be 50 characters or less.");
+            return false;
+        }
+        if (!validateDescription(description)) {
+            alert("Description must be 3500 characters or less.");
+            return false;
+        }
         if (!mainPhoto) {
-            alert("Please upload a main photo.");
+            alert("Please upload a main photo for your post.");
+            return false;
+        }
+        if (steps.length === 0) {
+            alert("Please add at least one step to your post.");
+            return false;
+        }
+        if (steps.length > MAX_STEPS) {
+            alert(`You can add a maximum of ${MAX_STEPS} steps.`);
+            return false;
+        }
+        if (kod.length > MAX_CODE_BLOCKS) {
+            alert(`You can add a maximum of ${MAX_CODE_BLOCKS} code blocks.`);
+            return false;
+        }
+        if (files.size > MAX_FILES) {
+            alert(`You can upload a maximum of ${MAX_FILES} files.`);
+            return false;
+        }
+        if (requiredItems.length > MAX_ITEMS) {
+            alert(`You can add a maximum of ${MAX_ITEMS} required items.`);
+            return false;
+        }
+        if (donationLink && !validateLink(donationLink)) {
+            alert("Please enter a valid donation link.");
+            return false;
+        }
+        return true;
+    };
+
+    const testRequest = async () => {
+        if (!validateForm()) {
             return;
         }
 
@@ -206,141 +303,164 @@ const AddPost = () => {
     }
 
     return (
-        <div>
-            <h2>Add a New Post</h2>
+        <div className="add-post-container">
+            <div className="add-post-form">
+                <h2 style={{ marginBottom: '20px', fontSize: '24px', fontWeight: 'bold' }}>Add a New Post</h2>
 
-            <div>
-                <label>Title:</label>
-                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-            </div>
-            <div>
-                <label>Description:</label>
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-            </div>
-            <div>
-                <label>Main Photo:</label>
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setMainPhoto(e.target.files[0])}
-                />
-            </div>
-            <div>
-                <h3>Steps</h3>
-                {steps
-                    .slice()
-                    .sort((a, b) => a.stepNumber - b.stepNumber)
-                    .map((step, index) => (
-                        <div key={index}>
-                            <p><strong>Step {step.stepNumber}:</strong> {step.stepTitle}</p>
-                            <p>{step.stepDescription}</p>
-                            {step.image && <img src={URL.createObjectURL(step.image)} alt={`Step ${step.stepNumber}`} />}
-                            <button onClick={() => handleRemoveStep(index)}>Remove</button>
-                        </div>
-                    ))}
-                <div>
+                <div className="form-section">
+                    <label htmlFor="title">Title:</label>
+                    <input id="title" type="text" className="form-input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Enter post title" />
+                </div>
+                <div className="form-section">
+                    <label htmlFor="description">Description:</label>
+                    <textarea id="description" className="form-textarea" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Enter post description" />
+                </div>
+                <div className="form-section">
+                    <label htmlFor="mainPhoto">Main Photo:</label>
                     <input
-                        type="text"
-                        placeholder="Step Title"
-                        value={newStep.stepTitle}
-                        onChange={(e) => setNewStep({ ...newStep, stepTitle: e.target.value })}
-                    />
-                    <textarea
-                        placeholder="Step Description"
-                        value={newStep.stepDescription}
-                        onChange={(e) => setNewStep({ ...newStep, stepDescription: e.target.value })}
-                    />
-                    <input
-                        type="number"
-                        placeholder="Step Number"
-                        value={newStep.stepNumber || ""}
-                        onChange={(e) => setNewStep({ ...newStep, stepNumber: parseInt(e.target.value, 10) })}
-                    />
-                    <input
+                        id="mainPhoto"
                         type="file"
                         accept="image/*"
-                        onChange={(e) => handleStepImageChange(e.target.files[0])}
+                        onChange={(e) => setMainPhoto(e.target.files[0])}
+                        className="form-input"
                     />
-                    <button onClick={handleAddStep}>Add Step</button>
+                    {mainPhoto && <p style={{ marginTop: '10px' }}>Selected file: {mainPhoto.name}</p>}
                 </div>
-            </div>
-            <div>
-                <h3>Code Blocks</h3>
-                {kod.map((code, index) => (
-                    <div key={index}>
-                        <p><strong>Title:</strong> {code.title}</p>
-                        <pre>{code.code}</pre>
-                        <button onClick={() => handleRemoveCodeBlock(index)}>Remove</button>
+                <div className="form-section">
+                    <h3>Steps</h3>
+                    <ul className="item-list">
+                        {steps
+                            .slice()
+                            .sort((a, b) => a.stepNumber - b.stepNumber)
+                            .map((step, index) => (
+                                <li key={index}>
+                                    <h4 style={{ marginBottom: '10px' }}>Step {step.stepNumber}: {step.stepTitle}</h4>
+                                    <p style={{ marginBottom: '10px' }}>{step.stepDescription}</p>
+                                    {step.image && <img src={URL.createObjectURL(step.image)} alt={`Step ${step.stepNumber}`} style={{ maxWidth: '100%', marginBottom: '10px' }} />}
+                                    <button className="remove-button" onClick={() => handleRemoveStep(index)}>Remove Step</button>
+                                </li>
+                            ))}
+                    </ul>
+                    <div style={{ marginTop: '20px' }}>
+                        <input
+                            type="text"
+                            placeholder="Step Title"
+                            value={newStep.stepTitle}
+                            onChange={(e) => setNewStep({ ...newStep, stepTitle: e.target.value })}
+                            className="form-input"
+                        />
+                        <textarea
+                            placeholder="Step Description"
+                            value={newStep.stepDescription}
+                            onChange={(e) => setNewStep({ ...newStep, stepDescription: e.target.value })}
+                            className="form-textarea"
+                        />
+                        <input
+                            type="number"
+                            placeholder="Step Number"
+                            value={newStep.stepNumber || ""}
+                            onChange={(e) => setNewStep({ ...newStep, stepNumber: parseInt(e.target.value, 10) })}
+                            className="form-input"
+                        />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleStepImageChange(e.target.files[0])}
+                            className="form-input"
+                        />
+                        <button className="form-button" onClick={handleAddStep}>Add Step</button>
                     </div>
-                ))}
-                <div>
-                    <label>Code Block Title:</label>
+                </div>
+                <div className="form-section">
+                    <h3>Code Blocks</h3>
+                    <ul className="item-list">
+                        {kod.map((code, index) => (
+                            <li key={index}>
+                                <h4 style={{ marginBottom: '10px' }}>{code.title}</h4>
+                                <pre style={{ backgroundColor: '#f4f4f4', padding: '10px', borderRadius: '4px', overflowX: 'auto' }}>{code.code}</pre>
+                                <button className="remove-button" onClick={() => handleRemoveCodeBlock(index)}>Remove Code Block</button>
+                            </li>
+                        ))}
+                    </ul>
+                    <div style={{ marginTop: '20px' }}>
+                        <input
+                            type="text"
+                            placeholder="Code Block Title"
+                            value={newCode.title}
+                            onChange={(e) => setNewCode({ ...newCode, title: e.target.value })}
+                            className="form-input"
+                        />
+                        <textarea
+                            placeholder="Code Content"
+                            value={newCode.code}
+                            onChange={(e) => setNewCode({ ...newCode, code: e.target.value })}
+                            className="form-textarea"
+                            style={{ fontFamily: 'monospace' }}
+                        />
+                        <button className="form-button" onClick={handleAddCodeBlock}>Add Code Block</button>
+                    </div>
+                </div>
+                <div className="form-section">
+                    <h3>Files</h3>
+                    <ul className="item-list">
+                        {Array.from(files.entries()).map(([fileId, fileName]) => (
+                            <li key={fileId}>
+                                <p>{fileName}</p>
+                                <button className="remove-button" onClick={() => handleRemoveFile(fileId)}>Remove File</button>
+                            </li>
+                        ))}
+                    </ul>
+                    <input
+                        type="file"
+                        onChange={handleAddFile}
+                        multiple
+                        className="form-input"
+                    />
+                </div>
+                <div className="form-section">
+                    <h3>Required Items</h3>
+                    <ul className="item-list">
+                        {requiredItems.map((item, index) => (
+                            <li key={index}>
+                                <h4 style={{ marginBottom: '10px' }}>{item.itemName}</h4>
+                                <p style={{ marginBottom: '10px' }}>Link: <a href={item.itemLink[0]} target="_blank" rel="noopener noreferrer">{item.itemLink[0]}</a></p>
+                                <button className="remove-button" onClick={() => handleRemoveRequiredItem(index)}>Remove Item</button>
+                            </li>
+                        ))}
+                    </ul>
+                    <div style={{ marginTop: '20px' }}>
+                        <input
+                            type="text"
+                            placeholder="Item Name"
+                            value={newItem.itemName}
+                            onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })}
+                            className="form-input"
+                        />
+                        <input
+                            type="text"
+                            placeholder="Item Link"
+                            value={newItem.itemLink}
+                            onChange={(e) => setNewItem({ ...newItem, itemLink: e.target.value })}
+                            className="form-input"
+                        />
+                        <button className="form-button" onClick={handleAddRequiredItem}>Add Item</button>
+                    </div>
+                </div>
+                <div className="form-section">
+                    <h3>Donation Link (Optional)</h3>
                     <input
                         type="text"
-                        value={newCode.title}
-                        onChange={(e) => setNewCode({ ...newCode, title: e.target.value })}
+                        value={donationLink}
+                        onChange={(e) => setDonationLink(e.target.value)}
+                        placeholder="Enter donation link if you'd like to receive support"
+                        className="form-input"
                     />
-                    <label>Code Content:</label>
-                    <textarea
-                        value={newCode.code}
-                        onChange={(e) => setNewCode({ ...newCode, code: e.target.value })}
-                    />
-                    <button onClick={handleAddCodeBlock}>Add Code Block</button>
                 </div>
+                <button className="form-button" onClick={testRequest} style={{ width: '100%' }}>Submit Post</button>
             </div>
-            <div>
-                <h3>Files</h3>
-                {Array.from(files.entries()).map(([fileId, fileName]) => (
-                    <div key={fileId}>
-                        <p>{fileName}</p>
-                        <button onClick={() => handleRemoveFile(fileId)}>Remove</button>
-                    </div>
-                ))}
-                <input
-                    type="file"
-                    onChange={handleAddFile}
-                    multiple
-                    accept=".pdf,.jpg,.txt"
-                />
-            </div>
-            <div>
-                <h3>Required Items</h3>
-                {requiredItems.map((item, index) => (
-                    <div key={index}>
-                        <p><strong>Name:</strong> {item.itemName}</p>
-                        <p><strong>Link:</strong> {item.itemLink[0]}</p>
-                        <button onClick={() => handleRemoveRequiredItem(index)}>Remove</button>
-                    </div>
-                ))}
-                <div>
-                    <label>Item Name:</label>
-                    <input
-                        type="text"
-                        value={newItem.itemName}
-                        onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })}
-                    />
-                    <label>Item Link:</label>
-                    <input
-                        type="text"
-                        value={newItem.itemLink}
-                        onChange={(e) => setNewItem({ ...newItem, itemLink: e.target.value })}
-                    />
-                    <button onClick={handleAddRequiredItem}>Add Item</button>
-                </div>
-            </div>
-            <div>
-                <h3>Donation Link (Optional)</h3>
-                <input
-                    type="text"
-                    value={donationLink}
-                    onChange={(e) => setDonationLink(e.target.value)}
-                    placeholder="Enter donation link if you'd like to receive support"
-                    className="w-full p-2 border rounded"
-                />
-            </div>
-            <button onClick={testRequest}>Send Test Request</button>
         </div>
     );
 };
 
 export default AddPost;
+

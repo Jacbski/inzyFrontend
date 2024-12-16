@@ -41,7 +41,7 @@ const ProjectFiles = ({ project }) => {
                                 className="download-text"
                                 onClick={() => handleDownload(fileId, fileName)}
                             >
-                                Download
+                                ⬇
                             </span>
                         </li>
                     ))}

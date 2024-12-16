@@ -75,7 +75,7 @@ const ShopRecommendations = ({ items }) => {
                             >
                                 {selectedShop === "Author's links"
                                     ? (isLinkAvailable(item) ? "View Link" : "No link available")
-                                    : `Search on ${selectedShop}`}
+                                    : `Find on ${selectedShop}`}
                             </button>
                         </li>
                     ))}
