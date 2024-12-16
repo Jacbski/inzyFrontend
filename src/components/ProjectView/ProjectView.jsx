@@ -16,6 +16,7 @@ const ProjectView = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [opinions, setOpinions] = useState({ positive: 0, negative: 0 });
+    const [currentUser, setCurrentUser] = useState(null);
     const [userReaction, setUserReaction] = useState('none');
 
     const { id } = useParams();
@@ -54,11 +55,23 @@ const ProjectView = () => {
         }
     };
 
+    const fetchCurrentUser = async () => {
+        try {
+            const user = await request('/api/users/current-user', 'GET', null, true);
+            setCurrentUser(user);
+        } catch (err) {
+            console.warn('No user logged in:', err);
+            setCurrentUser(null);
+        }
+    };
+
     useEffect(() => {
+        fetchCurrentUser();
         fetchProjectById();
         fetchSteps();
         fetchOpinions();
     }, [id]);
+
 
     const handleReactionRequest = async (positive, negative, none, newReaction) => {
         try {
@@ -109,17 +122,22 @@ const ProjectView = () => {
                         <div className="project-details">
                             <span className="project-date">Created: {project.dataStworzenia || 'N/A'}</span>
                             <div className="project-reactions">
-                                <span className="reaction-sum">{reactionSum}</span>
-                                <button
-                                    className={`reaction-button like-button ${userReaction === 'like' ? 'active' : ''}`}
-                                    onClick={handleLike}>
-                                    Like
-                                </button>
-                                <button
-                                    className={`reaction-button dislike-button ${userReaction === 'dislike' ? 'active' : ''}`}
-                                    onClick={handleDislike}>
-                                    Dislike
-                                </button>
+                                <span className="reaction-sum">Likes score: {reactionSum}</span>
+                                {currentUser && (
+                                    <>
+                                        <button
+                                            className={`reaction-button like-button ${userReaction === 'like' ? 'active' : ''}`}
+                                            onClick={handleLike}>
+                                            Like
+                                        </button>
+                                        <button
+                                            className={`reaction-button dislike-button ${userReaction === 'dislike' ? 'active' : ''}`}
+                                            onClick={handleDislike}>
+                                            Dislike
+                                        </button>
+                                    </>
+                                )}
+
                                 <Share />
                             </div>
                         </div>

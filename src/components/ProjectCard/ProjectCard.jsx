@@ -86,7 +86,7 @@ const ProjectCard = ({
           onClick={
             !disableFavorite && !isFavorite ? handleFavoriteClick : undefined
           }
-          disabled={disableFavorite} // Disable button functionality
+          disabled={disableFavorite}
         >
           ★
         </button>
