@@ -62,11 +62,15 @@ const ProjectFeed = () => {
     }, [currentPage, activeFilter]);
 
     const handleFilter = (sortType) => {
-        if (sortType !== activeFilter) {
+        if (sortType === activeFilter) {
+            setActiveFilter(null);
+            setCurrentPage(0);
+        } else {
             setActiveFilter(sortType);
             setCurrentPage(0);
         }
     };
+
 
     const handleSearch = (e) => {
         const value = e.target.value.toLowerCase();
@@ -152,16 +156,16 @@ const ProjectFeed = () => {
             </div>
             <div className="filter-buttons">
                 <button
-                    className={activeFilter === 'asc' ? 'active' : ''}
-                    onClick={() => handleFilter('asc')}
-                >
-                    Sort by Date Asc
-                </button>
-                <button
                     className={activeFilter === 'desc' ? 'active' : ''}
                     onClick={() => handleFilter('desc')}
                 >
-                    Sort by Date Desc
+                    Newest
+                </button>
+                <button
+                    className={activeFilter === 'asc' ? 'active' : ''}
+                    onClick={() => handleFilter('asc')}
+                >
+                    Oldest
                 </button>
                 <button
                     className={activeFilter === 'positive' ? 'active' : ''}
