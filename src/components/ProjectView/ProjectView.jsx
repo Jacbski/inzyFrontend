@@ -109,7 +109,7 @@ const ProjectView = () => {
 
         return (
             <div className="project-view-container">
-                <Link to="/" className="close-button">X</Link>
+                <button onClick={() => navigate(-1)} className="close-button">X</button>
                 <div className="project-header">
                     <div className="project-info">
                         <h1>{project.title || 'Untitled Project'}</h1>
