@@ -1,9 +1,11 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../services/auth/AuthContex";
+import { useNavigate } from "react-router-dom";
 import "./css/AddPost.css";
 
 const AddPost = () => {
     const { currentUser } = useContext(AuthContext);
+    const navigate = useNavigate();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [kategoria, setKategoria] = useState("RASPBERRY_PI");
@@ -90,7 +92,7 @@ const AddPost = () => {
                 if (fileId && fileId.trim()) {
                     setFiles(prev => {
                         const newFiles = new Map(prev);
-                        newFiles.set(fileId.trim(), file.name);
+                        newFiles.set(fileId.trim(), { fileName: file.name, fileObject: file });
                         return newFiles;
                     });
                 }
@@ -120,7 +122,6 @@ const AddPost = () => {
             return;
         }
 
-        // itemLink is optional. Only validate if provided.
         let linkToAdd = [];
         if (newItem.itemLink.trim()) {
             if (!validateLink(newItem.itemLink)) {
@@ -135,10 +136,7 @@ const AddPost = () => {
             return;
         }
 
-        setRequiredItems([
-            ...requiredItems,
-            { itemName: newItem.itemName, itemLink: linkToAdd },
-        ]);
+        setRequiredItems([...requiredItems, { itemName: newItem.itemName, itemLink: linkToAdd }]);
         setNewItem({ itemName: "", itemLink: "" });
     };
 
@@ -251,7 +249,7 @@ const AddPost = () => {
         formData.append("ogloszenie", JSON.stringify(ogloszeniePayload));
         formData.append("mainPhoto", mainPhoto);
 
-        files.forEach((fileName, fileId) => {
+        files.forEach((value, fileId) => {
             formData.append("files", fileId);
         });
 
@@ -292,6 +290,8 @@ const AddPost = () => {
                     body: stepFormData,
                 });
             }
+
+            navigate("/my-posts");
         } catch (error) {
             console.error("Error adding post or steps:", error);
             alert(`Error adding post or steps: ${error.message}`);
@@ -310,6 +310,8 @@ const AddPost = () => {
     return (
         <div className="add-post-container">
             <div className="add-post-form">
+                <button className="close-button" onClick={() => navigate('/my-posts')}>X</button>
+
                 <h2 className="form-title">Add a New Post</h2>
 
                 <div className="form-section">
@@ -358,7 +360,18 @@ const AddPost = () => {
                         onChange={(e) => setMainPhoto(e.target.files[0])}
                         className="form-input"
                     />
-                    {mainPhoto && <p className="selected-file">Selected file: {mainPhoto.name}</p>}
+                    {mainPhoto && (
+                        <div className="image-preview-container">
+                            <p className="selected-file">Selected file: {mainPhoto.name}</p>
+                            {mainPhoto.type.startsWith("image/") && (
+                                <img
+                                    src={URL.createObjectURL(mainPhoto)}
+                                    alt="Main Photo Preview"
+                                    className="image-preview"
+                                />
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 <div className="form-section">
@@ -448,9 +461,16 @@ const AddPost = () => {
                 <div className="form-section">
                     <h3>Files</h3>
                     <ul className="item-list">
-                        {Array.from(files.entries()).map(([fileId, fileName]) => (
+                        {Array.from(files.entries()).map(([fileId, fileData]) => (
                             <li key={fileId}>
-                                <p>{fileName}</p>
+                                <p>{fileData.fileName}</p>
+                                {fileData.fileObject && fileData.fileObject.type.startsWith("image/") && (
+                                    <img
+                                        src={URL.createObjectURL(fileData.fileObject)}
+                                        alt={fileData.fileName}
+                                        className="file-image-preview"
+                                    />
+                                )}
                                 <button className="remove-button" onClick={() => handleRemoveFile(fileId)}>Remove File</button>
                             </li>
                         ))}
