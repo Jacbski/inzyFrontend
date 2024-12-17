@@ -6,7 +6,7 @@ const AddPost = () => {
     const { currentUser } = useContext(AuthContext);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [kategoriaId, setKategoriaId] = useState(1);
+    const [kategoria, setKategoria] = useState("RASPBERRY_PI");
     const [kod, setKod] = useState([]);
     const [newCode, setNewCode] = useState({ title: "", code: "" });
     const [donationLink, setDonationLink] = useState("");
@@ -120,9 +120,14 @@ const AddPost = () => {
             return;
         }
 
-        if (!validateLink(newItem.itemLink)) {
-            alert("Please enter a valid item link.");
-            return;
+        // itemLink is optional. Only validate if provided.
+        let linkToAdd = [];
+        if (newItem.itemLink.trim()) {
+            if (!validateLink(newItem.itemLink)) {
+                alert("Please enter a valid item link.");
+                return;
+            }
+            linkToAdd = [newItem.itemLink.trim()];
         }
 
         if (requiredItems.length >= MAX_ITEMS) {
@@ -132,7 +137,7 @@ const AddPost = () => {
 
         setRequiredItems([
             ...requiredItems,
-            { itemName: newItem.itemName, itemLink: [newItem.itemLink.trim()] },
+            { itemName: newItem.itemName, itemLink: linkToAdd },
         ]);
         setNewItem({ itemName: "", itemLink: "" });
     };
@@ -236,7 +241,7 @@ const AddPost = () => {
         const ogloszeniePayload = {
             title,
             description,
-            kategoriaId: parseInt(kategoriaId, 10),
+            kategoria,
             kod,
             requiredItems,
             donationLink,
@@ -305,16 +310,45 @@ const AddPost = () => {
     return (
         <div className="add-post-container">
             <div className="add-post-form">
-                <h2 style={{ marginBottom: '20px', fontSize: '24px', fontWeight: 'bold' }}>Add a New Post</h2>
+                <h2 className="form-title">Add a New Post</h2>
 
                 <div className="form-section">
                     <label htmlFor="title">Title:</label>
-                    <input id="title" type="text" className="form-input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Enter post title" />
+                    <input
+                        id="title"
+                        type="text"
+                        className="form-input"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="Enter post title"
+                    />
                 </div>
+
                 <div className="form-section">
                     <label htmlFor="description">Description:</label>
-                    <textarea id="description" className="form-textarea" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Enter post description" />
+                    <textarea
+                        id="description"
+                        className="form-textarea"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Enter post description"
+                    />
                 </div>
+
+                <div className="form-section">
+                    <label htmlFor="kategoria">Category:</label>
+                    <select
+                        id="kategoria"
+                        value={kategoria}
+                        onChange={(e) => setKategoria(e.target.value)}
+                        className="form-select"
+                    >
+                        <option value="RASPBERRY_PI">Raspberry Pi</option>
+                        <option value="ARDUINO">Arduino</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+
                 <div className="form-section">
                     <label htmlFor="mainPhoto">Main Photo:</label>
                     <input
@@ -324,8 +358,9 @@ const AddPost = () => {
                         onChange={(e) => setMainPhoto(e.target.files[0])}
                         className="form-input"
                     />
-                    {mainPhoto && <p style={{ marginTop: '10px' }}>Selected file: {mainPhoto.name}</p>}
+                    {mainPhoto && <p className="selected-file">Selected file: {mainPhoto.name}</p>}
                 </div>
+
                 <div className="form-section">
                     <h3>Steps</h3>
                     <ul className="item-list">
@@ -334,14 +369,20 @@ const AddPost = () => {
                             .sort((a, b) => a.stepNumber - b.stepNumber)
                             .map((step, index) => (
                                 <li key={index}>
-                                    <h4 style={{ marginBottom: '10px' }}>Step {step.stepNumber}: {step.stepTitle}</h4>
-                                    <p style={{ marginBottom: '10px' }}>{step.stepDescription}</p>
-                                    {step.image && <img src={URL.createObjectURL(step.image)} alt={`Step ${step.stepNumber}`} style={{ maxWidth: '100%', marginBottom: '10px' }} />}
+                                    <h4>Step {step.stepNumber}: {step.stepTitle}</h4>
+                                    <p>{step.stepDescription}</p>
+                                    {step.image && (
+                                        <img
+                                            src={URL.createObjectURL(step.image)}
+                                            alt={`Step ${step.stepNumber}`}
+                                            className="step-image-preview"
+                                        />
+                                    )}
                                     <button className="remove-button" onClick={() => handleRemoveStep(index)}>Remove Step</button>
                                 </li>
                             ))}
                     </ul>
-                    <div style={{ marginTop: '20px' }}>
+                    <div>
                         <input
                             type="text"
                             placeholder="Step Title"
@@ -371,18 +412,21 @@ const AddPost = () => {
                         <button className="form-button" onClick={handleAddStep}>Add Step</button>
                     </div>
                 </div>
+
                 <div className="form-section">
                     <h3>Code Blocks</h3>
                     <ul className="item-list">
                         {kod.map((code, index) => (
                             <li key={index}>
-                                <h4 style={{ marginBottom: '10px' }}>{code.title}</h4>
-                                <pre style={{ backgroundColor: '#f4f4f4', padding: '10px', borderRadius: '4px', overflowX: 'auto' }}>{code.code}</pre>
+                                <h4>{code.title}</h4>
+                                <div className="code-block-wrapper">
+                                    <pre>{code.code}</pre>
+                                </div>
                                 <button className="remove-button" onClick={() => handleRemoveCodeBlock(index)}>Remove Code Block</button>
                             </li>
                         ))}
                     </ul>
-                    <div style={{ marginTop: '20px' }}>
+                    <div>
                         <input
                             type="text"
                             placeholder="Code Block Title"
@@ -400,6 +444,7 @@ const AddPost = () => {
                         <button className="form-button" onClick={handleAddCodeBlock}>Add Code Block</button>
                     </div>
                 </div>
+
                 <div className="form-section">
                     <h3>Files</h3>
                     <ul className="item-list">
@@ -417,18 +462,23 @@ const AddPost = () => {
                         className="form-input"
                     />
                 </div>
+
                 <div className="form-section">
                     <h3>Required Items</h3>
                     <ul className="item-list">
                         {requiredItems.map((item, index) => (
                             <li key={index}>
-                                <h4 style={{ marginBottom: '10px' }}>{item.itemName}</h4>
-                                <p style={{ marginBottom: '10px' }}>Link: <a href={item.itemLink[0]} target="_blank" rel="noopener noreferrer">{item.itemLink[0]}</a></p>
+                                <h4>{item.itemName}</h4>
+                                {item.itemLink.length > 0 && (
+                                    <p>
+                                        Link: <a href={item.itemLink[0]} target="_blank" rel="noopener noreferrer">{item.itemLink[0]}</a>
+                                    </p>
+                                )}
                                 <button className="remove-button" onClick={() => handleRemoveRequiredItem(index)}>Remove Item</button>
                             </li>
                         ))}
                     </ul>
-                    <div style={{ marginTop: '20px' }}>
+                    <div>
                         <input
                             type="text"
                             placeholder="Item Name"
@@ -438,7 +488,7 @@ const AddPost = () => {
                         />
                         <input
                             type="text"
-                            placeholder="Item Link"
+                            placeholder="Item Link (Optional)"
                             value={newItem.itemLink}
                             onChange={(e) => setNewItem({ ...newItem, itemLink: e.target.value })}
                             className="form-input"
@@ -446,6 +496,7 @@ const AddPost = () => {
                         <button className="form-button" onClick={handleAddRequiredItem}>Add Item</button>
                     </div>
                 </div>
+
                 <div className="form-section">
                     <h3>Donation Link (Optional)</h3>
                     <input
@@ -456,11 +507,11 @@ const AddPost = () => {
                         className="form-input"
                     />
                 </div>
-                <button className="form-button" onClick={testRequest} style={{ width: '100%' }}>Submit Post</button>
+
+                <button className="form-button" onClick={testRequest}>Submit Post</button>
             </div>
         </div>
     );
 };
 
 export default AddPost;
-

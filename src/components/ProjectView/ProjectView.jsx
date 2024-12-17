@@ -125,6 +125,7 @@ const ProjectView = () => {
                                 new Date(project.dataStworzenia).toISOString().split('T')[0]
                                 : 'N/A'}
 </span>
+                            <span className="project-date">Category: {project.kategoria.charAt(0) + project.kategoria.slice(1).toLowerCase()}</span>
                             <div className="project-reactions">
                                 <span className="reaction-sum">Likes: {reactionSum}</span>
                                 {currentUser && (
