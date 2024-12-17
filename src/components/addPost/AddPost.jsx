@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../services/auth/AuthContex";
 import { useNavigate } from "react-router-dom";
 import "./css/AddPost.css";
@@ -19,41 +19,80 @@ const AddPost = () => {
     const [newStep, setNewStep] = useState({ stepTitle: "", stepDescription: "", stepNumber: null, image: null });
     const [requiredItems, setRequiredItems] = useState([]);
 
-    const validateTitle = (title) => title.length <= 50;
-    const validateDescription = (description) => description.length <= 3500;
-    const validateStepTitle = (stepTitle) => stepTitle.length <= 50;
-    const validateStepDescription = (stepDescription) => stepDescription.length <= 3500;
-    const validateCodeBlockTitle = (title) => title.length <= 50;
-    const validateCodeContent = (content) => content.length <= 3500;
-    const validateItemName = (name) => name.length <= 50;
-    const validateLink = (link) => /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(link);
+    const [formErrors, setFormErrors] = useState({});
 
     const MAX_STEPS = 100;
     const MAX_FILES = 50;
     const MAX_CODE_BLOCKS = 50;
     const MAX_ITEMS = 100;
 
+    const validateTitle = (val) => val.length <= 50;
+    const validateDescription = (val) => val.length <= 3500;
+    const validateStepTitle = (val) => val.length <= 50;
+    const validateStepDescription = (val) => val.length <= 3500;
+    const validateCodeBlockTitle = (val) => val.length <= 50;
+    const validateCodeContent = (val) => val.length <= 3500;
+    const validateItemName = (val) => val.length <= 50;
+    const validateLink = (val) => !val || /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(val);
+
+    const updateFormError = (field, message) => {
+        setFormErrors(prev => ({ ...prev, [field]: message }));
+    };
+
+    const clearFormError = (field) => {
+        setFormErrors(prev => {
+            const newErrors = { ...prev };
+            delete newErrors[field];
+            return newErrors;
+        });
+    };
+
+    useEffect(() => {
+        if (title && !validateTitle(title)) {
+            updateFormError("title", "Title must be 50 characters or less.");
+        } else {
+            clearFormError("title");
+        }
+    }, [title]);
+
+    useEffect(() => {
+        if (description && !validateDescription(description)) {
+            updateFormError("description", "Description must be 3500 characters or less.");
+        } else {
+            clearFormError("description");
+        }
+    }, [description]);
+
+    useEffect(() => {
+        if (donationLink && !validateLink(donationLink)) {
+            updateFormError("donationLink", "Please enter a valid donation link.");
+        } else {
+            clearFormError("donationLink");
+        }
+    }, [donationLink]);
+
     const handleAddCodeBlock = () => {
         if (!newCode.title || !newCode.code) {
-            alert("Please fill out both the code title and content.");
+            updateFormError("code", "Please fill out both the code title and content.");
             return;
         }
 
         if (!validateCodeBlockTitle(newCode.title)) {
-            alert("Code block title must be 50 characters or less.");
+            updateFormError("code", "Code block title must be 50 characters or less.");
             return;
         }
 
         if (!validateCodeContent(newCode.code)) {
-            alert("Code content must be 3500 characters or less.");
+            updateFormError("code", "Code content must be 3500 characters or less.");
             return;
         }
 
         if (kod.length >= MAX_CODE_BLOCKS) {
-            alert(`You can add a maximum of ${MAX_CODE_BLOCKS} code blocks.`);
+            updateFormError("code", `You can add a maximum of ${MAX_CODE_BLOCKS} code blocks.`);
             return;
         }
 
+        clearFormError("code");
         setKod([...kod, { ...newCode }]);
         setNewCode({ title: "", code: "" });
     };
@@ -66,9 +105,11 @@ const AddPost = () => {
         const selectedFiles = Array.from(event.target.files);
 
         if (files.size + selectedFiles.length > MAX_FILES) {
-            alert(`You can upload a maximum of ${MAX_FILES} files. You're trying to add ${selectedFiles.length} files, but you already have ${files.size} files.`);
+            updateFormError("files", `You can upload a maximum of ${MAX_FILES} files.`);
             return;
         }
+
+        clearFormError("files");
 
         for (const file of selectedFiles) {
             const formData = new FormData();
@@ -85,7 +126,8 @@ const AddPost = () => {
 
                 if (!response.ok) {
                     const errorText = await response.text();
-                    throw new Error(`Upload failed: ${response.status} ${errorText}`);
+                    updateFormError("files", `Upload failed: ${response.status} ${errorText}`);
+                    return;
                 }
 
                 const fileId = await response.text();
@@ -97,8 +139,7 @@ const AddPost = () => {
                     });
                 }
             } catch (error) {
-                console.error(`Error uploading file ${file.name}:`, error);
-                alert(`Error uploading file ${file.name}: ${error.message}`);
+                updateFormError("files", `Error uploading file ${file.name}: ${error.message}`);
             }
         }
     };
@@ -113,27 +154,30 @@ const AddPost = () => {
 
     const handleAddRequiredItem = () => {
         if (!newItem.itemName) {
-            alert("Item name is required.");
+            updateFormError("requiredItem", "Item name is required.");
             return;
         }
 
         if (!validateItemName(newItem.itemName)) {
-            alert("Item name must be 50 characters or less.");
+            updateFormError("requiredItem", "Item name must be 50 characters or less.");
             return;
-        }
-
-        let linkToAdd = [];
-        if (newItem.itemLink.trim()) {
-            if (!validateLink(newItem.itemLink)) {
-                alert("Please enter a valid item link.");
-                return;
-            }
-            linkToAdd = [newItem.itemLink.trim()];
         }
 
         if (requiredItems.length >= MAX_ITEMS) {
-            alert(`You can add a maximum of ${MAX_ITEMS} required items.`);
+            updateFormError("requiredItem", `You can add a maximum of ${MAX_ITEMS} required items.`);
             return;
+        }
+
+        if (!validateLink(newItem.itemLink)) {
+            updateFormError("requiredItem", "Please enter a valid item link.");
+            return;
+        }
+
+        clearFormError("requiredItem");
+
+        let linkToAdd = [];
+        if (newItem.itemLink.trim()) {
+            linkToAdd = [newItem.itemLink.trim()];
         }
 
         setRequiredItems([...requiredItems, { itemName: newItem.itemName, itemLink: linkToAdd }]);
@@ -148,35 +192,36 @@ const AddPost = () => {
         const { stepTitle, stepDescription, stepNumber, image } = newStep;
 
         if (!stepTitle || !stepDescription || !stepNumber || !image) {
-            alert("Please fill out all fields and upload an image for the step.");
+            updateFormError("steps", "Please fill out all fields and upload an image for the step.");
             return;
         }
 
         if (!validateStepTitle(stepTitle)) {
-            alert("Step title must be 50 characters or less.");
+            updateFormError("steps", "Step title must be 50 characters or less.");
             return;
         }
 
         if (!validateStepDescription(stepDescription)) {
-            alert("Step description must be 3500 characters or less.");
+            updateFormError("steps", "Step description must be 3500 characters or less.");
             return;
         }
 
         if (stepNumber <= 0) {
-            alert("Step number must be a positive integer.");
+            updateFormError("steps", "Step number must be a positive integer.");
             return;
         }
 
         if (steps.some(step => step.stepNumber === stepNumber)) {
-            alert("Step number must be unique.");
+            updateFormError("steps", "Step number must be unique.");
             return;
         }
 
         if (steps.length >= MAX_STEPS) {
-            alert(`You can add a maximum of ${MAX_STEPS} steps.`);
+            updateFormError("steps", `You can add a maximum of ${MAX_STEPS} steps.`);
             return;
         }
 
+        clearFormError("steps");
         setSteps([...steps, { ...newStep }]);
         setNewStep({ stepTitle: "", stepDescription: "", stepNumber: null, image: null });
     };
@@ -189,48 +234,64 @@ const AddPost = () => {
         setNewStep({ ...newStep, image: file });
     };
 
-    const validateForm = () => {
+    const validateFormOnSubmit = () => {
+        let isValid = true;
+
         if (!validateTitle(title)) {
-            alert("Title must be 50 characters or less.");
-            return false;
+            updateFormError("title", "Title must be 50 characters or less.");
+            isValid = false;
         }
+
         if (!validateDescription(description)) {
-            alert("Description must be 3500 characters or less.");
-            return false;
+            updateFormError("description", "Description must be 3500 characters or less.");
+            isValid = false;
         }
+
         if (!mainPhoto) {
-            alert("Please upload a main photo for your post.");
-            return false;
+            updateFormError("mainPhoto", "Please upload a main photo for your post.");
+            isValid = false;
+        } else {
+            clearFormError("mainPhoto");
         }
+
         if (steps.length === 0) {
-            alert("Please add at least one step to your post.");
-            return false;
+            updateFormError("steps", "Please add at least one step to your post.");
+            isValid = false;
         }
+
         if (steps.length > MAX_STEPS) {
-            alert(`You can add a maximum of ${MAX_STEPS} steps.`);
-            return false;
+            updateFormError("steps", `You can add a maximum of ${MAX_STEPS} steps.`);
+            isValid = false;
         }
+
         if (kod.length > MAX_CODE_BLOCKS) {
-            alert(`You can add a maximum of ${MAX_CODE_BLOCKS} code blocks.`);
-            return false;
+            updateFormError("code", `You can add a maximum of ${MAX_CODE_BLOCKS} code blocks.`);
+            isValid = false;
         }
+
         if (files.size > MAX_FILES) {
-            alert(`You can upload a maximum of ${MAX_FILES} files.`);
-            return false;
+            updateFormError("files", `You can upload a maximum of ${MAX_FILES} files.`);
+            isValid = false;
         }
-        if (requiredItems.length > MAX_ITEMS) {
-            alert(`You can add a maximum of ${MAX_ITEMS} required items.`);
-            return false;
+
+        if (requiredItems.length === 0) {
+            updateFormError("requiredItem", "Please add at least one required item.");
+            isValid = false;
+        } else if (requiredItems.length > MAX_ITEMS) {
+            updateFormError("requiredItem", `You can add a maximum of ${MAX_ITEMS} required items.`);
+            isValid = false;
         }
+
         if (donationLink && !validateLink(donationLink)) {
-            alert("Please enter a valid donation link.");
-            return false;
+            updateFormError("donationLink", "Please enter a valid donation link.");
+            isValid = false;
         }
-        return true;
+
+        return isValid;
     };
 
     const testRequest = async () => {
-        if (!validateForm()) {
+        if (!validateFormOnSubmit()) {
             return;
         }
 
@@ -264,12 +325,11 @@ const AddPost = () => {
 
             if (!response.ok) {
                 const errorText = await response.text();
-                throw new Error(`HTTP error! Status: ${response.status} ${errorText}`);
+                updateFormError("submit", `HTTP error! Status: ${response.status} ${errorText}`);
+                return;
             }
 
             const postData = await response.json();
-            alert("Post added successfully!");
-
             for (const step of steps) {
                 const stepFormData = new FormData();
                 stepFormData.append(
@@ -282,19 +342,25 @@ const AddPost = () => {
                 );
                 stepFormData.append("image", step.image);
 
-                await fetch(`http://localhost:8080/api/steps/${postData.id}`, {
+                const stepResponse = await fetch(`http://localhost:8080/api/steps/${postData.id}`, {
                     method: "POST",
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
                     },
                     body: stepFormData,
                 });
+
+                if (!stepResponse.ok) {
+                    const errorText = await stepResponse.text();
+                    updateFormError("submit", `Error adding steps: ${errorText}`);
+                    return;
+                }
             }
 
             navigate("/my-posts");
         } catch (error) {
             console.error("Error adding post or steps:", error);
-            alert(`Error adding post or steps: ${error.message}`);
+            updateFormError("submit", `Error adding post or steps: ${error.message}`);
         }
     };
 
@@ -314,6 +380,8 @@ const AddPost = () => {
 
                 <h2 className="form-title">Add a New Post</h2>
 
+                {formErrors.submit && <p className="error">{formErrors.submit}</p>}
+
                 <div className="form-section">
                     <label htmlFor="title">Title:</label>
                     <input
@@ -324,6 +392,7 @@ const AddPost = () => {
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="Enter post title"
                     />
+                    {formErrors.title && <p className="error">{formErrors.title}</p>}
                 </div>
 
                 <div className="form-section">
@@ -335,6 +404,7 @@ const AddPost = () => {
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Enter post description"
                     />
+                    {formErrors.description && <p className="error">{formErrors.description}</p>}
                 </div>
 
                 <div className="form-section">
@@ -372,6 +442,7 @@ const AddPost = () => {
                             )}
                         </div>
                     )}
+                    {formErrors.mainPhoto && <p className="error">{formErrors.mainPhoto}</p>}
                 </div>
 
                 <div className="form-section">
@@ -423,6 +494,7 @@ const AddPost = () => {
                             className="form-input"
                         />
                         <button className="form-button" onClick={handleAddStep}>Add Step</button>
+                        {formErrors.steps && <p className="error">{formErrors.steps}</p>}
                     </div>
                 </div>
 
@@ -455,6 +527,7 @@ const AddPost = () => {
                             style={{ fontFamily: 'monospace' }}
                         />
                         <button className="form-button" onClick={handleAddCodeBlock}>Add Code Block</button>
+                        {formErrors.code && <p className="error">{formErrors.code}</p>}
                     </div>
                 </div>
 
@@ -481,6 +554,7 @@ const AddPost = () => {
                         multiple
                         className="form-input"
                     />
+                    {formErrors.files && <p className="error">{formErrors.files}</p>}
                 </div>
 
                 <div className="form-section">
@@ -514,6 +588,7 @@ const AddPost = () => {
                             className="form-input"
                         />
                         <button className="form-button" onClick={handleAddRequiredItem}>Add Item</button>
+                        {formErrors.requiredItem && <p className="error">{formErrors.requiredItem}</p>}
                     </div>
                 </div>
 
@@ -526,6 +601,7 @@ const AddPost = () => {
                         placeholder="Enter donation link if you'd like to receive support"
                         className="form-input"
                     />
+                    {formErrors.donationLink && <p className="error">{formErrors.donationLink}</p>}
                 </div>
 
                 <button className="form-button" onClick={testRequest}>Submit Post</button>
