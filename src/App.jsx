@@ -6,6 +6,7 @@ import Header from "./components/Header/Hearder";
 import Profile from "./components/Profile/Profile";
 import AddPost from "./components/AddPost/AddPost";
 import Favorites from "./components/Favorites/Favorites.jsx";
+import MyPostsFeed from "./components/MyPostsFeed/MyPostsFeed.jsx";
 
 const App = () => {
     return (
@@ -17,6 +18,7 @@ const App = () => {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/add-post" element={<AddPost />} />
                 <Route path="/favorites" element={<Favorites />} />
+                <Route path="/my-posts" element={<MyPostsFeed />} />
             </Routes>
         </Router>
     );
