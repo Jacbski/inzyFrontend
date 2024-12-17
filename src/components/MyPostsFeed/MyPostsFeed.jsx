@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../services/auth/AuthContex";
 import { Link } from "react-router-dom";
 import MyProjectCard from "../MyProjectCard/MyProjectCard";
@@ -12,8 +13,8 @@ const MyPostsFeed = () => {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
-    const [searchTerm, setSearchTerm] = useState("");
     const projectsPerPage = 5;
+    const navigate = useNavigate();
 
     const fetchUserProjects = async (page = 0) => {
         if (!currentUser) return;
@@ -43,25 +44,15 @@ const MyPostsFeed = () => {
         }
     }, [currentUser, currentPage]);
 
-    const handleSearch = (e) => {
-        const value = e.target.value.toLowerCase();
-        setSearchTerm(value);
-
-        if (value.trim() === "") {
-            fetchUserProjects(0);
-        } else {
-            const filtered = projects.filter((project) =>
-                project.description.toLowerCase().includes(value) ||
-                project.title.toLowerCase().includes(value)
-            );
-            setProjects(filtered);
-        }
-    };
 
     const handlePagination = (pageNumber) => {
         if (pageNumber >= 0 && pageNumber < totalPages) {
             setCurrentPage(pageNumber);
         }
+    };
+
+    const handleAddPostClick = () => {
+        navigate("/add-post");
     };
 
     const renderPageNumbers = () => {
@@ -128,14 +119,10 @@ const MyPostsFeed = () => {
     return (
         <div className="project-feed">
             <h1 className="project-feed-title">My Posts</h1>
-            <div className="search-bar">
-                <input
-                    type="text"
-                    placeholder="Search My Posts"
-                    value={searchTerm}
-                    onChange={handleSearch}
-                />
-                <button>Search</button>
+            <div className="add-post-button-container">
+                <button className="add-post-button" onClick={handleAddPostClick}>
+                    Add Post
+                </button>
             </div>
             {projects.length === 0 && !isLoading && (
                 <div>No posts available. Create a new one!</div>

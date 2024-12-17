@@ -151,3 +151,20 @@ body {
         max-width: 200px;
     }
 }
+
+.add-post-button-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
+.add-post-button {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
