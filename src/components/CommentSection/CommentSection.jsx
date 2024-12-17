@@ -140,6 +140,30 @@ export default function CommentSection({ postId }) {
         }
     };
 
+    const handleReportComment = async (commentId) => {
+        if (!currentUser) {
+            alert("You must be logged in to report a comment.");
+            return;
+        }
+
+        const title = prompt("Please provide a short title for your report (max 50 chars):");
+        if (!title || title.trim() === "") return;
+
+        const message = prompt("Please provide the details of your report (reason):");
+        if (!message || message.trim() === "") return;
+
+        const trimmedTitle = title.slice(0,50);
+        const trimmedMessage = message.slice(0,3500);
+
+        try {
+            await request(`/api/report/comment/${commentId}`, 'POST', { title: trimmedTitle, message: trimmedMessage }, true);
+            alert("Comment reported successfully.");
+        } catch (err) {
+            console.error("Failed to report comment:", err);
+            alert("Failed to report the comment. Please try again later.");
+        }
+    };
+
     return (
         <div className="comment-section">
             {currentUser && (
@@ -167,7 +191,11 @@ export default function CommentSection({ postId }) {
                         <div key={comment.id} className="comment">
                             <div className="avatar">
                                 <img
-                                    src={`data:image/jpeg;base64,${user.avatar}` || 'https://via.placeholder.com/150'}
+                                    src={
+                                        user.avatar
+                                            ? `data:image/jpeg;base64,${user.avatar}`
+                                            : 'https://via.placeholder.com/150'
+                                    }
                                     alt={user.userName}
                                     className="avatar-img"
                                 />
@@ -198,22 +226,32 @@ export default function CommentSection({ postId }) {
                                 ) : (
                                     <>
                                         <p className="comment-text">{comment.contents}</p>
-                                        {currentUser && currentUser.id === comment.userID && (
-                                            <div className="comment-actions">
+                                        <div className="comment-actions">
+                                            {currentUser && currentUser.id === comment.userID && (
+                                                <>
+                                                    <button
+                                                        className="action-button"
+                                                        onClick={() => handleEditComment(comment.id, comment.contents)}
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        className="action-button"
+                                                        onClick={() => handleDeleteComment(comment.id)}
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </>
+                                            )}
+                                            {currentUser && (
                                                 <button
                                                     className="action-button"
-                                                    onClick={() => handleEditComment(comment.id, comment.contents)}
+                                                    onClick={() => handleReportComment(comment.id)}
                                                 >
-                                                    Edit
+                                                    Report
                                                 </button>
-                                                <button
-                                                    className="action-button"
-                                                    onClick={() => handleDeleteComment(comment.id)}
-                                                >
-                                                    Delete
-                                                </button>
-                                            </div>
-                                        )}
+                                            )}
+                                        </div>
                                     </>
                                 )}
                             </div>

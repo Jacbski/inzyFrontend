@@ -72,7 +72,6 @@ const ProjectView = () => {
         fetchOpinions();
     }, [id]);
 
-
     const handleReactionRequest = async (positive, negative, none, newReaction) => {
         try {
             await request(`/api/opinie/${id}/dodaj`, 'POST', { positive, negative, none }, true);
@@ -93,12 +92,35 @@ const ProjectView = () => {
 
     const handleDislike = () => {
         if (userReaction === 'dislike') {
-            handleReactionRequest(0, 0, 1, 'none');
+            handleReactionRequest(0, 1, 0, 'none');
         } else {
             handleReactionRequest(0, 1, 0, 'dislike');
         }
     };
 
+    const handleReportProject = async () => {
+        if (!currentUser) {
+            alert("You must be logged in to report a post.");
+            return;
+        }
+
+        const title = prompt("Please provide a short title for your report (max 50 chars):");
+        if (!title || title.trim() === "") return;
+
+        const message = prompt("Please provide the details of your report (reason):");
+        if (!message || message.trim() === "") return;
+
+        const trimmedTitle = title.slice(0,50);
+        const trimmedMessage = message.slice(0,3500);
+
+        try {
+            await request(`/api/report/post/${id}`, 'POST', { title: trimmedTitle, message: trimmedMessage }, true);
+            alert("Post reported successfully.");
+        } catch (err) {
+            console.error("Failed to report post:", err);
+            alert("Failed to report the post. Please try again later.");
+        }
+    };
 
     const renderContent = () => {
         if (loading) return <div>Loading...</div>;
@@ -124,7 +146,7 @@ const ProjectView = () => {
                             <span className="project-date">Date: {project.dataStworzenia ?
                                 new Date(project.dataStworzenia).toISOString().split('T')[0]
                                 : 'N/A'}
-</span>
+                            </span>
                             <span className="project-date">Category: {project.kategoria.charAt(0) + project.kategoria.slice(1).toLowerCase()}</span>
                             <div className="project-reactions">
                                 <span className="reaction-sum">Likes: {reactionSum}</span>
@@ -142,12 +164,16 @@ const ProjectView = () => {
                                         </button>
                                     </>
                                 )}
-
                                 <Share />
+                                {currentUser && (
+                                    <button className="reaction-button" onClick={handleReportProject}>
+                                        Report
+                                    </button>
+                                )}
                             </div>
                         </div>
                         <Donate link={project.donationLink} />
-                            <ProjectFiles project={project} />
+                        <ProjectFiles project={project} />
                         <ShopRecommendations items={project.requiredItems || []} />
                     </div>
                 </div>
