@@ -7,6 +7,7 @@ import Profile from "./components/Profile/Profile";
 import AddPost from "./components/AddPost/AddPost";
 import Favorites from "./components/Favorites/Favorites.jsx";
 import MyPostsFeed from "./components/MyPostsFeed/MyPostsFeed.jsx";
+import ReportedPostsFeed from "./components/ReportedPostsFeed/ReportedPostsFeed.jsx";
 
 const App = () => {
     return (
@@ -19,6 +20,7 @@ const App = () => {
                 <Route path="/add-post" element={<AddPost />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/my-posts" element={<MyPostsFeed />} />
+                <Route path="/reported-posts" element={<ReportedPostsFeed />} />
             </Routes>
         </Router>
     );

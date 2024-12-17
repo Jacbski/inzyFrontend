@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './css/CommentSection.css';
 import request from '../../services/api/Request.jsx';
+import ReportModal from '../ReportModal/ReportModal';
 
 export default function CommentSection({ postId }) {
     const [comments, setComments] = useState([]);
@@ -13,6 +14,8 @@ export default function CommentSection({ postId }) {
     const [editingContent, setEditingContent] = useState('');
     const [validationError, setValidationError] = useState('');
     const [editValidationError, setEditValidationError] = useState('');
+    const [showReportModal, setShowReportModal] = useState(false);
+    const [commentToReport, setCommentToReport] = useState(null);
 
     const MAX_COMMENT_LENGTH = 500;
 
@@ -140,24 +143,21 @@ export default function CommentSection({ postId }) {
         }
     };
 
-    const handleReportComment = async (commentId) => {
+    const handleReportComment = (commentId) => {
         if (!currentUser) {
             alert("You must be logged in to report a comment.");
             return;
         }
+        setCommentToReport(commentId);
+        setShowReportModal(true);
+    };
 
-        const title = prompt("Please provide a short title for your report (max 50 chars):");
-        if (!title || title.trim() === "") return;
-
-        const message = prompt("Please provide the details of your report (reason):");
-        if (!message || message.trim() === "") return;
-
-        const trimmedTitle = title.slice(0,50);
-        const trimmedMessage = message.slice(0,3500);
-
+    const submitCommentReport = async (title, message) => {
+        if (!commentToReport) return;
         try {
-            await request(`/api/report/comment/${commentId}`, 'POST', { title: trimmedTitle, message: trimmedMessage }, true);
-            alert("Comment reported successfully.");
+            await request(`/api/report/comment/${commentToReport}`, 'POST', { title, message }, true);
+            setShowReportModal(false);
+            setCommentToReport(null);
         } catch (err) {
             console.error("Failed to report comment:", err);
             alert("Failed to report the comment. Please try again later.");
@@ -259,6 +259,15 @@ export default function CommentSection({ postId }) {
                     );
                 })}
             </div>
+            {showReportModal && (
+                <ReportModal
+                    onClose={() => {
+                        setShowReportModal(false);
+                        setCommentToReport(null);
+                    }}
+                    onSubmit={submitCommentReport}
+                />
+            )}
         </div>
     );
 }

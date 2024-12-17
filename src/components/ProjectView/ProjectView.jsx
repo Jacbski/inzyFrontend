@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import ProjectSteps from '../ProjectSteps/ProjectSteps';
 import CommentSection from '../CommentSection/CommentSection';
 import ShopRecommendations from '../ShopRecommendations/ShopRecommendations';
@@ -9,6 +9,7 @@ import Donate from "../Donate/Donate";
 import Share from "../Share/Share";
 import request from '../../services/api/Request.jsx';
 import ProjectFiles from "../ProjectFiles/ProjectFiles.jsx";
+import ReportModal from "../ReportModal/ReportModal"; // Import the ReportModal
 
 const ProjectView = () => {
     const [project, setProject] = useState(null);
@@ -18,6 +19,7 @@ const ProjectView = () => {
     const [opinions, setOpinions] = useState({ positive: 0, negative: 0 });
     const [currentUser, setCurrentUser] = useState(null);
     const [userReaction, setUserReaction] = useState('none');
+    const [showReportModal, setShowReportModal] = useState(false);
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -25,8 +27,8 @@ const ProjectView = () => {
     const fetchProjectById = async () => {
         try {
             setLoading(true);
-            const project = await request(`/api/ogloszenie/getById/${id}`, 'GET');
-            setProject(project);
+            const projectData = await request(`/api/ogloszenie/getById/${id}`, 'GET');
+            setProject(projectData);
         } catch (err) {
             console.error("Failed to load project:", err);
             setError("Failed to load project. Please try again later.");
@@ -98,24 +100,19 @@ const ProjectView = () => {
         }
     };
 
-    const handleReportProject = async () => {
+    const handleReportClick = () => {
         if (!currentUser) {
             alert("You must be logged in to report a post.");
             return;
         }
+        setShowReportModal(true);
+    };
 
-        const title = prompt("Please provide a short title for your report (max 50 chars):");
-        if (!title || title.trim() === "") return;
-
-        const message = prompt("Please provide the details of your report (reason):");
-        if (!message || message.trim() === "") return;
-
-        const trimmedTitle = title.slice(0,50);
-        const trimmedMessage = message.slice(0,3500);
-
+    const submitReport = async (title, message) => {
         try {
-            await request(`/api/report/post/${id}`, 'POST', { title: trimmedTitle, message: trimmedMessage }, true);
-            alert("Post reported successfully.");
+            await request(`/api/report/post/${id}`, 'POST', { title, message }, true);
+            setShowReportModal(false);
+            // You can show a success message inline if desired
         } catch (err) {
             console.error("Failed to report post:", err);
             alert("Failed to report the post. Please try again later.");
@@ -168,9 +165,9 @@ const ProjectView = () => {
                             </div>
                         </div>
                         {currentUser && (
-                                <button className="reaction-button report-button" onClick={handleReportProject}>
-                                    ⚠ Report
-                                </button>
+                            <button className="reaction-button report-button" onClick={handleReportClick}>
+                                ⚠ Report
+                            </button>
                         )}
                         <Donate link={project.donationLink} />
                         <ProjectFiles project={project} />
@@ -190,6 +187,12 @@ const ProjectView = () => {
     return (
         <div className="project-view-wrapper">
             {renderContent()}
+            {showReportModal && (
+                <ReportModal
+                    onClose={() => setShowReportModal(false)}
+                    onSubmit={submitReport}
+                />
+            )}
         </div>
     );
 };
