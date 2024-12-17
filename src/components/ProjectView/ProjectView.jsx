@@ -165,13 +165,13 @@ const ProjectView = () => {
                                     </>
                                 )}
                                 <Share />
-                                {currentUser && (
-                                    <button className="reaction-button" onClick={handleReportProject}>
-                                        Report
-                                    </button>
-                                )}
                             </div>
                         </div>
+                        {currentUser && (
+                                <button className="reaction-button report-button" onClick={handleReportProject}>
+                                    ⚠ Report
+                                </button>
+                        )}
                         <Donate link={project.donationLink} />
                         <ProjectFiles project={project} />
                         <ShopRecommendations items={project.requiredItems || []} />
