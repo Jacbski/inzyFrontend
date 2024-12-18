@@ -18,8 +18,8 @@ const AddPost = () => {
     const [newItem, setNewItem] = useState({ itemName: "", itemLink: "" });
     const [steps, setSteps] = useState([]);
     const [newStep, setNewStep] = useState({ stepTitle: "", stepDescription: "", stepNumber: null, image: null });
-    const [requiredItems, setRequiredItems] = useState([]);
 
+    const [requiredItems, setRequiredItems] = useState([]);
     const [formErrors, setFormErrors] = useState({});
 
     const MAX_STEPS = 100;
@@ -58,8 +58,8 @@ const AddPost = () => {
     }, [title]);
 
     useEffect(() => {
-        if (description && !validateDescription(description)) {
-            updateFormError("description", "Description must be 10000 characters or less.");
+        if (description && description.length > 3500) {
+            updateFormError("description", "Description must be 3500 characters or less.");
         } else {
             clearFormError("description");
         }
@@ -297,8 +297,6 @@ const AddPost = () => {
             return;
         }
 
-        const formData = new FormData();
-
         const ogloszeniePayload = {
             title,
             description,
@@ -309,12 +307,10 @@ const AddPost = () => {
             files: Array.from(files.keys())
         };
 
-        formData.append("ogloszenie", JSON.stringify(ogloszeniePayload));
+        const formData = new FormData();
+        const ogloszenieBlob = new Blob([JSON.stringify(ogloszeniePayload)], { type: "application/json" });
+        formData.append("ogloszenie", ogloszenieBlob);
         formData.append("mainPhoto", mainPhoto);
-
-        files.forEach((value, fileId) => {
-            formData.append("files", fileId);
-        });
 
         try {
             const response = await fetch("http://localhost:8080/api/ogloszenie/addOgloszenie", {
@@ -332,16 +328,17 @@ const AddPost = () => {
             }
 
             const postData = await response.json();
+
             for (const step of steps) {
+                const stepPayload = {
+                    stepTitle: step.stepTitle,
+                    stepDescription: step.stepDescription,
+                    stepNumber: step.stepNumber,
+                };
+
                 const stepFormData = new FormData();
-                stepFormData.append(
-                    "step",
-                    JSON.stringify({
-                        stepTitle: step.stepTitle,
-                        stepDescription: step.stepDescription,
-                        stepNumber: step.stepNumber,
-                    })
-                );
+                const stepBlob = new Blob([JSON.stringify(stepPayload)], { type: "application/json" });
+                stepFormData.append("step", stepBlob);
                 stepFormData.append("image", step.image);
 
                 const stepResponse = await fetch(`http://localhost:8080/api/steps/${postData.id}`, {
