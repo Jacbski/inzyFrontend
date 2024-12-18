@@ -8,22 +8,27 @@ import AddPost from "./components/AddPost/AddPost";
 import Favorites from "./components/Favorites/Favorites.jsx";
 import MyPostsFeed from "./components/MyPostsFeed/MyPostsFeed.jsx";
 import ReportedPostsFeed from "./components/ReportedPostsFeed/ReportedPostsFeed.jsx";
+import Regulations from "./components/Regulations/Regulations.jsx";
+import About from "./components/About/About.jsx";
 
 const App = () => {
-    return (
-        <Router>
-            <Header />
-            <Routes>
-                <Route path="/" element={<ProjectFeed />} />
-                <Route path="/project/:id" element={<ProjectView />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/add-post" element={<AddPost />} />
-                <Route path="/favorites" element={<Favorites />} />
-                <Route path="/my-posts" element={<MyPostsFeed />} />
-                <Route path="/reported-posts" element={<ReportedPostsFeed />} />
-            </Routes>
-        </Router>
-    );
+  return (
+    <Router>
+      <Header />
+      <Routes>
+        <Route path="/" element={<ProjectFeed />} />
+        <Route path="/project/:id" element={<ProjectView />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/regulations" element={<Regulations />} />
+        <Route path="/about" element={<About />} />
+        {/* <Route path="/contact" element={<Contact />} /> */}
+        <Route path="/add-post" element={<AddPost />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/my-posts" element={<MyPostsFeed />} />
+        <Route path="/reported-posts" element={<ReportedPostsFeed />} />
+      </Routes>
+    </Router>
+  );
 };
 
 export default App;

@@ -31,15 +31,8 @@ const AsideMenu = ({ isAsideOpen, isLoggedIn }) => {
   //ogolnie widoczne sekcje jako default
   const commonSections = [
     {
-      title: "TOPICS",
-      items: [
-        { link: "/internet-culture", text: "Internet Culture (Viral)" },
-        { link: "/games", text: "Games" },
-        { link: "/qnas", text: "Q&As" },
-        { link: "/technology", text: "Technology" },
-        { link: "/pop-culture", text: "Pop Culture" },
-        { link: "/movies-tv", text: "Movies & TV" },
-      ],
+      title: "About",
+      items: [{ link: "/about", text: "About Us" }],
     },
     {
       title: "REGULATIONS",
@@ -82,7 +75,7 @@ const AsideMenu = ({ isAsideOpen, isLoggedIn }) => {
             ? loggedInSections.map((section, index) =>
                 renderSection(section.title, section.items, `loggedIn-${index}`)
               )
-            : // Reszta sekcji dla nie zalogowanych tlyko
+            : // Reszta sekcji dla nie zalogowanych !tylko!
               loggedOutSections.map((section, index) =>
                 renderSection(
                   section.title,

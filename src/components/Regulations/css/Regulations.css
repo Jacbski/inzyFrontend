@@ -1,0 +1,36 @@
+.regulations {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  line-height: 1.6;
+}
+.regulations h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #333;
+}
+.regulations ol {
+  list-style-type: decimal;
+  padding-left: 20px;
+}
+.regulations ol li {
+  margin-bottom: 15px;
+}
+.regulations ol li strong {
+  font-weight: bold;
+  color: #000;
+}
+.regulations ol li p {
+  margin: 5px 0;
+  color: #555;
+}
+.regulations ol .rodo {
+  margin-top: 10px;
+}
+.regulations ol .rodo strong {
+  font-weight: bold;
+  color: #990000;
+}
+.regulations ol .rodo p {
+  color: #444;
+  font-style: italic;
+}/*# sourceMappingURL=Regulations.css.map */
