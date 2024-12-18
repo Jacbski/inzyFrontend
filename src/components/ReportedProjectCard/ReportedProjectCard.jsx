@@ -13,7 +13,7 @@ const ReportedProjectCard = ({ report, onDeleteProject, onDeleteReport }) => {
                 <p><strong>Reported by user:</strong> {userName}</p>
             </div>
             <div className="reported-actions-wrapper">
-                <Link to={`/project/${ogloszenieID}`}>
+                <Link to={`/project/${ogloszenieID}`} target="_blank" rel="noopener noreferrer">
                     <button className="reported-view-button">View Post</button>
                 </Link>
                 <button

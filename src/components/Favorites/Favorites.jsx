@@ -79,7 +79,7 @@ const Favorites = () => {
             {favorites.length === 0 && !isLoading && <div>No favorite projects found.</div>}
             <div className="favorites-list">
                 {favorites.slice(0, displayedProjects).map((project) => (
-                    <Link to={`/project/${project.id}`} key={project.id}>
+                    <Link to={`/project/${project.id}`} key={project.id} target="_blank" rel="noopener noreferrer">
                         <ProjectCard
                             description={project.description}
                             photo={project.photo}

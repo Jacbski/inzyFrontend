@@ -129,7 +129,7 @@ const MyPostsFeed = () => {
             )}
             <div>
                 {projects.map((project) => (
-                    <Link to={`/project/${project.id}`} key={project.id}>
+                    <Link to={`/project/${project.id}`} key={project.id} target="_blank" rel="noopener noreferrer">
                         <MyProjectCard
                             key={project.id}
                             description={project.description}

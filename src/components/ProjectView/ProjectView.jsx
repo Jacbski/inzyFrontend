@@ -9,7 +9,7 @@ import Donate from "../Donate/Donate";
 import Share from "../Share/Share";
 import request from '../../services/api/Request.jsx';
 import ProjectFiles from "../ProjectFiles/ProjectFiles.jsx";
-import ReportModal from "../ReportModal/ReportModal"; // Import the ReportModal
+import ReportModal from "../ReportModal/ReportModal";
 
 const ProjectView = () => {
     const [project, setProject] = useState(null);
@@ -112,7 +112,6 @@ const ProjectView = () => {
         try {
             await request(`/api/report/post/${id}`, 'POST', { title, message }, true);
             setShowReportModal(false);
-            // You can show a success message inline if desired
         } catch (err) {
             console.error("Failed to report post:", err);
             alert("Failed to report the post. Please try again later.");
@@ -128,7 +127,7 @@ const ProjectView = () => {
 
         return (
             <div className="project-view-container">
-                <button onClick={() => navigate(-1)} className="close-button">X</button>
+                <button onClick={() => navigate('/')} className="close-button">X</button>
                 <div className="project-header">
                     <div className="project-info">
                         <h1>{project.title || 'Untitled Project'}</h1>

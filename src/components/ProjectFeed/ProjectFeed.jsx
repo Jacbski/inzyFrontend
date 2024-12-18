@@ -301,7 +301,7 @@ const ProjectFeed = () => {
             )}
             <div>
                 {projects.map((project) => (
-                    <Link to={`/project/${project.id}`} key={project.id}>
+                    <Link to={`/project/${project.id}`} key={project.id} target="_blank" rel="noopener noreferrer">
                         <ProjectCard
                             description={project.description}
                             photo={project.photo}
