@@ -34,15 +34,17 @@ const AddPost = () => {
     const validateCodeBlockTitle = (val) => val.length <= 50;
     const validateCodeContent = (val) => val.length <= 10000;
     const validateItemName = (val) => val.length <= 50;
-    const validateLink = (val) => !val || /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(val);
-    const validateStripeDonationLink = (val) => !val || /^(https?:\/\/)?(www\.)?(stripe\.com|connect\.stripe\.com|donate\.stripe\.com)\/.*$/.test(val);
+    const validateLink = (val) =>
+        !val || /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(val);
+    const validateStripeDonationLink = (val) =>
+        !val || /^(https?:\/\/)?(www\.)?(stripe\.com|connect\.stripe\.com|donate\.stripe\.com)\/.*$/.test(val);
 
     const updateFormError = (field, message) => {
-        setFormErrors(prev => ({ ...prev, [field]: message }));
+        setFormErrors((prev) => ({ ...prev, [field]: message }));
     };
 
     const clearFormError = (field) => {
-        setFormErrors(prev => {
+        setFormErrors((prev) => {
             const newErrors = { ...prev };
             delete newErrors[field];
             return newErrors;
@@ -67,7 +69,10 @@ const AddPost = () => {
 
     useEffect(() => {
         if (donationLink && !validateStripeDonationLink(donationLink)) {
-            updateFormError("donationLink", "Donation link must be a valid Stripe link (e.g. stripe.com or connect.stripe.com).");
+            updateFormError(
+                "donationLink",
+                "Donation link must be a valid Stripe link (e.g. stripe.com or connect.stripe.com)."
+            );
         } else {
             clearFormError("donationLink");
         }
@@ -103,51 +108,23 @@ const AddPost = () => {
         setKod(kod.filter((_, i) => i !== index));
     };
 
-    const handleAddFile = async (event) => {
+    const handleFilesInputChange = (event) => {
         const selectedFiles = Array.from(event.target.files);
 
         if (files.size + selectedFiles.length > MAX_FILES) {
             updateFormError("files", `You can upload a maximum of ${MAX_FILES} files.`);
             return;
         }
-
         clearFormError("files");
 
-        for (const file of selectedFiles) {
-            const formData = new FormData();
-            formData.append("file", file);
-
-            try {
-                const response = await fetch("http://localhost:8080/api/images/upload-single", {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                    },
-                    body: formData,
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    updateFormError("files", `Upload failed: ${response.status} ${errorText}`);
-                    return;
-                }
-
-                const fileId = await response.text();
-                if (fileId && fileId.trim()) {
-                    setFiles(prev => {
-                        const newFiles = new Map(prev);
-                        newFiles.set(fileId.trim(), { fileName: file.name, fileObject: file });
-                        return newFiles;
-                    });
-                }
-            } catch (error) {
-                updateFormError("files", `Error uploading file ${file.name}: ${error.message}`);
-            }
-        }
+        selectedFiles.forEach((file) => {
+            const fileId = crypto.randomUUID();
+            setFiles((prev) => new Map(prev).set(fileId, { fileName: file.name, fileObject: file }));
+        });
     };
 
     const handleRemoveFile = (fileId) => {
-        setFiles(prev => {
+        setFiles((prev) => {
             const newFiles = new Map(prev);
             newFiles.delete(fileId);
             return newFiles;
@@ -213,7 +190,7 @@ const AddPost = () => {
             return;
         }
 
-        if (steps.some(step => step.stepNumber === stepNumber)) {
+        if (steps.some((step) => step.stepNumber === stepNumber)) {
             updateFormError("steps", "Step number must be unique.");
             return;
         }
@@ -285,7 +262,10 @@ const AddPost = () => {
         }
 
         if (donationLink && !validateStripeDonationLink(donationLink)) {
-            updateFormError("donationLink", "Donation link must be a valid Stripe link (e.g. stripe.com or connect.stripe.com).");
+            updateFormError(
+                "donationLink",
+                "Donation link must be a valid Stripe link (e.g. stripe.com or connect.stripe.com)."
+            );
             isValid = false;
         }
 
@@ -303,14 +283,17 @@ const AddPost = () => {
             kategoria,
             kod,
             requiredItems,
-            donationLink,
-            files: Array.from(files.keys())
+            donationLink
         };
 
         const formData = new FormData();
         const ogloszenieBlob = new Blob([JSON.stringify(ogloszeniePayload)], { type: "application/json" });
         formData.append("ogloszenie", ogloszenieBlob);
         formData.append("mainPhoto", mainPhoto);
+
+        for (const [, fileData] of files.entries()) {
+            formData.append("files", fileData.fileObject);
+        }
 
         try {
             const response = await fetch("http://localhost:8080/api/ogloszenie/addOgloszenie", {
@@ -549,7 +532,7 @@ const AddPost = () => {
                     </ul>
                     <input
                         type="file"
-                        onChange={handleAddFile}
+                        onChange={handleFilesInputChange}
                         multiple
                         className="form-input"
                     />
