@@ -6,6 +6,7 @@ import "./css/AddPost.css";
 const AddPost = () => {
     const { currentUser } = useContext(AuthContext);
     const navigate = useNavigate();
+
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [kategoria, setKategoria] = useState("RASPBERRY_PI");
@@ -34,6 +35,7 @@ const AddPost = () => {
     const validateCodeContent = (val) => val.length <= 3500;
     const validateItemName = (val) => val.length <= 50;
     const validateLink = (val) => !val || /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(val);
+    const validateStripeDonationLink = (val) => !val || /^(https?:\/\/)?(www\.)?(stripe\.com|connect\.stripe\.com|donate\.stripe\.com)\/.*$/.test(val);
 
     const updateFormError = (field, message) => {
         setFormErrors(prev => ({ ...prev, [field]: message }));
@@ -64,8 +66,8 @@ const AddPost = () => {
     }, [description]);
 
     useEffect(() => {
-        if (donationLink && !validateLink(donationLink)) {
-            updateFormError("donationLink", "Please enter a valid donation link.");
+        if (donationLink && !validateStripeDonationLink(donationLink)) {
+            updateFormError("donationLink", "Donation link must be a valid Stripe link (e.g. stripe.com or connect.stripe.com).");
         } else {
             clearFormError("donationLink");
         }
@@ -282,8 +284,8 @@ const AddPost = () => {
             isValid = false;
         }
 
-        if (donationLink && !validateLink(donationLink)) {
-            updateFormError("donationLink", "Please enter a valid donation link.");
+        if (donationLink && !validateStripeDonationLink(donationLink)) {
+            updateFormError("donationLink", "Donation link must be a valid Stripe link (e.g. stripe.com or connect.stripe.com).");
             isValid = false;
         }
 
@@ -598,7 +600,7 @@ const AddPost = () => {
                         type="text"
                         value={donationLink}
                         onChange={(e) => setDonationLink(e.target.value)}
-                        placeholder="Enter donation link if you'd like to receive support"
+                        placeholder="Enter donation link if you'd like to receive support (must be Stripe link if provided)"
                         className="form-input"
                     />
                     {formErrors.donationLink && <p className="error">{formErrors.donationLink}</p>}
