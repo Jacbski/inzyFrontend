@@ -23,7 +23,7 @@ const AddPost = () => {
     const [formErrors, setFormErrors] = useState({});
 
     const MAX_STEPS = 100;
-    const MAX_FILES = 50;
+    const MAX_FILES = 10;
     const MAX_CODE_BLOCKS = 50;
     const MAX_ITEMS = 100;
 
@@ -32,7 +32,7 @@ const AddPost = () => {
     const validateStepTitle = (val) => val.length <= 50;
     const validateStepDescription = (val) => val.length <= 3500;
     const validateCodeBlockTitle = (val) => val.length <= 50;
-    const validateCodeContent = (val) => val.length <= 3500;
+    const validateCodeContent = (val) => val.length <= 10000;
     const validateItemName = (val) => val.length <= 50;
     const validateLink = (val) => !val || /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(val);
     const validateStripeDonationLink = (val) => !val || /^(https?:\/\/)?(www\.)?(stripe\.com|connect\.stripe\.com|donate\.stripe\.com)\/.*$/.test(val);
@@ -59,7 +59,7 @@ const AddPost = () => {
 
     useEffect(() => {
         if (description && !validateDescription(description)) {
-            updateFormError("description", "Description must be 3500 characters or less.");
+            updateFormError("description", "Description must be 10000 characters or less.");
         } else {
             clearFormError("description");
         }
@@ -85,7 +85,7 @@ const AddPost = () => {
         }
 
         if (!validateCodeContent(newCode.code)) {
-            updateFormError("code", "Code content must be 3500 characters or less.");
+            updateFormError("code", "Code content must be 10000 characters or less.");
             return;
         }
 
