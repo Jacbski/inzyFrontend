@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import "./css/ReportedProjectCard.css";
 
-const ReportedProjectCard = ({ report, onDelete }) => {
-    const { title, message, userName, ogloszenieID } = report;
+const ReportedProjectCard = ({ report, onDeleteProject, onDeleteReport }) => {
+    const { messageID, title, message, userName, ogloszenieID } = report;
 
     return (
         <div className="reported-project-card">
@@ -16,7 +16,18 @@ const ReportedProjectCard = ({ report, onDelete }) => {
                 <Link to={`/project/${ogloszenieID}`}>
                     <button className="reported-view-button">View Post</button>
                 </Link>
-                <button className="reported-remove-button" onClick={() => onDelete(ogloszenieID)}>Delete Project</button>
+                <button
+                    className="reported-remove-button"
+                    onClick={() => onDeleteProject(ogloszenieID, messageID)}
+                >
+                    Delete Project
+                </button>
+                <button
+                    className="reported-delete-report-button"
+                    onClick={() => onDeleteReport(messageID)}
+                >
+                    Delete Report
+                </button>
             </div>
         </div>
     );

@@ -55,7 +55,8 @@
 }
 
 .reported-view-button,
-.reported-remove-button {
+.reported-remove-button,
+.reported-delete-report-button {
     background: none;
     border: none;
     cursor: pointer;
@@ -64,7 +65,7 @@
     font-size: 0.9rem;
     font-weight: 600;
     text-align: center;
-    width: 120px
+    width: 150px;
 }
 
 .reported-view-button {
@@ -77,6 +78,12 @@
     color: #fff;
 }
 
+.reported-delete-report-button {
+    background-color: #007bff;
+    color: #fff;
+}
+
+
 @media (hover: hover) and (pointer: fine) {
     .reported-project-card:hover {
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
@@ -84,6 +91,10 @@
 
     .reported-remove-button:hover {
         background-color: #c82333;
+    }
+
+    .reported-delete-report-button:hover {
+        background-color: #0056b3;
     }
 }
 
@@ -101,7 +112,8 @@
     }
 
     .reported-view-button,
-    .reported-remove-button {
+    .reported-remove-button,
+    .reported-delete-report-button{
         width: 200px;
         margin-bottom: 8px;
     }

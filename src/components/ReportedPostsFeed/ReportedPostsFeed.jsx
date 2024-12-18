@@ -42,10 +42,11 @@ const ReportedPostsFeed = () => {
     }, [currentUser, currentPage]);
 
     if (!currentUser || currentUser.role !== "ADMIN") {
-        return(
-        <div className="project-feed">
-            <div>You do not have permission to view this page.</div>;
-        </div>);
+        return (
+            <div className="project-feed">
+                <div>You do not have permission to view this page.</div>
+            </div>
+        );
     }
 
     const handlePagination = (pageNumber) => {
@@ -101,16 +102,32 @@ const ReportedPostsFeed = () => {
         return pageNumbers;
     };
 
-    const handleDelete = async (projectId) => {
-        const confirmed = window.confirm("Are you sure you want to delete this post?");
+    const handleDeleteReport = async (postReportID) => {
+        const confirmed = window.confirm("Are you sure you want to delete this report?");
+        if (!confirmed) return;
+
+        try {
+            await request(`/api/admin/posts/${postReportID}`, "DELETE", null, true);
+            fetchReportedPosts(currentPage);
+        } catch (err) {
+            console.error("Failed to delete report:", err);
+            alert("Failed to delete the report.");
+        }
+    };
+
+    const handleDeleteProject = async (projectId, postReportID) => {
+        const confirmed = window.confirm("Are you sure you want to delete this project?");
         if (!confirmed) return;
 
         try {
             await request(`/api/ogloszenie/deleteOgloszenie/${projectId}`, "DELETE", null, true);
+
+            await request(`/api/admin/posts/${postReportID}`, "DELETE", null, true);
+
             fetchReportedPosts(currentPage);
         } catch (err) {
-            console.error("Failed to delete post:", err);
-            alert("Failed to delete the post.");
+            console.error("Failed to delete project or report:", err);
+            alert("Failed to delete the project or the report.");
         }
     };
 
@@ -128,7 +145,8 @@ const ReportedPostsFeed = () => {
                     <ReportedProjectCard
                         key={report.messageID}
                         report={report}
-                        onDelete={handleDelete}
+                        onDeleteProject={handleDeleteProject}
+                        onDeleteReport={handleDeleteReport}
                     />
                 ))}
             </div>
