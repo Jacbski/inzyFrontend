@@ -10,6 +10,7 @@ import MyPostsFeed from "./components/MyPostsFeed/MyPostsFeed.jsx";
 import ReportedPostsFeed from "./components/ReportedPostsFeed/ReportedPostsFeed.jsx";
 import Regulations from "./components/Regulations/Regulations.jsx";
 import About from "./components/About/About.jsx";
+import Contact from "./components/Contact/Contact.jsx";
 
 const App = () => {
   return (
@@ -21,7 +22,7 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/regulations" element={<Regulations />} />
         <Route path="/about" element={<About />} />
-        {/* <Route path="/contact" element={<Contact />} /> */}
+        <Route path="/contact" element={<Contact />} />
         <Route path="/add-post" element={<AddPost />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/my-posts" element={<MyPostsFeed />} />

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useMemo } from "react";
 import { login as apiLogin, register as apiRegister } from "../api/Auth";
+
 import {
   getCurrentUser,
   updateUser,

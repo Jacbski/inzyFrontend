@@ -1,36 +1,52 @@
 .regulations {
   font-family: Arial, sans-serif;
-  margin: 20px;
+  padding: 1rem;
   line-height: 1.6;
+  max-width: 100%;
+  margin: 0 auto;
 }
 .regulations h1 {
-  font-size: 2em;
-  margin-bottom: 20px;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
   color: #333;
 }
 .regulations ol {
   list-style-type: decimal;
-  padding-left: 20px;
+  padding-left: 1.5rem;
 }
 .regulations ol li {
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 .regulations ol li strong {
   font-weight: bold;
   color: #000;
+  display: block;
+  margin-bottom: 0.5rem;
 }
 .regulations ol li p {
-  margin: 5px 0;
+  margin: 0.5rem 0;
   color: #555;
 }
 .regulations ol .rodo {
-  margin-top: 10px;
+  margin-top: 1rem;
 }
 .regulations ol .rodo strong {
-  font-weight: bold;
   color: #990000;
 }
 .regulations ol .rodo p {
   color: #444;
   font-style: italic;
+}
+
+@media (min-width: 768px) {
+  .regulations {
+    padding: 2rem;
+    max-width: 800px;
+  }
+  .regulations h1 {
+    font-size: 2rem;
+  }
+  .regulations ol {
+    padding-left: 2rem;
+  }
 }/*# sourceMappingURL=Regulations.css.map */

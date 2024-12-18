@@ -64,7 +64,7 @@ function Settings() {
                   .email("Invalid email")
                   .required("Required"),
                 password: Yup.string()
-                  .min(6, "Password must be at least 6 characters")
+                  .min(1, "Password must be at least 1 characters")
                   .required("Required"),
               }),
               async (values) => {
@@ -85,11 +85,12 @@ function Settings() {
               { newPassword: "" },
               Yup.object({
                 newPassword: Yup.string()
-                  .min(6, "Password must be at least 6 characters")
+                  .min(1, "Password must be at least 1 characters")
                   .required("Required"),
               }),
               async (values) => {
                 await updatePassword(values.newPassword);
+                navigate("/");
                 alert("Password updated successfully!");
               }
             )

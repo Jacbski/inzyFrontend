@@ -1,0 +1,103 @@
+.contact {
+  font-family: Arial, sans-serif;
+  padding: 1.5rem;
+  max-width: 100%;
+  margin: 0 auto;
+  margin-top: 8px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.contact h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+  font-weight: 600;
+}
+.contact form {
+  display: flex;
+  flex-direction: column;
+}
+.contact .form-group {
+  margin-bottom: 1.5rem;
+}
+.contact .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+.contact .form-group input,
+.contact .form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+.contact .form-group input:focus,
+.contact .form-group textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+.contact .form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+.contact .error {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+.contact button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 600;
+}
+.contact button:hover {
+  background-color: #0056b3;
+}
+.contact button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+.contact .success-message,
+.contact .error-message {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  text-align: center;
+}
+.contact .success-message {
+  background-color: #c4f1ce;
+  color: #1e7e34;
+  border: 1px solid #28a745;
+}
+.contact .error-message {
+  background-color: #fef9f9;
+  color: #bd2130;
+  border: 1px solid #dc3545;
+}
+
+@media (min-width: 768px) {
+  .contact {
+    padding: 2.5rem;
+    max-width: 600px;
+  }
+  .contact h1 {
+    font-size: 2.25rem;
+  }
+  .contact button {
+    align-self: flex-start;
+    padding: 0.75rem 1.5rem;
+  }
+}/*# sourceMappingURL=Contact.css.map */

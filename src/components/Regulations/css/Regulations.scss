@@ -1,37 +1,40 @@
 .regulations {
   font-family: Arial, sans-serif;
-  margin: 20px;
+  padding: 1rem;
   line-height: 1.6;
+  max-width: 100%;
+  margin: 0 auto;
 
   h1 {
-    font-size: 2em;
-    margin-bottom: 20px;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
     color: #333;
   }
 
   ol {
     list-style-type: decimal;
-    padding-left: 20px;
+    padding-left: 1.5rem;
 
     li {
-      margin-bottom: 15px;
+      margin-bottom: 1rem;
 
       strong {
         font-weight: bold;
         color: #000;
+        display: block;
+        margin-bottom: 0.5rem;
       }
 
       p {
-        margin: 5px 0;
+        margin: 0.5rem 0;
         color: #555;
       }
     }
 
     .rodo {
-      margin-top: 10px;
+      margin-top: 1rem;
 
       strong {
-        font-weight: bold;
         color: #990000;
       }
 
@@ -39,6 +42,21 @@
         color: #444;
         font-style: italic;
       }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .regulations {
+    padding: 2rem;
+    max-width: 800px;
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    ol {
+      padding-left: 2rem;
     }
   }
 }

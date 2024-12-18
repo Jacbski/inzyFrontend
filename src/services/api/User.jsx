@@ -16,3 +16,7 @@ export const uploadAvatar = (userId, file) => {
   formData.append("avatar", file);
   return request(`/api/users/avatar/${userId}`, "POST", formData, true);
 };
+
+export const resetPassword = (email) => {
+  return request("/api/users/resetPassword", "POST", { email });
+};
