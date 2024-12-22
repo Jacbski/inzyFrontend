@@ -121,13 +121,25 @@ const ReportedPostsFeed = () => {
 
         try {
             await request(`/api/ogloszenie/deleteOgloszenie/${projectId}`, "DELETE", null, true);
-
             await request(`/api/admin/posts/${postReportID}`, "DELETE", null, true);
 
             fetchReportedPosts(currentPage);
         } catch (err) {
             console.error("Failed to delete project or report:", err);
             alert("Failed to delete the project or the report.");
+        }
+    };
+
+    const handleBanUser = async (userId) => {
+        const confirmed = window.confirm("Are you sure you want to ban this user?");
+        if (!confirmed) return;
+
+        try {
+            const banResponse = await request(`/api/admin/ban/${userId}`, "PUT", null, true);
+            alert("User banned successfully.");
+        } catch (err) {
+            console.error("Failed to ban user:", err);
+            alert("Failed to ban the user.");
         }
     };
 
@@ -147,6 +159,7 @@ const ReportedPostsFeed = () => {
                         report={report}
                         onDeleteProject={handleDeleteProject}
                         onDeleteReport={handleDeleteReport}
+                        onBanUser={handleBanUser}
                     />
                 ))}
             </div>
