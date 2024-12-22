@@ -1,4 +1,4 @@
-import request from "./request";
+import request from "./Request";
 
 // compendium for all requsets form user-like
 export const getCurrentUser = () => {

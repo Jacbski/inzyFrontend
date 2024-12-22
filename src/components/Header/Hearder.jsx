@@ -14,6 +14,7 @@ const Header = () => {
   const { isLoggedIn, currentUser, login, register, logout } = useAuth();
   const userMenuRef = useRef(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const handleResize = () => {
       setIsAsideOpen(window.innerWidth > 1300);
@@ -94,23 +95,11 @@ const Header = () => {
               </Link>
             </div>
           </div>
-          {/* <nav className="header__nav">
-            <ul>
-              <li>
-                <Link to="/features">Features</Link>
-              </li>
-              <li>
-                <Link to="/pricing">Pricing</Link>
-              </li>
-              <li>
-                <Link to="/about">About</Link>
-              </li>
-            </ul>
-          </nav> */}
           <div className="header__right">
             {isLoggedIn && currentUser && (
               <span className="header__username">
-                Welcome {currentUser.userName}
+                Welcome {currentUser.role === "ADMIN" ? "Admin" : ""}{" "}
+                {currentUser.userName}
               </span>
             )}
             <div className="header__user" ref={userMenuRef}>
@@ -136,6 +125,14 @@ const Header = () => {
                       <Link to="/profile" className="header__menu-item">
                         Profile
                       </Link>
+                      {currentUser.role === "ADMIN" && (
+                        <Link
+                          to="/admin-dashboard"
+                          className="header__menu-item"
+                        >
+                          Admin Dashboard
+                        </Link>
+                      )}
                       <button
                         className="header__menu-item"
                         onClick={handleLogoutClick}

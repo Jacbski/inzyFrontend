@@ -522,12 +522,26 @@ POST http://localhost:8080/api/ogloszenie/contains
   "phrase": "laptop"
 }
 
+###
 
-GET http://localhost:8080/api/admin/comments
+POST http://localhost:8080/api/admin/message
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ1MjE4MDQsImV4cCI6MTczNDYwODIwNH0.epCcHv-wq_P9WHHdwkbeKIfI3fxHCsRqOuFy-3NXXVQ
+Content-Type: application/json
+
+{
+  "title":"This is a test title that definitely exceeds fifty characters in length.",
+  "message":"This is a test description designed to exceed the character limit of 200 characters. It contains a lot of filler text to ensure it meets the criteria for being rejected by the validation constraints in place. This should trigger an error."
+}
+
+###
+GET http://localhost:8080/api/admin/messages
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ0NDkyNTAsImV4cCI6MTczNDUzNTY1MH0.avgxl-PXKGaBkrsytWtAtnSdBi9W58kWU8k5QKOl310
 ###
+GET http://localhost:8080/api/admin/comments
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ4ODUyMjgsImV4cCI6MTczNDk3MTYyOH0.8vEPDLgh4VOjvk2h_P0H20MPZRC-_-sdBVbOEBabgKs
+###
 GET http://localhost:8080/api/users/getByUserName/jajco
-//Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ0NDg5MTksImV4cCI6MTczNDUzNTMxOX0.8Wyr_5Xd1IJGEWfLPQypKawYO1-QhqFnGE7ND71ZoDg
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ4ODUyMjgsImV4cCI6MTczNDk3MTYyOH0.8vEPDLgh4VOjvk2h_P0H20MPZRC-_-sdBVbOEBabgKs
 ###
 GET http://localhost:8080/api/admin/posts
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ0NDkyNTAsImV4cCI6MTczNDUzNTY1MH0.avgxl-PXKGaBkrsytWtAtnSdBi9W58kWU8k5QKOl310
@@ -554,10 +568,8 @@ Content-Type: application/json
   "message":"test"
 }
 
-################################################################################
+###
 
-
-#reset hasla 
 POST http://localhost:8080/api/users/resetPassword
 Content-Type: application/json
 
@@ -574,25 +586,37 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ0N
 {
   "role":"ADMIN"
 }
-
-
-### do wysylania do admin panel
-
-POST http://localhost:8080/api/admin/message
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ1MjE4MDQsImV4cCI6MTczNDYwODIwNH0.epCcHv-wq_P9WHHdwkbeKIfI3fxHCsRqOuFy-3NXXVQ
+###
+POST http://localhost:8080/auth/authenticate
 Content-Type: application/json
 
 {
-  "title":"This is a test title that definitely exceeds fifty characters in length.",
-  "message":"This is a test description designed to exceed the character limit of 200 characters. It contains a lot of filler text to ensure it meets the criteria for being rejected by the validation constraints in place. This should trigger an error."
+  "userName": "jajco2",
+  "password": "jajco"
 }
 
-### wszystkie do admina
-GET http://localhost:8080/api/admin/messages
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ4NzkzNDgsImV4cCI6MTczNDk2NTc0OH0.1dQnOq63Ox7Co3uN0gjV3FoPPHGiFlIeM_dSp_GXA7M
 ###
+POST http://localhost:8080/auth/register
+Content-Type: application/json
 
+{
+  "userName": "jajco0",
+  "password": "jajco",
+  "email":"jajco0@email.com"
+}
 
-GET http://localhost:8080/api/admin/comments
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ4ODI4MjYsImV4cCI6MTczNDk2OTIyNn0.XfFNX7G2Ci7YyoPbAQ7L1XJB3PjuwzPR21zRkLifFuA
 ###
+GET http://localhost:8080/api/users/getByUserName/jajco0
+
+###
+PUT http://localhost:8080/api/admin/ban/67657ee308f8831a83f15135
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ3MDQ5NDksImV4cCI6MTczNDc5MTM0OX0.y1IMnrw08C0IM3dlcNgXGd3T0LyGu1BaVCWe-IssJXU
+###
+POST http://localhost:8080/auth/authenticate
+Content-Type: application/json
+
+{
+  "userName": "jajco0",
+  "password": "jajco"
+}

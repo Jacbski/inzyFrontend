@@ -11,6 +11,8 @@ import ReportedPostsFeed from "./components/ReportedPostsFeed/ReportedPostsFeed.
 import Regulations from "./components/Regulations/Regulations.jsx";
 import About from "./components/About/About.jsx";
 import Contact from "./components/Contact/Contact.jsx";
+import AdminDashboard from "./components/AdminDashboard/AdminDashboard.jsx";
+import ContactFormMessages from "./components/ContactFormMessages/ContactFormMessages.jsx";
 
 const App = () => {
   return (
@@ -26,7 +28,12 @@ const App = () => {
         <Route path="/add-post" element={<AddPost />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/my-posts" element={<MyPostsFeed />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/reported-posts" element={<ReportedPostsFeed />} />
+        <Route
+          path="/contact-form-messages"
+          element={<ContactFormMessages />}
+        />
       </Routes>
     </Router>
   );
