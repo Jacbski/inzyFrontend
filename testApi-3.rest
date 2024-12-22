@@ -538,7 +538,7 @@ GET http://localhost:8080/api/admin/messages
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ0NDkyNTAsImV4cCI6MTczNDUzNTY1MH0.avgxl-PXKGaBkrsytWtAtnSdBi9W58kWU8k5QKOl310
 ###
 GET http://localhost:8080/api/admin/comments
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ4ODUyMjgsImV4cCI6MTczNDk3MTYyOH0.8vEPDLgh4VOjvk2h_P0H20MPZRC-_-sdBVbOEBabgKs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ5MDQ1NjQsImV4cCI6MTczNDk5MDk2NH0.1JFeOFBqOf_Z8ELIgPVALlqk1J1gM5WQyuz_P8LGIMs
 ###
 GET http://localhost:8080/api/users/getByUserName/jajco
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ4ODUyMjgsImV4cCI6MTczNDk3MTYyOH0.8vEPDLgh4VOjvk2h_P0H20MPZRC-_-sdBVbOEBabgKs

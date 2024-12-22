@@ -18,7 +18,7 @@ const AdminDashboard = () => {
           <div className="admin-dashboard__card-content">
             <h2 className="admin-dashboard__card-title">Reported Posts</h2>
             <Link to="/reported-posts" className="admin-dashboard__card-link">
-              View All
+              View Posts
             </Link>
           </div>
         </div>
@@ -30,8 +30,11 @@ const AdminDashboard = () => {
           ></div>
           <div className="admin-dashboard__card-content">
             <h2 className="admin-dashboard__card-title">Reported Comments</h2>
-            <Link to="/user-management" className="admin-dashboard__card-link">
-              Manage Users
+            <Link
+              to="/reported-comments"
+              className="admin-dashboard__card-link"
+            >
+              Manage Comments
             </Link>
           </div>
         </div>
@@ -48,7 +51,7 @@ const AdminDashboard = () => {
               to="/contact-form-messages"
               className="admin-dashboard__card-link"
             >
-              View Statistics
+              View Messages
             </Link>
           </div>
         </div>

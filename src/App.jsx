@@ -13,6 +13,7 @@ import About from "./components/About/About.jsx";
 import Contact from "./components/Contact/Contact.jsx";
 import AdminDashboard from "./components/AdminDashboard/AdminDashboard.jsx";
 import ContactFormMessages from "./components/ContactFormMessages/ContactFormMessages.jsx";
+import ReportedComments from "./components/ReportedComments/ReportedComments.jsx";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
           path="/contact-form-messages"
           element={<ContactFormMessages />}
         />
+        <Route path="/reported-comments" element={<ReportedComments />} />
       </Routes>
     </Router>
   );
