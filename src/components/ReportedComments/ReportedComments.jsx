@@ -46,7 +46,7 @@ const ReportedComments = () => {
     try {
       await request(`/api/admin/ban/${userID}`, "PUT", null, true);
       alert(`User with ID '${userID}' has been banned successfully!`);
-      // W razie potrzeby możesz np. odświeżyć listę:
+      // W razie potrzeby możesz odświeżyć listę:
       // fetchComments(currentPage);
     } catch (err) {
       console.error("Failed to ban user:", err);

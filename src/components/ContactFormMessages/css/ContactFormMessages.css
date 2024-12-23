@@ -1,5 +1,6 @@
 :root {
   --primary-color: #007bff;
+  --primary-hover-color: #0056b3;
   --danger-color: #dc3545;
   --danger-hover-color: #c82333;
   --background-color: #f8f9fa;
@@ -8,97 +9,133 @@
   --text-muted: #6c757d;
   --border-color: #dee2e6;
   --transition-speed: 0.3s;
+  --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --box-shadow-hover: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .messages-wrapper {
-  padding: 1rem;
+  padding: 2rem;
   max-width: 800px;
   margin: 0 auto;
   background-color: var(--background-color);
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
 }
 .messages-wrapper .messages-title {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
   color: var(--text-color);
   text-align: center;
   transition: color var(--transition-speed) ease;
+  font-weight: 600;
 }
 .messages-wrapper .messages-title:hover {
   color: var(--primary-color);
 }
 .messages-wrapper .messages-list {
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 .messages-wrapper .messages-list .message-card {
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 12px;
+  padding: 1.5rem;
   background-color: var(--card-background);
   position: relative;
-  padding-bottom: 3rem;
   transition: all var(--transition-speed) ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow);
 }
 .messages-wrapper .messages-list .message-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: var(--box-shadow-hover);
 }
 .messages-wrapper .messages-list .message-card .message-title {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
   color: var(--text-color);
+  font-size: 1.2rem;
 }
 .messages-wrapper .messages-list .message-card .message-content {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   color: var(--text-color);
-  line-height: 1.5;
+  line-height: 1.6;
+}
+.messages-wrapper .messages-list .message-card .message-userid {
+  margin-top: 5px;
+  margin-bottom: 35px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 .messages-wrapper .messages-list .message-card .message-user {
   color: var(--text-muted);
   font-size: 0.9rem;
   font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
-.messages-wrapper .messages-list .message-card .delete-button {
+.messages-wrapper .messages-list .message-card .message-user::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+}
+.messages-wrapper .messages-list .message-card .delete-button,
+.messages-wrapper .messages-list .message-card .ban-button {
   position: absolute;
-  bottom: 0.5rem;
-  right: 0.5rem;
-  background-color: var(--danger-color);
-  border: none;
-  padding: 8px 12px;
+  bottom: 1rem;
+  padding: 0.5rem 1rem;
   color: white;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all var(--transition-speed) ease;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
   opacity: 0;
   transform: translateY(10px);
+}
+.messages-wrapper .messages-list .message-card .delete-button:focus,
+.messages-wrapper .messages-list .message-card .ban-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.5);
+}
+.messages-wrapper .messages-list .message-card .delete-button {
+  right: 1rem;
+  background-color: var(--danger-color);
 }
 .messages-wrapper .messages-list .message-card .delete-button:hover {
   background-color: var(--danger-hover-color);
 }
-.messages-wrapper .messages-list .message-card .delete-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.5);
+.messages-wrapper .messages-list .message-card .ban-button {
+  right: 7rem;
+  background-color: var(--primary-color);
 }
-.messages-wrapper .messages-list .message-card:hover .delete-button {
+.messages-wrapper .messages-list .message-card .ban-button:hover {
+  background-color: var(--primary-hover-color);
+}
+.messages-wrapper .messages-list .message-card:hover .delete-button,
+.messages-wrapper .messages-list .message-card:hover .ban-button {
   opacity: 1;
   transform: translateY(0);
 }
 .messages-wrapper .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: 2rem;
+  gap: 0.5rem;
 }
 .messages-wrapper .pagination .pagination-button {
   border: 1px solid var(--border-color);
   background-color: var(--card-background);
-  margin: 0 4px;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.25rem;
   cursor: pointer;
-  outline: none;
   transition: all var(--transition-speed) ease;
-  border-radius: 4px;
+  border-radius: 6px;
   color: var(--text-color);
+  font-weight: 600;
 }
 .messages-wrapper .pagination .pagination-button.active {
   background-color: var(--primary-color);
@@ -115,12 +152,14 @@
 }
 .messages-wrapper .pagination .pagination-button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
 }
 .messages-wrapper .pagination .pagination-ellipsis {
-  line-height: 2.25rem;
-  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
   color: var(--text-muted);
+  font-weight: 600;
 }
 
 @keyframes fadeIn {
@@ -135,4 +174,30 @@
 }
 .messages-list .message-card {
   animation: fadeIn 0.5s ease-out forwards;
+}
+
+@media (max-width: 768px) {
+  .messages-wrapper {
+    padding: 1rem;
+  }
+  .messages-list .message-card {
+    padding: 1rem;
+    padding-bottom: 4rem;
+    position: relative;
+  }
+  .messages-list .message-card .delete-button,
+  .messages-list .message-card .ban-button {
+    position: absolute;
+    bottom: 1rem;
+    margin-top: 0;
+    width: calc(50% - 0.5rem);
+    opacity: 1;
+    transform: none;
+  }
+  .messages-list .message-card .delete-button {
+    right: 0.5rem;
+  }
+  .messages-list .message-card .ban-button {
+    left: 0.5rem;
+  }
 }/*# sourceMappingURL=ContactFormMessages.css.map */

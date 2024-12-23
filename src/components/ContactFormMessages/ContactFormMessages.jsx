@@ -5,9 +5,11 @@ import "./css/ContactFormMessages.css";
 
 const ContactFormMessages = () => {
   const { currentUser } = useContext(AuthContext);
+
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const messagesPerPage = 5;
@@ -16,8 +18,10 @@ const ContactFormMessages = () => {
     try {
       setIsLoading(true);
       setError(null);
+
       const endpoint = `/api/admin/messages?pageNumber=${page}&pageSize=${messagesPerPage}`;
       const response = await request(endpoint, "GET", null, true);
+
       if (response && response.content) {
         setMessages(response.content);
         setTotalPages(response.totalPages);
@@ -41,10 +45,32 @@ const ContactFormMessages = () => {
 
     try {
       await request(`/api/admin/messages/${messageID}`, "DELETE", null, true);
+
       fetchMessages(currentPage);
     } catch (err) {
       console.error("Failed to delete the message:", err);
       alert("Failed to delete the message.");
+    }
+  };
+
+  const handleBanUser = async (userID) => {
+    if (!userID) {
+      alert("Cannot ban user: userID is missing.");
+      return;
+    }
+    const confirmBan = window.confirm(
+      `Are you sure you want to ban user with ID: ${userID}?`
+    );
+    if (!confirmBan) return;
+
+    try {
+      await request(`/api/admin/ban/${userID}`, "PUT", null, true);
+      alert(`User with ID '${userID}' has been banned successfully!`);
+      // W razie potrzeby możesz ponownie wczytać wiadomości:
+      // fetchMessages(currentPage);
+    } catch (err) {
+      console.error("Failed to ban user:", err);
+      alert("Failed to ban user.");
     }
   };
 
@@ -72,6 +98,7 @@ const ContactFormMessages = () => {
     if (totalPages <= 1) return null;
 
     const pageNumbers = [];
+
     pageNumbers.push(
       <button
         key="first"
@@ -131,7 +158,9 @@ const ContactFormMessages = () => {
   return (
     <div className="messages-wrapper">
       <h1 className="messages-title">Contact Form Messages</h1>
+
       {messages.length === 0 && !isLoading && <div>No messages available.</div>}
+
       <div className="messages-list">
         {messages.map((msg) => (
           <div key={msg.messageID} className="message-card">
@@ -140,15 +169,29 @@ const ContactFormMessages = () => {
             <p className="message-user">
               <strong>User:</strong> {msg.userName}
             </p>
+            <p className="message-userid">
+              <strong>UserID:</strong> {msg.userID}
+            </p>
+
             <button
               className="delete-button"
               onClick={() => handleDeleteMessage(msg.messageID)}
             >
               Delete
             </button>
+
+            {msg.userID && (
+              <button
+                className="ban-button"
+                onClick={() => handleBanUser(msg.userID)}
+              >
+                Ban User
+              </button>
+            )}
           </div>
         ))}
       </div>
+
       {totalPages > 1 && (
         <div className="pagination">
           <button
