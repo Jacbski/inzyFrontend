@@ -1,64 +1,60 @@
 .reported-project-card {
     display: flex;
-    padding: 16px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
-    gap: 16px;
-    position: relative;
-    margin-bottom: 20px;
-    transition: box-shadow 0.3s ease;
+    flex-direction: column;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    overflow: visible !important;
+    padding: 16px;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    gap: 16px;
+    position: relative;
+    transition: box-shadow 0.3s ease;
+}
+
+.reported-project-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .reported-card-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    overflow: visible !important;
+    width: 100%;
+    display: block;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    box-sizing: border-box;
+    margin-bottom: 8px;
 }
 
 .reported-project-title {
-    margin: 0;
+    margin: 0 0 8px 0;
     font-size: 1.2rem;
     font-weight: bold;
-    color: #000000;
-    margin-bottom: 8px;
-    overflow-wrap: break-word;
-    word-break: break-all;
-    white-space: normal;
-    text-overflow: clip;
+    color: #000;
+    line-height: 1.3;
 }
-
 .reported-body-text {
     margin: 6px 0;
     color: #757575;
-    word-wrap: break-word;
+    line-height: 1.4;
     overflow-wrap: break-word;
-    white-space: normal;
-    word-break: break-all;
-    text-overflow: clip;
-    overflow: visible !important;
-    display: block;
-    line-height: normal;
+    word-wrap: break-word;
+    word-break: break-word;
 }
-
+.reported-author-info {
+    font-size: 0.9rem;
+    color: #555;
+}
 .reported-actions-wrapper {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
-    align-items: center;
-    flex-shrink: 0;
+    margin-top: 8px;
 }
 
-.reported-view-button,
-.reported-remove-button,
-.reported-delete-report-button,
-.reported-ban-button {
-    background: none;
+.reported-actions-wrapper button {
     border: none;
     cursor: pointer;
     padding: 6px 10px;
@@ -66,11 +62,12 @@
     font-size: 0.9rem;
     font-weight: 600;
     text-align: center;
-    width: 130px;
+    min-width: 120px;
+    box-sizing: border-box;
 }
 
 .reported-view-button {
-    background-color: black;
+    background-color: #000;
     color: #fff;
 }
 
@@ -89,43 +86,14 @@
     color: #fff;
 }
 
-
 @media (hover: hover) and (pointer: fine) {
-    .reported-project-card:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-
     .reported-remove-button:hover {
         background-color: #c82333;
     }
-
     .reported-delete-report-button:hover {
         background-color: #0056b3;
     }
-
     .reported-ban-button:hover {
         background-color: #fb8c00;
-    }
-}
-
-@media (max-width: 480px) {
-    .reported-project-card {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .reported-actions-wrapper {
-        margin-top: 10px;
-        flex-wrap: wrap;
-        width: 100%;
-        gap: 8px;
-    }
-
-    .reported-view-button,
-    .reported-remove-button,
-    .reported-delete-report-button,
-    .reported-ban-button{
-        width: 200px;
-        margin-bottom: 8px;
     }
 }

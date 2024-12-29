@@ -10,7 +10,7 @@ const ReportedProjectCard = ({ report, onDeleteProject, onDeleteReport, onBanUse
             <div className="reported-card-content">
                 <div className="reported-project-title">{title || "No Title"}</div>
                 <p className="reported-body-text">{message || "No details provided"}</p>
-                <p><strong>Reported by user:</strong> {userName}</p>
+                <p><strong>Reported by:</strong> {userName}</p>
             </div>
             <div className="reported-actions-wrapper">
                 <Link to={`/project/${ogloszenieID}`} target="_blank" rel="noopener noreferrer">

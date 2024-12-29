@@ -82,10 +82,6 @@
     overflow-wrap: break-word;
 }
 
-.form-button:hover {
-    background-color: #0056b3;
-}
-
 .item-list {
     list-style-type: none;
     padding: 0;
