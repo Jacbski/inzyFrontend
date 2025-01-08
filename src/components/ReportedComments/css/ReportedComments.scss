@@ -3,8 +3,8 @@
   --primary-hover-color: #0056b3;
 
   /* Kolory typu "ban" (zolty) */
-  --danger-color: #ffc107;
-  --danger-hover-color: #e0a800;
+  --danger-color: #ff9800;
+  --danger-hover-color: #fb8c00;
 
   /* Kolory typu "comment" (czerwony) */
   --warning-color: #dc3545;
@@ -118,7 +118,7 @@
           margin-top: 1rem;
         }
 
-        /* BAN USER button (red - "danger") */
+        /* BAN USER button  */
         .ban-button {
           background-color: var(--danger-color);
           color: #fff;
@@ -141,7 +141,7 @@
           }
         }
 
-        /* DELETE COMMENT button (yellow - "warning") */
+        /* DELETE COMMENT button  */
         .delete-comment-button {
           background-color: var(--warning-color);
           color: #fff;
@@ -164,7 +164,7 @@
           }
         }
 
-        /* DELETE REPORT button (blue - "info") */
+        /* DELETE REPORT button  */
         .delete-report-button {
           background-color: var(--info-color);
           color: #fff;
