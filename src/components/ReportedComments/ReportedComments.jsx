@@ -54,6 +54,41 @@ const ReportedComments = () => {
     }
   };
 
+  const handleDeleteReport = async (reportID) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this report?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await request(`/api/admin/comments/${reportID}`, "DELETE", null, true);
+      alert("Report deleted successfully!");
+
+      fetchComments(currentPage);
+    } catch (err) {
+      console.error("Failed to delete report:", err);
+      alert("Failed to delete report.");
+    }
+  };
+
+  const handleDeleteComment = async (commentID) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this comment?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await request(`/api/comments/${commentID}`, "DELETE", null, true);
+      alert("Comment deleted successfully!");
+
+      // Odświeżamy listę
+      fetchComments(currentPage);
+    } catch (err) {
+      console.error("Failed to delete comment:", err);
+      alert("Failed to delete comment.");
+    }
+  };
+
   useEffect(() => {
     if (currentUser && currentUser.role === "ADMIN") {
       fetchComments(currentPage);
@@ -172,6 +207,7 @@ const ReportedComments = () => {
                   <strong>Created at:</strong> {report.commentDto.creationDate}
                 </p>
 
+                {/* PRZYCISK BANOWANIA AUTORA KOMENTARZA */}
                 {report.commentDto.userID && (
                   <button
                     className="ban-button"
@@ -180,6 +216,22 @@ const ReportedComments = () => {
                     Ban User
                   </button>
                 )}
+
+                {/* PRZYCISK USUWANIA KOMENTARZA */}
+                <button
+                  className="delete-comment-button"
+                  onClick={() => handleDeleteComment(report.commentDto.id)}
+                >
+                  Delete Comment
+                </button>
+
+                {/* PRZYCISK USUWANIA ZGŁOSZENIA */}
+                <button
+                  className="delete-report-button"
+                  onClick={() => handleDeleteReport(report.messageID)}
+                >
+                  Delete Report
+                </button>
               </div>
             )}
           </div>

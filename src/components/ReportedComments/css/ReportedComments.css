@@ -1,8 +1,15 @@
 :root {
   --primary-color: #007bff;
   --primary-hover-color: #0056b3;
-  --danger-color: #dc3545;
-  --danger-hover-color: #c82333;
+  /* Kolory typu "ban" (zolty) */
+  --danger-color: #ffc107;
+  --danger-hover-color: #e0a800;
+  /* Kolory typu "comment" (czerwony) */
+  --warning-color: #dc3545;
+  --warning-hover-color: #c82333;
+  /* Kolory typu "report" (niebieski) */
+  --info-color: #1883a3;
+  --info-hover-color: #147584;
   --background-color: #f8f9fa;
   --card-background: #ffffff;
   --comment-background: #f1f3f5;
@@ -83,6 +90,9 @@
   background-color: var(--comment-background);
   border-radius: 8px;
   padding: 1rem;
+  /* BAN USER button (red - "danger") */
+  /* DELETE COMMENT button (yellow - "warning") */
+  /* DELETE REPORT button (blue - "info") */
 }
 .reported-comments-wrapper .comments-list .comment-report-card .comment-details p {
   margin: 0.5rem 0;
@@ -91,11 +101,16 @@
   line-height: 1.6;
   color: var(--text-color);
 }
-.reported-comments-wrapper .comments-list .comment-report-card .comment-details .ban-button {
+.reported-comments-wrapper .comments-list .comment-report-card .comment-details .action-buttons {
+  display: flex;
+  gap: 1rem;
   margin-top: 1rem;
+}
+.reported-comments-wrapper .comments-list .comment-report-card .comment-details .ban-button {
   background-color: var(--danger-color);
   color: #fff;
   border: none;
+  margin-left: 1rem;
   padding: 0.75rem 1.25rem;
   border-radius: 6px;
   cursor: pointer;
@@ -109,6 +124,44 @@
 .reported-comments-wrapper .comments-list .comment-report-card .comment-details .ban-button:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.5);
+}
+.reported-comments-wrapper .comments-list .comment-report-card .comment-details .delete-comment-button {
+  background-color: var(--warning-color);
+  color: #fff;
+  border: none;
+  margin-left: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.reported-comments-wrapper .comments-list .comment-report-card .comment-details .delete-comment-button:hover {
+  background-color: var(--warning-hover-color);
+}
+.reported-comments-wrapper .comments-list .comment-report-card .comment-details .delete-comment-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.5);
+}
+.reported-comments-wrapper .comments-list .comment-report-card .comment-details .delete-report-button {
+  background-color: var(--info-color);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  margin-left: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.reported-comments-wrapper .comments-list .comment-report-card .comment-details .delete-report-button:hover {
+  background-color: var(--info-hover-color);
+}
+.reported-comments-wrapper .comments-list .comment-report-card .comment-details .delete-report-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.5);
 }
 .reported-comments-wrapper .pagination {
   display: flex;
@@ -151,6 +204,7 @@
   font-weight: 600;
 }
 
+/* "fadeIn" animation for report cards */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -165,6 +219,7 @@
   animation: fadeIn 0.5s ease-out forwards;
 }
 
+/* Mobile view adjustments */
 @media (max-width: 768px) {
   .reported-comments-wrapper {
     padding: 1rem;
@@ -174,8 +229,16 @@
   }
   .comments-list .comment-report-card .comment-details {
     padding: 0.75rem;
+    /* In mobile view, all buttons will have 100% width */
   }
-  .comments-list .comment-report-card .comment-details .ban-button {
-    width: 100%;
+  .comments-list .comment-report-card .comment-details .action-buttons {
+    flex-direction: column;
+  }
+  .comments-list .comment-report-card .comment-details .ban-button,
+  .comments-list .comment-report-card .comment-details .delete-comment-button,
+  .comments-list .comment-report-card .comment-details .delete-report-button {
+    width: 15rem;
+    margin-top: 1.5rem;
+    margin-left: 0;
   }
 }/*# sourceMappingURL=ReportedComments.css.map */
