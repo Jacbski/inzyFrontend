@@ -1,0 +1,47 @@
+@charset "UTF-8";
+.profile {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 8px solid #ddd;
+  border-radius: 14px;
+  text-align: center;
+  /* Stylizacja dla większych ekranów */
+}
+.profile h1 {
+  font-size: 20px; /* Mniejsze rozmiary tekstu dla mobilnych */
+  color: #333;
+  margin-bottom: 10px;
+}
+.profile p {
+  font-size: 14px; /* Dopasowane do małych ekranów */
+  color: #666;
+}
+.profile p:first-of-type {
+  font-weight: bold;
+  color: #333;
+}
+.profile div {
+  margin-top: 10px;
+}
+.profile div p {
+  margin: 5px 0;
+}
+.profile img {
+  display: inline;
+  width: 128px;
+  height: 128px;
+  border-radius: 10%;
+}
+@media (min-width: 768px) {
+  .profile {
+    padding: 20px;
+    max-width: 400px;
+    margin: 20px auto;
+  }
+  .profile h1 {
+    font-size: 24px; /* Większe nagłówki dla desktopów */
+  }
+  .profile p {
+    font-size: 16px; /* Większy tekst na większych ekranach */
+  }
+}/*# sourceMappingURL=profile.css.map */

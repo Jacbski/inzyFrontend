@@ -1,10 +1,18 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import Modal from "react-modal";
+import App from "./App.jsx";
+import "./reset.css";
+import { AuthProvider } from "./services/auth/AuthContex.jsx";
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+Modal.setAppElement("#root");
+
+const root = createRoot(document.getElementById("root"));
+
+root.render(
+  <AuthProvider>
+    <StrictMode>
+      <App />
+    </StrictMode>
+  </AuthProvider>
+);

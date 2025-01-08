@@ -1,0 +1,622 @@
+@baseUrl = http://localhost:8080/
+
+@access_token = {{login.response.body.token}}
+
+
+# @name login
+POST {{baseUrl}}auth/authenticate
+Content-Type: application/json
+
+{
+  "userName": "jajco2",
+  "password": "jajco"
+}
+
+
+
+### Tworzenie ogloszen/posta bez opini
+POST {{baseUrl}}api/ogloszenie/dodajOgloszenie HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "title":"tesssttest",
+  "opis":"fiip",
+  "kod":"fiip",
+  "kategoriaId":"12",
+  "opinia":[{
+    "positive": 1,
+    "negative": 0
+  }]
+}
+
+
+//my sami ręcznie nie będziemy dodawac opini do ogloszenia ale tutaj jest pokazane jak mniej wiecej to wyglada
+
+### Tworzenie ogloszen/posta bez opini
+POST {{baseUrl}}api/ogloszenie/dodajOgloszenie
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "title": "nowe",
+  "description": "Laptop w dobrym stanie, sprawny technicznie, 15 cali.",
+  "kod": [
+    {
+      "title": "Laptop code",
+      "code": "A1234B567"
+    }
+  ],
+  "kategoriaId": 1,
+  "requiredItems": [
+    {
+      "itemName": "Laptop charger",
+      "itemLink": [
+        "https://example.com/laptop-charger",
+        "https://example.com/laptop-charger2"
+      ]
+    },
+    {
+      "itemName": "Laptop bag",
+      "itemLink": [
+        "https://example.com/laptop-bag"
+      ]
+    }
+  ],
+  "files": [
+    "https://example.com/laptop-image.jpg",
+    "https://example.com/laptop-documentation.pdf"
+  ],
+  "steps": [
+    {
+      "stepTitle": "Krok 1: Sprawdzenie stanu technicznego",
+      "stepImage": "https://example.com/step1-image.jpg",
+      "stepDescription": "Upewnij się, że laptop działa poprawnie."
+    },
+    {
+      "stepTitle": "Krok 2: Przygotowanie do wysyłki",
+      "stepImage": "https://example.com/step2-image.jpg",
+      "stepDescription": "Zapakuj laptopa w odpowiednie opakowanie."
+    }
+  ]
+}
+
+
+
+### POBIERANIE wszystkie ogloszenia/posty
+GET {{baseUrl}}api/ogloszenie/getAll
+Content-Type: application/json
+#Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJKYWt1YiIsImlhdCI6MTczMDczNzQ5NywiZXhwIjoxNzMwODIzODk3fQ.hZYCMMH7_X3XmMvpj00qC5heKrXSlxaawQtqaXgj8Mg
+
+### POBIERANIE po konkrtentym id ogloszenia/posty
+GET {{baseUrl}}api/ogloszenie/getById/6714d4ac3623bd1e680ea411
+Content-Type: application/json
+
+
+### POBIERANIE ogloszen po Kategoria id
+GET {{baseUrl}}api/ogloszenie/getByKategoria/44
+Content-Type: application/json
+
+
+### EDYTOWANIE danego posta po jego id
+PUT {{baseUrl}}api/ogloszenie/updateOgloszenia/673a3cd5846ca9284d27b19e
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "title": "zmioenione",
+  "description": "zmioenione.",
+  "kod": [
+    {
+      "title": "Laptop code",
+      "code": "A1234B567"
+    }
+  ],
+  "kategoriaId": 1,
+  "requiredItems": [
+    {
+      "itemName": "Laptop charger",
+      "itemLink": [
+        "https://example.com/laptop-charger",
+        "https://example.com/laptop-charger2"
+      ]
+    },
+    {
+      "itemName": "Laptop bag",
+      "itemLink": [
+        "https://example.com/laptop-bag"
+      ]
+    }
+  ],
+  "files": [
+    "https://example.com/laptop-image.jpg",
+    "https://example.com/laptop-documentation.pdf"
+  ],
+  "steps": [
+    {
+      "stepTitle": "Krok 1: Sprawdzenie stanu technicznego",
+      "stepImage": "https://example.com/step1-image.jpg",
+      "stepDescription": "Upewnij się, że laptop działa poprawnie."
+    },
+    {
+      "stepTitle": "Krok 2: Przygotowanie do wysyłki",
+      "stepImage": "https://example.com/step2-image.jpg",
+      "stepDescription": "Zapakuj laptopa w odpowiednie opakowanie."
+    }
+  ]
+}
+
+
+### USUWANIE danego posta po jego id
+DELETE {{baseUrl}}api/ogloszenie/deleteOgloszenie/673a2e4ad3843b6325edac92
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### Pobiera Opinie jako są przypisane do danego posta, zwraca liczbe pozytywnych/negatywnych i sumuje ilosc
+GET {{baseUrl}}api/ogloszenie/673a2b332338da37af559af6/opinie
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### Pobiera ogloszenia uzytkownika o danym id
+GET {{baseUrl}}api/ogloszenie/user/673516a2481ed0706af1620c/ogloszenia
+Content-Type: application/json
+
+### Dodanie Opini do Ogloszenia/psota
+POST {{baseUrl}}api/opinie/673a2b332338da37af559af6/dodaj
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "positive" : 1,
+  "negative": 0
+}
+
+### rejestracja uzytkownika
+POST {{baseUrl}}auth/register
+Content-Type: application/json
+
+{
+  "userName" : "sraker",
+  "email" : "sraker@alal.lala",
+  "password" : "sraker"
+}
+
+### logowanie uzytkownika
+POST {{baseUrl}}auth/authenticate
+Content-Type: application/json
+
+{
+  "userName" : "sraker",
+  "password" : "sraker"
+}
+
+### dodanie ogloszenia do ulubiuonych
+POST {{baseUrl}}api/user/dodajDoUlubionych/673a3635c2af344bd6e0157e
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### Pobierz ulubione dla danego uzytkownika
+GET {{baseUrl}}api/user/ulubione/67351712a9a6843320eb9c35
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### pobieranie aktualnego uzytkownika
+GET {{baseUrl}}api/user/current-user
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### POBIERANIE ogłoszeń posortowanych rosnąco według daty
+GET {{baseUrl}}api/ogloszenie/sorted/asc
+Content-Type: application/json
+
+
+### POBIERANIE ogłoszeń posortowanych malejąco według daty
+GET {{baseUrl}}api/ogloszenie/sorted/desc
+Content-Type: application/json
+
+### POBIERANIE ogłoszeń posortowanych według pozytywnych ocen
+GET {{baseUrl}}api/ogloszenie/sorted/positive
+Content-Type: application/json
+
+### POBIERANIE ogłoszeń posortowanych według negatywnych ocen
+GET {{baseUrl}}api/ogloszenie/sorted/negative
+Content-Type: application/json
+
+
+### Ustawienia avatara uzytkownika po id uzytkownika
+POST {{baseUrl}}api/avatar/{userId}/upload
+Content-Type: multipart/form-data
+
+
+### Pobranie avatara uzytkownika po jego id
+GET {{baseUrl}}api/avatar/67362fe05ab9bb6bc1c24279/download
+Content-Type: multipart/form-data
+
+
+### Tworzenie ogloszen/posta bez opini
+POST http://localhost:8080/api/ogloszenie/addOgloszenie
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzEiLCJpYXQiOjE3MzM3ODMzOTQsImV4cCI6MTczMzg2OTc5NH0.hrDvbJwVeaXIoZa5oiK41pqrBB5T9W0LFHx98NKQnJw
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="ogloszenie"
+Content-Type: application/json
+
+{
+  "title": "nowe",
+  "description": "Laptop w dobrym stanie, sprawny technicznie, 15 cali.",
+  "kod": [
+    {
+      "title": "Laptop code",
+      "code": "A1234B567"
+    }
+  ],
+  "kategoriaId": 1,
+  "requiredItems": [
+    {
+      "itemName": "Laptop charger",
+      "itemLink": [
+        "https://example.com/laptop-charger",
+        "https://example.com/laptop-charger2"
+      ]
+    },
+    {
+      "itemName": "Laptop bag",
+      "itemLink": [
+        "https://example.com/laptop-bag"
+      ]
+    }
+  ],
+  "files": [
+    "https://example.com/laptop-image.jpg",
+    "https://example.com/laptop-documentation.pdf"
+  ]
+}
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="mainPhoto"; filename="sampleImage.jpg"
+Content-Type: image/jpeg
+
+< C:\Users\kopec\Pictures\Screenshot 2022-03-23 133052.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+###
+
+POST http://localhost:8080/api/ogloszenie/addOgloszenie
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZ29yZ3V0a293c2tpIiwiaWF0IjoxNzMzODQxMDc2LCJleHAiOjE3MzM5Mjc0NzZ9.v2clJQ7TZVJHs4nnqM62EbbgGWaZrcuMW6863rTxQZ8
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="ogloszenie"
+Content-Type: application/json
+
+{
+    "title": "Car Speaker 4",
+    "description": "This is a sample project description. It can contain details about the project, its goals, and its current status",
+    "kod": [
+        {
+            "title": "Arduino Sketch",
+            "code": "const int ledPin = 13;\n\nvoid setup() {\n  pinMode(ledPin, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(ledPin, HIGH);\n  delay(1000);\n  digitalWrite(ledPin, LOW);\n  delay(1000);\n}"
+        },
+        {
+            "title": "Advanced Blink",
+            "code": "const int ledPin = 13;\nint blinkInterval = 1000;\n\nvoid setup() {\n  pinMode(ledPin, OUTPUT);\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  digitalWrite(ledPin, HIGH);\n  delay(blinkInterval);\n  digitalWrite(ledPin, LOW);\n  delay(blinkInterval);\n\n  if (Serial.available() > 0) {\n    blinkInterval = Serial.parseInt();\n    Serial.print(\"New blink interval: \");\n    Serial.println(blinkInterval);\n  }\n}"
+        }
+    ],
+    "kategoriaId": 1,
+    "requiredItems": [
+        {
+            "itemName": "Arduino Uno",
+            "itemLink": [
+                "https://example.com/arduino-uno1"
+            ]
+        },
+        {
+            "itemName": "Speaker",
+            "itemLink": [
+                "https://example.com/speaker1"
+            ]
+        },
+        {
+            "itemName": "Microphone",
+            "itemLink": [
+                "https://example.com/microphone1"
+            ]
+        },
+        {
+            "itemName": "Jumper wires",
+            "itemLink": [
+                "https://example.com/jumper-wires1"
+            ]
+        }
+    ],
+    "files": [
+        "https://example.com/laptop-image.jpg",
+        "https://example.com/laptop-documentation.pdf"
+    ],
+    "donationLink": "https://donate.stripe.com/test_7sIcMV5ui3oW38QdQQ"
+}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="mainPhoto"; filename="testfota3.jpg"
+Content-Type: image/jpeg
+
+< C:\Users\kopec\Pictures\Screenshot 2022-03-23 133052.png
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+###
+POST http://localhost:8080/auth/authenticate
+Content-Type: application/json
+
+{
+  "userName": "jajco2",
+  "password": "jajco"
+}
+
+###
+
+POST http://localhost:8080/api/ogloszenie/addOgloszenie
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQxNzExMjUsImV4cCI6MTczNDI1NzUyNX0.gQ8Wlwje2mOEnkbJA-voxKcsaSm_vjmZZBZSoiL-V7Y
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="ogloszenie"
+Content-Type: application/json
+
+{
+    "title": "Car Speaker 4",
+    "description": "This is a sample project description. It can contain details about the project, its goals, and its current status",
+    "kod": [
+        {
+            "title": "Arduino Sketch",
+            "code": "const int ledPin = 13;\n\nvoid setup() {\n  pinMode(ledPin, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(ledPin, HIGH);\n  delay(1000);\n  digitalWrite(ledPin, LOW);\n  delay(1000);\n}"
+        },
+        {
+            "title": "Advanced Blink",
+            "code": "const int ledPin = 13;\nint blinkInterval = 1000;\n\nvoid setup() {\n  pinMode(ledPin, OUTPUT);\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  digitalWrite(ledPin, HIGH);\n  delay(blinkInterval);\n  digitalWrite(ledPin, LOW);\n  delay(blinkInterval);\n\n  if (Serial.available() > 0) {\n    blinkInterval = Serial.parseInt();\n    Serial.print(\"New blink interval: \");\n    Serial.println(blinkInterval);\n  }\n}"
+        }
+    ],
+    "kategoriaId": 1,
+    "requiredItems": [
+        {
+            "itemName": "Arduino Uno",
+            "itemLink": [
+                "https://example.com/arduino-uno1"
+            ]
+        },
+        {
+            "itemName": "Speaker",
+            "itemLink": [
+                "https://example.com/speaker1"
+            ]
+        },
+        {
+            "itemName": "Microphone",
+            "itemLink": [
+                "https://example.com/microphone1"
+            ]
+        },
+        {
+            "itemName": "Jumper wires",
+            "itemLink": [
+                "https://example.com/jumper-wires1"
+            ]
+        }
+    ],
+    "files": [
+        "https://example.com/laptop-image.jpg",
+        "https://example.com/laptop-documentation.pdf"
+    ],
+    "donationLink": "https://donate.stripe.com/test_7sIcMV5ui3oW38QdQQ"
+}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="mainPhoto"; filename="testfota3.jpg"
+Content-Type: image/jpeg
+
+< C:\Users\kopec\Pictures\Screenshot 2022-03-23 133052.png
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Add a step for the post
+POST http://127.0.0.1:8080/api/steps/675d5a013b853f0fea4d4f87
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQxNzIwMTMsImV4cCI6MTczNDI1ODQxM30.ODDAsexXpdymLVRm-ZOVvAjYLQhn2ZZqUVoCInPG88A
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="step"
+Content-Type: application/json
+
+{
+    "stepTitle": "Step 1",
+    "stepDescription": "This is the first step.",
+    "stepNumber": 1
+}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="step-image.jpg"
+Content-Type: image/jpeg
+
+< C:\Users\igor0\Desktop\testfota.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+###
+
+GET http://localhost:8080/api/steps/
+
+
+###
+
+POST http://localhost:8080/api/ogloszenie/addOgloszenie
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbyIsImlhdCI6MTczNDE3OTczOCwiZXhwIjoxNzM0MjY2MTM4fQ.4KkaAn0FNM5PfLCDLcBWZKu951UsAHWtLREBPdvkCw8
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="ogloszenie"
+Content-Type: application/json
+
+{
+    "title": "Car Speaker bez kodu",
+    "description": "This is a sample project description. It can contain details about the project, its goals, and its current status",
+    "kod": [],
+    "kategoriaId": 1,
+    "requiredItems": [
+        {
+            "itemName": "Arduino Uno"
+        },
+        {
+            "itemName": "Speaker"
+        },
+        {
+            "itemName": "Microphone"
+        },
+        {
+            "itemName": "Jumper wires"
+        }
+    ],
+    "files": [],
+    "donationLink": null
+}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="mainPhoto"; filename="testfota3.jpg"
+Content-Type: image/jpeg
+
+< C:\Users\igor0\Desktop\testfota.png
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### Upload PDF File to Server
+POST http://localhost:8080/api/images/upload-single
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQzNjkyMTIsImV4cCI6MTczNDQ1NTYxMn0.20W3PJCO_Yq4tA1ez5RHZQfEf3LWln-FlSGDGMAfwuc
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="file.pdf"
+Content-Type: application/pdf
+
+< C:\Users\kopec\Downloads\dowod-nieobciazenie.pdf
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+GET http://localhost:8080/api/images/download/675eb6119b6c742ea5e71bd0
+
+###
+
+GET http://localhost:8080/api/users/ulubione/67574e6d1f6d9b0066881606
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQyNzQ4ODUsImV4cCI6MTczNDM2MTI4NX0.uNwsCd3S9rndcCL3XhsIztaYpUxbnQbf9hf8c82rIAE
+
+###
+GET http://localhost:8080/api/users/getByUserName/jajco2
+
+###
+
+POST http://localhost:8080/api/ogloszenie/contains
+
+{
+  "phrase": "laptop"
+}
+
+###
+
+POST http://localhost:8080/api/admin/message
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ1MjE4MDQsImV4cCI6MTczNDYwODIwNH0.epCcHv-wq_P9WHHdwkbeKIfI3fxHCsRqOuFy-3NXXVQ
+Content-Type: application/json
+
+{
+  "title":"This is a test title that definitely exceeds fifty characters in length.",
+  "message":"This is a test description designed to exceed the character limit of 200 characters. It contains a lot of filler text to ensure it meets the criteria for being rejected by the validation constraints in place. This should trigger an error."
+}
+
+###
+GET http://localhost:8080/api/admin/messages
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ0NDkyNTAsImV4cCI6MTczNDUzNTY1MH0.avgxl-PXKGaBkrsytWtAtnSdBi9W58kWU8k5QKOl310
+###
+GET http://localhost:8080/api/admin/comments
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ5MDQ1NjQsImV4cCI6MTczNDk5MDk2NH0.1JFeOFBqOf_Z8ELIgPVALlqk1J1gM5WQyuz_P8LGIMs
+###
+GET http://localhost:8080/api/users/getByUserName/jajco
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ4ODUyMjgsImV4cCI6MTczNDk3MTYyOH0.8vEPDLgh4VOjvk2h_P0H20MPZRC-_-sdBVbOEBabgKs
+###
+GET http://localhost:8080/api/admin/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ0NDkyNTAsImV4cCI6MTczNDUzNTY1MH0.avgxl-PXKGaBkrsytWtAtnSdBi9W58kWU8k5QKOl310
+###
+
+
+POST http://localhost:8080/api/report/comment/674f601c45394145d29b05eb
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQzNjc0MDMsImV4cCI6MTczNDQ1MzgwM30.2zubFS8-UPI9pU6HeYIo1myQ4TDQx5cFi4uWTRkokwU
+Content-Type: application/json
+
+{
+  "title":"test",
+  "message":"test"
+}
+
+###
+
+POST http://localhost:8080/api/report/post/675770c6f8ec3c77239ed703
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQzNjc0MDMsImV4cCI6MTczNDQ1MzgwM30.2zubFS8-UPI9pU6HeYIo1myQ4TDQx5cFi4uWTRkokwU
+Content-Type: application/json
+
+{
+  "title":"test",
+  "message":"test"
+}
+
+###
+
+POST http://localhost:8080/api/users/resetPassword
+Content-Type: application/json
+
+{
+  "email":"21kubi15@gmail.com"
+}
+
+
+###
+
+PUT http://localhost:8080/api/users/changeRole/674a37487ccaf61822e87fb1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ0Njk2MDksImV4cCI6MTczNDU1NjAwOX0.IoeMc1Q_4OFi_hgIq6CL7DePIedjMa53pLceaYmqWl8
+
+{
+  "role":"ADMIN"
+}
+###
+POST http://localhost:8080/auth/authenticate
+Content-Type: application/json
+
+{
+  "userName": "jajco2",
+  "password": "jajco"
+}
+
+###
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+  "userName": "jajco0",
+  "password": "jajco",
+  "email":"jajco0@email.com"
+}
+
+###
+GET http://localhost:8080/api/users/getByUserName/jajco0
+
+###
+PUT http://localhost:8080/api/admin/ban/67657ee308f8831a83f15135
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWpjbzIiLCJpYXQiOjE3MzQ3MDQ5NDksImV4cCI6MTczNDc5MTM0OX0.y1IMnrw08C0IM3dlcNgXGd3T0LyGu1BaVCWe-IssJXU
+###
+POST http://localhost:8080/auth/authenticate
+Content-Type: application/json
+
+{
+  "userName": "jajco0",
+  "password": "jajco"
+}

@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import ProjectFeed from "./components/ProjectFeed/ProjectFeed";
+import ProjectView from "./components/ProjectView/ProjectView";
+import Header from "./components/Header/Hearder";
+import Profile from "./components/Profile/Profile";
+import AddPost from "./components/AddPost/AddPost";
+import Favorites from "./components/Favorites/Favorites.jsx";
+import MyPostsFeed from "./components/MyPostsFeed/MyPostsFeed.jsx";
+import ReportedPostsFeed from "./components/ReportedPostsFeed/ReportedPostsFeed.jsx";
+import Regulations from "./components/Regulations/Regulations.jsx";
+import About from "./components/About/About.jsx";
+import Contact from "./components/Contact/Contact.jsx";
+import AdminDashboard from "./components/AdminDashboard/AdminDashboard.jsx";
+import ContactFormMessages from "./components/ContactFormMessages/ContactFormMessages.jsx";
+import ReportedComments from "./components/ReportedComments/ReportedComments.jsx";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <Router>
+      <Header />
+      <Routes>
+        <Route path="/" element={<ProjectFeed />} />
+        <Route path="/project/:id" element={<ProjectView />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/regulations" element={<Regulations />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/add-post" element={<AddPost />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/my-posts" element={<MyPostsFeed />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/reported-posts" element={<ReportedPostsFeed />} />
+        <Route
+          path="/contact-form-messages"
+          element={<ContactFormMessages />}
+        />
+        <Route path="/reported-comments" element={<ReportedComments />} />
+      </Routes>
+    </Router>
+  );
+};
 
-export default App
+export default App;

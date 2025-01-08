@@ -1,0 +1,172 @@
+/* Reset CSS - standardowe wyzerowanie stylów przeglądarki */
+
+/* Ustawienia ogólne */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  font-family: Roboto, sans-serif;
+}
+
+/* Zresetowanie elementów HTML5 do stylu "block" */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+/* Ustawienia ogólne dla strony */
+body {
+  line-height: 1;
+}
+
+/* Zresetowanie list */
+ol,
+ul {
+  list-style: none;
+}
+
+/* Zresetowanie elementów cytatów */
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+/* Zresetowanie tabel */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Zresetowanie linków */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Zresetowanie obrazków */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Zresetowanie przycisków */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Zresetowanie pól formularzy */
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Ustawienia pudełkowe */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}

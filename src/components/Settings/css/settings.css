@@ -1,0 +1,78 @@
+.settings {
+  margin-top: 20px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.settings h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+.settings .buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+.settings .buttons button {
+  width: 100%;
+  max-width: 300px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.settings .buttons button:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.settings .buttons button.edit-button {
+  color: #007bff;
+  border-color: #007bff;
+}
+.settings .buttons button.edit-button:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+.settings .buttons button.logout-button {
+  color: #ffa500;
+  border-color: #ffa500;
+}
+.settings .buttons button.logout-button:hover {
+  background-color: #ffa500;
+  color: #fff;
+}
+.settings .buttons button.delete-button {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+.settings .buttons button.delete-button:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+.settings .current-avatar {
+  margin-top: 30px;
+  text-align: center;
+}
+.settings .current-avatar h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+.settings .current-avatar .avatar-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: 2px solid #007bff;
+}/*# sourceMappingURL=settings.css.map */

@@ -1,0 +1,53 @@
+.profile {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 8px solid #ddd;
+  border-radius: 14px;
+  text-align: center;
+
+  h1 {
+    font-size: 20px; /* Mniejsze rozmiary tekstu dla mobilnych */
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 14px; /* Dopasowane do małych ekranów */
+    color: #666;
+
+    &:first-of-type {
+      font-weight: bold;
+      color: #333;
+    }
+  }
+
+  div {
+    margin-top: 10px;
+
+    p {
+      margin: 5px 0;
+    }
+  }
+
+  img {
+    display: inline;
+    width: 128px;
+    height: 128px;
+    border-radius: 10%;
+  }
+
+  /* Stylizacja dla większych ekranów */
+  @media (min-width: 768px) {
+    padding: 20px;
+    max-width: 400px;
+    margin: 20px auto;
+
+    h1 {
+      font-size: 24px; /* Większe nagłówki dla desktopów */
+    }
+
+    p {
+      font-size: 16px; /* Większy tekst na większych ekranach */
+    }
+  }
+}
