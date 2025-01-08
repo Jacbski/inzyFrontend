@@ -1,8 +1,10 @@
 :root {
   --primary-color: #007bff;
   --primary-hover-color: #0056b3;
-  --danger-color: #dc3545;
-  --danger-hover-color: #c82333;
+  --ban-user-color: #ff9800;
+  --ban-user-hover-color: #fb8c00;
+  --delete-mess-color: #dc3545;
+  --delete-mess-hover-color: #c82333;
   --background-color: #f8f9fa;
   --card-background: #ffffff;
   --text-color: #333333;
@@ -104,17 +106,17 @@
 }
 .messages-wrapper .messages-list .message-card .delete-button {
   right: 1rem;
-  background-color: var(--danger-color);
+  background-color: var(--delete-mess-color);
 }
 .messages-wrapper .messages-list .message-card .delete-button:hover {
-  background-color: var(--danger-hover-color);
+  background-color: var(--delete-mess-hover-color);
 }
 .messages-wrapper .messages-list .message-card .ban-button {
   right: 7rem;
-  background-color: var(--primary-color);
+  background-color: var(--ban-user-color);
 }
 .messages-wrapper .messages-list .message-card .ban-button:hover {
-  background-color: var(--primary-hover-color);
+  background-color: var(--ban-user-hover-color);
 }
 .messages-wrapper .messages-list .message-card:hover .delete-button,
 .messages-wrapper .messages-list .message-card:hover .ban-button {

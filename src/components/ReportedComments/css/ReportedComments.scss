@@ -1,8 +1,19 @@
 :root {
   --primary-color: #007bff;
   --primary-hover-color: #0056b3;
-  --danger-color: #dc3545;
-  --danger-hover-color: #c82333;
+
+  /* Kolory typu "ban" (zolty) */
+  --danger-color: #ff9800;
+  --danger-hover-color: #fb8c00;
+
+  /* Kolory typu "comment" (czerwony) */
+  --warning-color: #dc3545;
+  --warning-hover-color: #c82333;
+
+  /* Kolory typu "report" (niebieski) */
+  --info-color: #1883a3;
+  --info-hover-color: #147584;
+
   --background-color: #f8f9fa;
   --card-background: #ffffff;
   --comment-background: #f1f3f5;
@@ -101,11 +112,18 @@
           color: var(--text-color);
         }
 
-        .ban-button {
+        .action-buttons {
+          display: flex;
+          gap: 1rem;
           margin-top: 1rem;
+        }
+
+        /* BAN USER button  */
+        .ban-button {
           background-color: var(--danger-color);
           color: #fff;
           border: none;
+          margin-left: 1rem;
           padding: 0.75rem 1.25rem;
           border-radius: 6px;
           cursor: pointer;
@@ -120,6 +138,52 @@
           &:focus {
             outline: none;
             box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.5);
+          }
+        }
+
+        /* DELETE COMMENT button  */
+        .delete-comment-button {
+          background-color: var(--warning-color);
+          color: #fff;
+          border: none;
+          margin-left: 1rem;
+          padding: 0.75rem 1.25rem;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color var(--transition-speed) ease;
+          font-weight: 600;
+          font-size: 0.9rem;
+
+          &:hover {
+            background-color: var(--warning-hover-color);
+          }
+
+          &:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.5);
+          }
+        }
+
+        /* DELETE REPORT button  */
+        .delete-report-button {
+          background-color: var(--info-color);
+          color: #fff;
+          border: none;
+          padding: 0.75rem 1.25rem;
+          margin-left: 1rem;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color var(--transition-speed) ease;
+          font-weight: 600;
+          font-size: 0.9rem;
+
+          &:hover {
+            background-color: var(--info-hover-color);
+          }
+
+          &:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.5);
           }
         }
       }
@@ -174,6 +238,7 @@
   }
 }
 
+/* "fadeIn" animation for report cards */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -189,6 +254,7 @@
   animation: fadeIn 0.5s ease-out forwards;
 }
 
+/* Mobile view adjustments */
 @media (max-width: 768px) {
   .reported-comments-wrapper {
     padding: 1rem;
@@ -200,8 +266,17 @@
     .comment-details {
       padding: 0.75rem;
 
-      .ban-button {
-        width: 100%;
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      /* In mobile view, all buttons will have 100% width */
+      .ban-button,
+      .delete-comment-button,
+      .delete-report-button {
+        width: 15rem;
+        margin-top: 1.5rem;
+        margin-left: 0;
       }
     }
   }
