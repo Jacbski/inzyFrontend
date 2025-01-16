@@ -4,91 +4,93 @@ import "./css/Regulations.scss";
 const Regulations = () => {
   return (
     <div className="regulations">
-      <h1>Regulations of the PIOT</h1>
+      <h1>PIOT Platform Regulations</h1>
       <ol>
         <li>
-          <strong>Purpose of the Website</strong>
+          <strong>Purpose of the Platform</strong>
           <p>
-            The website aims to facilitate knowledge exchange, support, and
-            collaboration in the field of Internet of Things (IoT) technology
-            within the spirit of open source.
+            PIOT is a platform designed to support knowledge sharing, inspire
+            creativity, and enable meaningful discussions in the field of
+            Internet of Things (IoT) technology.
           </p>
         </li>
         <li>
           <strong>User Registration</strong>
           <p>
-            Registration is free. Each user agrees to provide accurate
-            information during registration.
+            Registration is free. By signing up, users agree to provide accurate
+            information and abide by the community guidelines.
           </p>
         </li>
         <li>
-          <strong>Rules of Participation</strong>
+          <strong>Community Guidelines</strong>
           <p>
-            Respect other users. It is prohibited to post offensive,
-            discriminatory, or illegal content.
+            Treat all members with respect. Offensive, discriminatory, or
+            illegal content is strictly prohibited.
           </p>
           <p>
-            Maintain a professional and polite tone. Posts should align with the
-            forum's topics and provide valuable content.
-          </p>
-        </li>
-        <li>
-          <strong>Content Publishing Rules</strong>
-          <p>
-            All materials published by users should comply with open source
-            licenses (e.g., MIT, GPL).
-          </p>
-          <p>
-            It is forbidden to post content protected by copyright without
-            proper permission.
+            Keep discussions relevant to IoT and contribute valuable,
+            constructive content. A professional yet friendly tone is
+            encouraged.
           </p>
         </li>
         <li>
-          <strong>Moderators</strong>
+          <strong>Content Publishing</strong>
           <p>
-            Moderators have the right to remove content that violates the rules
-            and block users who breach the terms.
+            Users are encouraged to share original content. Do not post
+            materials that violate copyright or intellectual property laws.
           </p>
           <p>
-            Moderator decisions are final, but users may appeal via the contact
-            form.
-          </p>
-        </li>
-        <li>
-          <strong>Security Guidelines</strong>
-          <p>Do not share personal or confidential information publicly.</p>
-          <p>
-            The website is not responsible for losses resulting from the
-            publication of sensitive data by users.
+            If sharing code or resources, ensure compliance with relevant
+            licenses and properly credit the authors.
           </p>
         </li>
         <li>
-          <strong>Privacy Policy</strong>
+          <strong>Moderation</strong>
           <p>
-            User data is processed in accordance with applicable data protection
-            laws.
+            Moderators ensure a positive and productive community environment.
+            They have the right to remove content that violates the regulations
+            and suspend users who break the rules.
+          </p>
+          <p>
+            Users may appeal moderation decisions through the contact form
+            provided on the platform.
+          </p>
+        </li>
+        <li>
+          <strong>Privacy and Security</strong>
+          <p>
+            Respect the privacy of others. Do not share personal or sensitive
+            information publicly. Users are responsible for protecting their own
+            data when participating in the platform.
+          </p>
+          <p>
+            Any personal information shared with the platform is used only to
+            support platform operations and will not be shared with third
+            parties without the user's explicit consent.
           </p>
         </li>
         <li>
           <strong>Changes to the Regulations</strong>
-          <p>The administration reserves the right to amend the regulations.</p>
+          <p>
+            The administration reserves the right to update the regulations.
+          </p>
         </li>
         <li>
-          <strong>Contact</strong>
+          <strong>Contact and Support</strong>
           <p>
-            All questions and comments can be submitted via the contact form
-            available on the website.
+            For questions or concerns, users can reach out via the contact form
+            available on the platform.
           </p>
         </li>
-        <li className="rodo">
-          <strong>GDPR and Data Processing</strong>
+        {/* <li className="gdpr">
+          <strong>GDPR Compliance</strong>
           <p>
-            All personal data of users is processed in accordance with the
-            General Data Protection Regulation (GDPR). Data is used solely for
-            purposes related to the operation of the website and is not shared
-            with third parties without the user's consent.
+            All personal data is processed in compliance with the General Data
+            Protection Regulation (GDPR). User data is not shared with third
+            parties without explicit consent and is used exclusively for
+            platform-related purposes.
           </p>
-        </li>
+        </li> */}
       </ol>
     </div>
   );

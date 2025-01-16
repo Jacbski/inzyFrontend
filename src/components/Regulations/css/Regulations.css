@@ -27,13 +27,13 @@
   margin: 0.5rem 0;
   color: #555;
 }
-.regulations ol .rodo {
+.regulations ol .gdpr {
   margin-top: 1rem;
 }
-.regulations ol .rodo strong {
+.regulations ol .gdpr strong {
   color: #990000;
 }
-.regulations ol .rodo p {
+.regulations ol .gdpr p {
   color: #444;
   font-style: italic;
 }

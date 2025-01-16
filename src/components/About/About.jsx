@@ -6,27 +6,37 @@ const About = () => {
     <div className="about">
       <h1>About Us</h1>
       <p>
-        Welcome to the PIOT. Our platform is dedicated to fostering
-        collaboration, sharing knowledge, and driving innovation in the field of
-        Internet of Things (IoT) technologies.
+        Welcome to PIOT - a platform crafted for IoT enthusiasts to connect,
+        share projects, and ignite innovation in the captivating world of
+        Internet of Things technologies.
       </p>
-      <h2>Our Mission</h2>
+      <h2>Our Vision</h2>
       <p>
-        We strive to create a community where enthusiasts, professionals, and
-        developers can come together to explore, learn, and contribute to open
-        source IoT projects.
+        We aspire to cultivate a vibrant community where hobbyists, tinkerers,
+        and tech lovers can showcase their ideas, exchange knowledge, and
+        explore innovative IoT projects together.
       </p>
       <h2>Why Join Us?</h2>
       <ul>
-        <li>Access to a diverse range of IoT resources and discussions.</li>
-        <li>Collaborate with like-minded individuals and industry experts.</li>
-        <li>Contribute to the growth of open source IoT technologies.</li>
+        <li>
+          Explore inspiring IoT projects and resources shared by fellow
+          enthusiasts.
+        </li>
+        <li>
+          Engage in discussions and conversations with a passionate community of
+          like-minded creators.
+        </li>
+        <li>
+          Share your own IoT experiments and receive valuable feedback and
+          support.
+        </li>
       </ul>
       <h2>Get Involved</h2>
       <p>
-        Whether you’re a seasoned developer or a curious beginner, there’s a
-        place for you here. Join our discussions, contribute to projects, or
-        simply explore the wealth of information available.
+        Whether you're a seasoned developer or a curious beginner delving into
+        IoT for the first time, PIOT is the perfect place to start. Join
+        discussions, share your creations, and discover the wealth of innovative
+        ideas within our community.
       </p>
     </div>
   );
