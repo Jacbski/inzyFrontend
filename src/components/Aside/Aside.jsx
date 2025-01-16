@@ -31,6 +31,10 @@ const AsideMenu = ({ isAsideOpen, isLoggedIn }) => {
   //ogolnie widoczne sekcje jako default
   const commonSections = [
     {
+      title: "Home",
+      items: [{ link: "/", text: "Home" }],
+    },
+    {
       title: "About",
       items: [{ link: "/about", text: "About Us" }],
     },
@@ -63,9 +67,9 @@ const AsideMenu = ({ isAsideOpen, isLoggedIn }) => {
     <aside className={`aside-menu ${isAsideOpen ? "aside-menu--open" : ""}`}>
       <nav className="aside-menu__nav">
         <ul>
-          <li>
+          {/* <li>
             <a href="/">Home</a>
-          </li>
+          </li> */}
           {/* Reszta sekcji Common */}
           {commonSections.map((section, index) =>
             renderSection(section.title, section.items, `common-${index}`)

@@ -14,6 +14,15 @@ const Header = () => {
   const { isLoggedIn, currentUser, login, register, logout } = useAuth();
   const userMenuRef = useRef(null);
   const navigate = useNavigate();
+  const [shouldRenderMenu, setShouldRenderMenu] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShouldRenderMenu(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -103,21 +112,35 @@ const Header = () => {
               </span>
             )}
             <div className="header__user" ref={userMenuRef}>
-              <button className="header__user-button" onClick={toggleUserMenu}>
-                <img
-                  src={
-                    currentUser && currentUser.avatar
-                      ? `data:image/jpeg;base64,${currentUser.avatar}`
-                      : "https://via.placeholder.com/150"
-                  }
-                  alt={
-                    currentUser
-                      ? `${currentUser.userName}'s profile picture`
-                      : "User profile"
-                  }
-                  className="header__user-icon"
-                />
-              </button>
+              {!shouldRenderMenu ? null : currentUser ? (
+                <button
+                  className="header__user-button"
+                  onClick={toggleUserMenu}
+                >
+                  <img
+                    src={
+                      currentUser.avatar
+                        ? `data:image/jpeg;base64,${currentUser.avatar}`
+                        : "https://via.placeholder.com/150"
+                    }
+                    alt={`${currentUser.userName}'s profile picture`}
+                    className="header__user-icon"
+                  />
+                </button>
+              ) : (
+                <>
+                  <button className="login" onClick={() => openModal("login")}>
+                    Login
+                  </button>
+                  <button
+                    className="register"
+                    onClick={() => openModal("register")}
+                  >
+                    Register
+                  </button>
+                </>
+              )}
+
               {isUserMenuOpen && (
                 <div className="header__user-menu">
                   {isLoggedIn ? (
@@ -143,13 +166,13 @@ const Header = () => {
                   ) : (
                     <>
                       <button
-                        className="header__menu-item"
+                        className="header__menu-login"
                         onClick={() => openModal("login")}
                       >
                         Sign In
                       </button>
                       <button
-                        className="header__menu-item"
+                        className="header__menu-register"
                         onClick={() => openModal("register")}
                       >
                         Register

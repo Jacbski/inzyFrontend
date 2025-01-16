@@ -1,3 +1,205 @@
+// .header {
+//   background-color: #fff;
+//   border-bottom: 1px solid #e5e5e5;
+//   position: sticky;
+//   top: 0;
+//   width: 100%;
+//   z-index: 1000;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+//   &__container {
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     height: 60px;
+//     padding: 0 2rem;
+//     // max-width: 1200px;
+//     margin: 0 auto;
+//   }
+
+//   &__left {
+//     display: flex;
+//     align-items: center;
+//   }
+
+//   &__menu-button {
+//     background: none;
+//     border: none;
+//     cursor: pointer;
+//     display: none;
+//     padding: 0.5rem;
+//     margin-right: 1rem;
+
+//     @media (max-width: 1300px) {
+//       display: block;
+//     }
+//   }
+
+//   &__menu-icon {
+//     display: block;
+//     width: 24px;
+//     height: 2px;
+//     background-color: #333;
+//     position: relative;
+
+//     &::before,
+//     &::after {
+//       content: "";
+//       display: block;
+//       width: 24px;
+//       height: 2px;
+//       background-color: #333;
+//       position: absolute;
+//       left: 0;
+//     }
+
+//     &::before {
+//       top: -6px;
+//     }
+
+//     &::after {
+//       bottom: -6px;
+//     }
+//   }
+
+//   &__logo {
+//     img {
+//       height: 40px;
+//     }
+//   }
+
+//   &__nav {
+//     display: flex;
+//     align-items: center;
+
+//     @media (max-width: 1300px) {
+//       display: none;
+//     }
+
+//     ul {
+//       display: flex;
+//       list-style-type: none;
+//       margin: 0;
+//       padding: 0;
+
+//       li {
+//         margin: 0 1rem;
+
+//         a {
+//           color: #333;
+//           text-decoration: none;
+//           font-weight: 500;
+//           transition: color 0.3s ease;
+
+//           &:hover {
+//             color: #0079d3;
+//           }
+//         }
+//       }
+//     }
+//   }
+
+//   &__right {
+//     display: flex;
+//     align-items: center;
+//   }
+
+//   &__user {
+//     position: relative;
+//   }
+
+//   &__user-button {
+//     background: none;
+//     border: none;
+//     cursor: pointer;
+//     padding: 0.5rem;
+//   }
+
+//   &__user-icon {
+//     width: 32px;
+//     height: 32px;
+//     border-radius: 50%;
+//   }
+
+//   &__user-menu {
+//     position: absolute;
+//     top: 100%;
+//     right: 0;
+//     background-color: #fff;
+//     border: 1px solid #e5e5e5;
+//     border-radius: 4px;
+//     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+//     padding: 0.5rem 0;
+//     min-width: 200px;
+//     z-index: 1001;
+//   }
+
+//   &__menu-item {
+//     display: block;
+//     width: 100%;
+//     padding: 0.5rem 1rem;
+//     color: #333;
+//     text-decoration: none;
+//     background: none;
+//     border: none;
+//     text-align: left;
+//     font-size: 1rem;
+//     cursor: pointer;
+//     transition: background-color 0.3s ease;
+
+//     &:hover {
+//       background-color: #f6f7f8;
+//     }
+//   }
+// }
+
+// .aside-menu {
+//   position: fixed;
+//   top: 60px;
+//   left: 0;
+//   width: 250px;
+//   height: calc(100% - 60px);
+//   background-color: #fff;
+//   border-right: 1px solid #e5e5e5;
+//   z-index: 999;
+//   overflow-y: auto;
+//   transform: translateX(-100%);
+//   transition: transform 0.3s ease;
+
+//   @media (min-width: 1301px) {
+//     transform: translateX(0);
+//   }
+
+//   &--open {
+//     transform: translateX(0);
+//   }
+
+//   &__nav {
+//     padding: 1rem;
+
+//     ul {
+//       list-style: none;
+//       padding: 0;
+//       margin: 0;
+
+//       li {
+//         margin: 1rem 0;
+
+//         a {
+//           text-decoration: none;
+//           color: #333;
+//           font-weight: 500;
+//           transition: color 0.3s ease;
+
+//           &:hover {
+//             color: #0079d3;
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+
 .header {
   background-color: #fff;
   border-bottom: 1px solid #e5e5e5;
@@ -13,7 +215,6 @@
     justify-content: space-between;
     height: 60px;
     padding: 0 2rem;
-    // max-width: 1200px;
     margin: 0 auto;
   }
 
@@ -151,48 +352,81 @@
       background-color: #f6f7f8;
     }
   }
-}
 
-.aside-menu {
-  position: fixed;
-  top: 60px;
-  left: 0;
-  width: 250px;
-  height: calc(100% - 60px);
-  background-color: #fff;
-  border-right: 1px solid #e5e5e5;
-  z-index: 999;
-  overflow-y: auto;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-
-  @media (min-width: 1301px) {
-    transform: translateX(0);
+  .login,
+  .register {
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  &--open {
-    transform: translateX(0);
+  .login {
+    background-color: transparent;
+    color: #000000;
+    border: 1px solid #000000;
+
+    &:hover {
+      background-color: #000000;
+      color: #fff;
+    }
   }
 
-  &__nav {
-    padding: 1rem;
+  .register {
+    background-color: #000000;
+    color: #fff;
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    &:hover {
+      background-color: #252525;
+    }
+  }
 
-      li {
-        margin: 1rem 0;
+  .aside-menu {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 250px;
+    height: calc(100% - 60px);
+    background-color: #fff;
+    border-right: 1px solid #e5e5e5;
+    z-index: 999;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
 
-        a {
-          text-decoration: none;
-          color: #333;
-          font-weight: 500;
-          transition: color 0.3s ease;
+    @media (min-width: 1301px) {
+      transform: translateX(0);
+    }
 
-          &:hover {
-            color: #0079d3;
+    &--open {
+      transform: translateX(0);
+    }
+
+    &__nav {
+      padding: 1rem;
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+          margin: 1rem 0;
+
+          a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+
+            &:hover {
+              color: #0079d3;
+            }
           }
         }
       }

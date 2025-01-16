@@ -25,9 +25,7 @@
   padding: 2rem;
   max-width: 800px;
   margin: 0 auto;
-  background-color: var(--background-color);
   border-radius: 12px;
-  box-shadow: var(--box-shadow);
 }
 .reported-comments-wrapper .reported-comments-title {
   font-size: 2rem;

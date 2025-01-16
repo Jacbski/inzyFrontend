@@ -130,8 +130,35 @@
 .header__menu-item:hover {
   background-color: #f6f7f8;
 }
-
-.aside-menu {
+.header .login,
+.header .register {
+  padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.header .login {
+  background-color: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+}
+.header .login:hover {
+  background-color: #000000;
+  color: #fff;
+}
+.header .register {
+  background-color: #000000;
+  color: #fff;
+}
+.header .register:hover {
+  background-color: #252525;
+}
+.header .aside-menu {
   position: fixed;
   top: 60px;
   left: 0;
@@ -145,30 +172,30 @@
   transition: transform 0.3s ease;
 }
 @media (min-width: 1301px) {
-  .aside-menu {
+  .header .aside-menu {
     transform: translateX(0);
   }
 }
-.aside-menu--open {
+.header .aside-menu--open {
   transform: translateX(0);
 }
-.aside-menu__nav {
+.header .aside-menu__nav {
   padding: 1rem;
 }
-.aside-menu__nav ul {
+.header .aside-menu__nav ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-.aside-menu__nav ul li {
+.header .aside-menu__nav ul li {
   margin: 1rem 0;
 }
-.aside-menu__nav ul li a {
+.header .aside-menu__nav ul li a {
   text-decoration: none;
   color: #333;
   font-weight: 500;
   transition: color 0.3s ease;
 }
-.aside-menu__nav ul li a:hover {
+.header .aside-menu__nav ul li a:hover {
   color: #0079d3;
 }/*# sourceMappingURL=header.css.map */
