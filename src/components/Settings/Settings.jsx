@@ -37,10 +37,10 @@ function Settings() {
               { newUsername: "", password: "" },
               Yup.object({
                 newUsername: Yup.string()
-                  .min(3, "Username must be at least 3 characters")
+                  .min(4, "Username must be at least 4 characters")
                   .required("Required"),
                 password: Yup.string()
-                  .min(6, "Password must be at least 6 characters")
+                  .min(8, "Password must be at least 8 characters")
                   .required("Required"),
               }),
               async (values) => {
@@ -64,7 +64,7 @@ function Settings() {
                   .email("Invalid email")
                   .required("Required"),
                 password: Yup.string()
-                  .min(1, "Password must be at least 1 characters")
+                  .min(8, "Password must be at least 8 characters")
                   .required("Required"),
               }),
               async (values) => {
@@ -85,7 +85,7 @@ function Settings() {
               { newPassword: "" },
               Yup.object({
                 newPassword: Yup.string()
-                  .min(1, "Password must be at least 1 characters")
+                  .min(8, "Password must be at least 8 characters")
                   .required("Required"),
               }),
               async (values) => {
