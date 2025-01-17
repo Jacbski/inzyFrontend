@@ -432,7 +432,7 @@ const AddPost = () => {
 
   if (!currentUser) {
     return (
-      <div>
+      <div style={{textAlign: "center"}}>
         <h2>You must be logged in to add a post</h2>
         <p>Please log in to access this feature.</p>
       </div>

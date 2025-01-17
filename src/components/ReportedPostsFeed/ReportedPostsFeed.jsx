@@ -143,8 +143,8 @@ const ReportedPostsFeed = () => {
         }
     };
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
+    if (isLoading) return <div style={{textAlign: "center"}}>Loading...</div>;
+    if (error) return <div style={{textAlign: "center"}}>{error}</div>;
 
     return (
         <div className="project-feed">

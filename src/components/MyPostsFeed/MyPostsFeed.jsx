@@ -112,9 +112,9 @@ const MyPostsFeed = () => {
         await fetchUserProjects(currentPage);
     };
 
-    if (!currentUser) return <div>Please log in to view your posts.</div>;
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
+    if (!currentUser) return <div style={{textAlign: "center"}}>Please log in to view your posts.</div>;
+    if (isLoading) return <div style={{textAlign: "center"}}>Loading...</div>;
+    if (error) return <div style={{textAlign: "center"}}>{error}</div>;
 
     return (
         <div className="project-feed">

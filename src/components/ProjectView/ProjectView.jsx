@@ -134,9 +134,9 @@ const ProjectView = () => {
   };
 
   const renderContent = () => {
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
-    if (!project) return <div>Project not found</div>;
+    if (loading) return <div style={{textAlign: "center"}}>Loading...</div>;
+    if (error) return <div style={{textAlign: "center"}}>Error: {error}</div>;
+    if (!project) return <div style={{textAlign: "center"}}>Project not found</div>;
 
     const reactionSum = opinions.positive - opinions.negative;
 

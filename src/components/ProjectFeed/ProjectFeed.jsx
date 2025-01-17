@@ -44,7 +44,8 @@ const ProjectFeed = () => {
             }
         } catch (err) {
             console.error("Failed to fetch projects:", err);
-            setError("Failed to fetch projects");
+            setError("Failed to connect with server.");
+
         } finally {
             setIsLoading(false);
         }
@@ -237,8 +238,8 @@ const ProjectFeed = () => {
         return pageNumbers;
     };
 
-    if (isLoading || favoritesLoading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
+    if (isLoading || favoritesLoading) return <div style={{textAlign: "center"}}>Loading...</div>;
+    if (error) return <div style={{textAlign: "center"}}>{error}</div>;
 
     return (
         <div className="project-feed">
