@@ -184,6 +184,7 @@ export default function CommentSection({ postId }) {
             <h3>Comments</h3>
             {loading && <p>Loading comments...</p>}
             {error && <p className="error">{error}</p>}
+            {comments.length !== 0 &&
             <div className="comments">
                 {comments.map((comment) => {
                     const user = getUserById(comment.userID);
@@ -258,7 +259,8 @@ export default function CommentSection({ postId }) {
                         </div>
                     );
                 })}
-            </div>
+            </div>}
+            {comments.length === 0 && !loading && <p>No comments yet.</p>}
             {showReportModal && (
                 <ReportModal
                     onClose={() => {
