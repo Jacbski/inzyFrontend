@@ -451,26 +451,26 @@ const AddPost = () => {
         {formErrors.submit && <p className="error">{formErrors.submit}</p>}
 
         <div className="form-section">
-          <label htmlFor="title">Title:</label>
+          <h3>Title</h3>
           <input
             id="title"
             type="text"
             className="form-input"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Enter post title"
+            placeholder="Title"
           />
           {formErrors.title && <p className="error">{formErrors.title}</p>}
         </div>
 
         <div className="form-section">
-          <label htmlFor="description">Description:</label>
+          <h3>Description</h3>
           <textarea
             id="description"
             className="form-textarea"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Enter post description"
+            placeholder="Descritption"
           />
           {formErrors.description && (
             <p className="error">{formErrors.description}</p>
@@ -478,7 +478,7 @@ const AddPost = () => {
         </div>
 
         <div className="form-section">
-          <label htmlFor="kategoria">Category:</label>
+          <h3>Category</h3>
           <select
             id="kategoria"
             value={kategoria}
@@ -492,7 +492,7 @@ const AddPost = () => {
         </div>
 
         <div className="form-section">
-          <label htmlFor="mainPhoto">Main Photo:</label>
+          <h3>Main Photo</h3>
           <input
             id="mainPhoto"
             type="file"
@@ -589,7 +589,62 @@ const AddPost = () => {
         </div>
 
         <div className="form-section">
-          <h3>Code Blocks</h3>
+          <h3>Required Items</h3>
+          <ul className="item-list">
+            {requiredItems.map((item, index) => (
+                <li key={index}>
+                  <h4>{item.itemName}</h4>
+                  {item.itemLink.length > 0 && (
+                      <p>
+                        Link:{" "}
+                        <a
+                            href={item.itemLink[0]}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                          {item.itemLink[0]}
+                        </a>
+                      </p>
+                  )}
+                  <button
+                      className="remove-button"
+                      onClick={() => handleRemoveRequiredItem(index)}
+                  >
+                    Remove Item
+                  </button>
+                </li>
+            ))}
+          </ul>
+          <div>
+            <input
+                type="text"
+                placeholder="Item Name"
+                value={newItem.itemName}
+                onChange={(e) =>
+                    setNewItem({ ...newItem, itemName: e.target.value })
+                }
+                className="form-input"
+            />
+            <input
+                type="text"
+                placeholder="Item Link (Optional)"
+                value={newItem.itemLink}
+                onChange={(e) =>
+                    setNewItem({ ...newItem, itemLink: e.target.value })
+                }
+                className="form-input"
+            />
+            <button className="form-button" onClick={handleAddRequiredItem}>
+              Add Item
+            </button>
+            {formErrors.requiredItem && (
+                <p className="error">{formErrors.requiredItem}</p>
+            )}
+          </div>
+        </div>
+
+        <div className="form-section">
+          <h3>Code Blocks (Optional)</h3>
           <ul className="item-list">
             {kod.map((code, index) => (
               <li key={index}>
@@ -631,7 +686,7 @@ const AddPost = () => {
         </div>
 
         <div className="form-section">
-          <h3>Files</h3>
+          <h3>Files (Optional)</h3>
           <ul className="item-list">
             {Array.from(files.entries()).map(([fileId, fileData]) => (
               <li key={fileId}>
@@ -662,60 +717,6 @@ const AddPost = () => {
           {formErrors.files && <p className="error">{formErrors.files}</p>}
         </div>
 
-        <div className="form-section">
-          <h3>Required Items</h3>
-          <ul className="item-list">
-            {requiredItems.map((item, index) => (
-              <li key={index}>
-                <h4>{item.itemName}</h4>
-                {item.itemLink.length > 0 && (
-                  <p>
-                    Link:{" "}
-                    <a
-                      href={item.itemLink[0]}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {item.itemLink[0]}
-                    </a>
-                  </p>
-                )}
-                <button
-                  className="remove-button"
-                  onClick={() => handleRemoveRequiredItem(index)}
-                >
-                  Remove Item
-                </button>
-              </li>
-            ))}
-          </ul>
-          <div>
-            <input
-              type="text"
-              placeholder="Item Name"
-              value={newItem.itemName}
-              onChange={(e) =>
-                setNewItem({ ...newItem, itemName: e.target.value })
-              }
-              className="form-input"
-            />
-            <input
-              type="text"
-              placeholder="Item Link (Optional)"
-              value={newItem.itemLink}
-              onChange={(e) =>
-                setNewItem({ ...newItem, itemLink: e.target.value })
-              }
-              className="form-input"
-            />
-            <button className="form-button" onClick={handleAddRequiredItem}>
-              Add Item
-            </button>
-            {formErrors.requiredItem && (
-              <p className="error">{formErrors.requiredItem}</p>
-            )}
-          </div>
-        </div>
 
         <div className="form-section">
           <h3>Donation Link (Optional)</h3>
