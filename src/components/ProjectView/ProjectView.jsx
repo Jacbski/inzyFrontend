@@ -20,7 +20,6 @@ const ProjectView = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [userReaction, setUserReaction] = useState("none");
   const [showReportModal, setShowReportModal] = useState(false);
-
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -49,12 +48,7 @@ const ProjectView = () => {
 
   const fetchOpinions = async () => {
     try {
-      const data = await request(
-        `/api/ogloszenie/${id}/opinie`,
-        "GET",
-        null,
-        false
-      );
+      const data = await request(`/api/ogloszenie/${id}/opinie`, "GET", null, false);
       setOpinions(data || { positive: 0, negative: 0 });
     } catch (err) {
       console.error("Failed to fetch opinions:", err);
@@ -79,19 +73,28 @@ const ProjectView = () => {
     fetchOpinions();
   }, [id]);
 
-  const handleReactionRequest = async (
-    positive,
-    negative,
-    none,
-    newReaction
-  ) => {
-    try {
-      await request(
-        `/api/opinie/${id}/dodaj`,
-        "POST",
-        { positive, negative, none },
-        true
+  useEffect(() => {
+    if (project && project.opinia && currentUser) {
+      const userOpinion = project.opinia.find(
+          (opinion) => opinion.userId === currentUser.id
       );
+      if (userOpinion) {
+        if (userOpinion.positive === 1) {
+          setUserReaction("like");
+        } else if (userOpinion.negative === 1) {
+          setUserReaction("dislike");
+        } else {
+          setUserReaction("none");
+        }
+      } else {
+        setUserReaction("none");
+      }
+    }
+  }, [project, currentUser]);
+
+  const handleReactionRequest = async (positive, negative, none, newReaction) => {
+    try {
+      await request(`/api/opinie/${id}/dodaj`, "POST", { positive, negative, none }, true);
       await fetchOpinions();
       setUserReaction(newReaction);
     } catch (err) {
@@ -134,107 +137,110 @@ const ProjectView = () => {
   };
 
   const renderContent = () => {
-    if (loading) return <div style={{textAlign: "center"}}>Loading...</div>;
-    if (error) return <div style={{textAlign: "center"}}>Error: {error}</div>;
-    if (!project) return <div style={{textAlign: "center"}}>Project not found</div>;
+    if (loading) return <div style={{ textAlign: "center" }}>Loading...</div>;
+    if (error) return <div style={{ textAlign: "center" }}>Error: {error}</div>;
+    if (!project) return <div style={{ textAlign: "center" }}>Project not found</div>;
 
     const reactionSum = opinions.positive - opinions.negative;
 
     return (
-      <div className="project-view-container">
-        <button onClick={() => navigate("/")} className="close-button">
-          X
-        </button>
-        <div className="project-header">
-          <div className="project-info">
-            <h1>{project.title || "Untitled Project"}</h1>
-            {project.photo ? (
-              <img
-                src={`data:image/png;base64,${project.photo}`}
-                alt={project.title}
-                className="project-image"
-              />
-            ) : (
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Placeholder"
-                className="project-image"
-              />
-            )}
-            <p className="project-description">
-              {project.description || "No description available"}
-            </p>
-            <div className="project-details">
-              <span className="project-date">Author: {project.username}</span>
-              <span className="project-date">
+        <div className="project-view-container">
+          <button onClick={() => navigate("/")} className="close-button">X</button>
+          <div className="project-header">
+            <div className="project-info">
+              <h1>{project.title || "Untitled Project"}</h1>
+              {project.photo ? (
+                  <img
+                      src={`data:image/png;base64,${project.photo}`}
+                      alt={project.title}
+                      className="project-image"
+                  />
+              ) : (
+                  <img
+                      src="https://via.placeholder.com/150"
+                      alt="Placeholder"
+                      className="project-image"
+                  />
+              )}
+              <p className="project-description">
+                {project.description || "No description available"}
+              </p>
+              <div className="project-details">
+                <span className="project-date">Author: {project.username}</span>
+                <span className="project-date">
                 Date:{" "}
-                {project.dataStworzenia
-                  ? new Date(project.dataStworzenia).toISOString().split("T")[0]
-                  : "N/A"}
+                  {project.dataStworzenia
+                      ? new Date(project.dataStworzenia).toISOString().split("T")[0]
+                      : "N/A"}
               </span>
-              <span className="project-date">
+                <span className="project-date">
                 Category:{" "}
-                {project.kategoria.charAt(0) +
-                  project.kategoria.slice(1).toLowerCase()}
+                  {project.kategoria.charAt(0) + project.kategoria.slice(1).toLowerCase()}
               </span>
-              <div className="project-reactions">
-                <span className="reaction-sum">Likes: {reactionSum}</span>
-                {currentUser && (
-                  <>
-                    <button
-                      className={`reaction-button like-button ${
-                        userReaction === "like" ? "active" : ""
-                      }`}
-                      onClick={handleLike}
-                    >
-                      Like
-                    </button>
-                    <button
-                      className={`reaction-button dislike-button ${
-                        userReaction === "dislike" ? "active" : ""
-                      }`}
-                      onClick={handleDislike}
-                    >
-                      Dislike
-                    </button>
-                  </>
-                )}
-                <Share />
+
+                <div className="project-reactions">
+                  <span className="reaction-sum">Likes: {reactionSum}</span>
+
+                  {currentUser && (
+                      <>
+                        <button
+                            className="reaction-button like-button"
+                            onClick={handleLike}
+                            style={{
+                              color: userReaction === "like" ? "green" : ""
+                            }}
+                        >
+                          Like
+                        </button>
+
+                        <button
+                            className="reaction-button dislike-button"
+                            onClick={handleDislike}
+                            style={{
+                              color: userReaction === "dislike" ? "red" : "",
+                            }}
+                        >
+                          Dislike
+                        </button>
+                      </>
+                  )}
+
+                  <Share />
+                </div>
               </div>
+              {currentUser && (
+                  <button
+                      className="reaction-button report-button"
+                      onClick={handleReportClick}
+                  >
+                    ⚠ Report
+                  </button>
+              )}
+              <Donate link={project.donationLink} />
+              <ProjectFiles project={project} />
+              <ShopRecommendations items={project.requiredItems || []} />
             </div>
-            {currentUser && (
-              <button
-                className="reaction-button report-button"
-                onClick={handleReportClick}
-              >
-                ⚠ Report
-              </button>
-            )}
-            <Donate link={project.donationLink} />
-            <ProjectFiles project={project} />
-            <ShopRecommendations items={project.requiredItems || []} />
           </div>
+          <CodeBlockDisplay codeBlocks={project.kod || []} />
+          <div className="project-steps">
+            <h3>Steps</h3>
+            <ProjectSteps steps={steps} />
+          </div>
+          <CommentSection postId={project.id} />
         </div>
-        <CodeBlockDisplay codeBlocks={project.kod || []} />
-        <div className="project-steps">
-          <h3>Steps</h3>
-          <ProjectSteps steps={steps} />
-        </div>
-        <CommentSection postId={project.id} />
-      </div>
     );
   };
 
   return (
-    <div className="project-view-wrapper">
-      {renderContent()}
-      {showReportModal && (
-        <ReportModal
-          onClose={() => setShowReportModal(false)}
-          onSubmit={submitReport}
-        />
-      )}
-    </div>
+      <div className="project-view-wrapper">
+        {renderContent()}
+        {showReportModal && (
+            <ReportModal
+                onClose={() => setShowReportModal(false)}
+                onSubmit={submitReport}
+            />
+        )}
+      </div>
   );
 };
 
