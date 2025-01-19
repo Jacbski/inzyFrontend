@@ -451,7 +451,7 @@ const AddPost = () => {
         {formErrors.submit && <p className="error">{formErrors.submit}</p>}
 
         <div className="form-section">
-          <h3>Title</h3>
+          <h3>Title*</h3>
           <input
             id="title"
             type="text"
@@ -464,7 +464,7 @@ const AddPost = () => {
         </div>
 
         <div className="form-section">
-          <h3>Description</h3>
+          <h3>Description*</h3>
           <textarea
             id="description"
             className="form-textarea"
@@ -478,7 +478,7 @@ const AddPost = () => {
         </div>
 
         <div className="form-section">
-          <h3>Category</h3>
+          <h3>Category*</h3>
           <select
             id="kategoria"
             value={kategoria}
@@ -492,7 +492,7 @@ const AddPost = () => {
         </div>
 
         <div className="form-section">
-          <h3>Main Photo</h3>
+          <h3>Main Photo*</h3>
           <input
             id="mainPhoto"
             type="file"
@@ -518,7 +518,7 @@ const AddPost = () => {
         </div>
 
         <div className="form-section">
-          <h3>Steps</h3>
+          <h3>Steps*</h3>
           <ul className="item-list">
             {steps
               .slice()
@@ -589,7 +589,7 @@ const AddPost = () => {
         </div>
 
         <div className="form-section">
-          <h3>Required Items</h3>
+          <h3>Required Items*</h3>
           <ul className="item-list">
             {requiredItems.map((item, index) => (
                 <li key={index}>
