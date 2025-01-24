@@ -141,25 +141,27 @@ const MyPostsFeed = () => {
                     </Link>
                 ))}
             </div>
-            <div className="pagination">
-                <button
-                    className={`pagination-button ${currentPage === 0 ? "disabled" : ""}`}
-                    onClick={() => handlePagination(currentPage - 1)}
-                    disabled={currentPage === 0}
-                >
-                    Previous
-                </button>
-                {renderPageNumbers()}
-                <button
-                    className={`pagination-button ${
-                        currentPage === totalPages - 1 ? "disabled" : ""
-                    }`}
-                    onClick={() => handlePagination(currentPage + 1)}
-                    disabled={currentPage === totalPages - 1}
-                >
-                    Next
-                </button>
-            </div>
+            {totalPages > 1 && (
+                <div className="pagination">
+                    <button
+                        className={`pagination-button ${currentPage === 0 ? "disabled" : ""}`}
+                        onClick={() => handlePagination(currentPage - 1)}
+                        disabled={currentPage === 0}
+                    >
+                        Previous
+                    </button>
+                    {renderPageNumbers()}
+                    <button
+                        className={`pagination-button ${
+                            currentPage === totalPages - 1 ? "disabled" : ""
+                        }`}
+                        onClick={() => handlePagination(currentPage + 1)}
+                        disabled={currentPage === totalPages - 1}
+                    >
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
