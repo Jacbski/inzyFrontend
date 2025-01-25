@@ -72,7 +72,7 @@ const Header = () => {
     try {
       await login(username, password);
       setActiveModal(null);
-      navigate("/profile");
+      navigate("/");
     } catch (error) {
       console.error("Login failed:", error);
       alert("Login failed. Please check your credentials.");
