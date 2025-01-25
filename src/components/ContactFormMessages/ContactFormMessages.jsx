@@ -169,9 +169,6 @@ const ContactFormMessages = () => {
             <p className="message-user">
               <strong>User:</strong> {msg.userName}
             </p>
-            <p className="message-userid">
-              <strong>UserID:</strong> {msg.userID}
-            </p>
 
             <button
               className="delete-button"
